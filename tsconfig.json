@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "lib": [
+      "dom", "esnext", "es2016"
+    ]
+  },
+  "exclude": ["node_modules", "dist", "examples"]
+}
