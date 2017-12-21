@@ -5,6 +5,7 @@ import {
   GraphQLSchema,
   SelectionSetNode,
   parse,
+  validate,
 } from 'graphql'
 import { isScalar, getTypeForRootFieldName } from './utils'
 
@@ -63,11 +64,15 @@ export function buildInfoFromFragment(
   operation: 'query' | 'mutation',
   query: string,
 ): GraphQLResolveInfo {
-  const type = getTypeForRootFieldName(rootFieldName, operation, schema)
+  const type = getTypeForRootFieldName(
+    rootFieldName,
+    operation,
+    schema,
+  ) as GraphQLObjectType
   const fieldNode: FieldNode = {
     kind: 'Field',
     name: { kind: 'Name', value: rootFieldName },
-    selectionSet: extractQuerySelectionSet(query),
+    selectionSet: extractQuerySelectionSet(query, type.name, schema),
   }
 
   return {
@@ -88,14 +93,24 @@ export function buildInfoFromFragment(
   }
 }
 
-function extractQuerySelectionSet(query: string): SelectionSetNode {
+function extractQuerySelectionSet(
+  query: string,
+  typeName: string,
+  schema: GraphQLSchema,
+): SelectionSetNode {
+  if (!query.startsWith('fragment')) {
+    query = `fragment tmp on ${typeName} ${query}`
+  }
   const document = parse(query)
+  const errors = validate(schema, document).filter(
+    e => e.message.match(/Fragment ".*" is never used./) === null,
+  )
+  if (errors.length > 0) {
+    throw errors
+  }
+
   const queryNode = document.definitions[0]
-  if (
-    !queryNode ||
-    queryNode.kind !== 'OperationDefinition' ||
-    queryNode.operation !== 'query'
-  ) {
+  if (!queryNode || queryNode.kind !== 'FragmentDefinition') {
     throw new Error(`Invalid query: ${query}`)
   }
 

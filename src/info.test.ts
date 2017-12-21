@@ -153,6 +153,19 @@ test('buildInfoFromFragment: nested', t => {
   )
 })
 
+test('buildInfoFromFragment: invalid selection', t => {
+  const schema = buildSchema(`
+  type Query {
+    book: Book
+  }
+
+  type Book {
+    title: String
+  }
+  `)
+  t.throws(() => buildInfoFromFragment('book', schema, 'query', `{ xxx }`))
+})
+
 function assertFields(
   t: TestContext,
   selections: SelectionNode[],
