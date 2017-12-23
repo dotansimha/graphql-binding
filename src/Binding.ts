@@ -7,8 +7,8 @@ import { QueryMap, BindingOptions, FragmentReplacements } from './types'
 export class Binding {
   query: QueryMap
   mutation: QueryMap
+  remoteSchema: GraphQLSchema
 
-  private remoteSchema: GraphQLSchema
   private fragmentReplacements: FragmentReplacements
 
   constructor({ executableSchema, fragmentReplacements }: BindingOptions) {

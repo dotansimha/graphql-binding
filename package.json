@@ -3,6 +3,10 @@
   "version": "0.1.1",
   "license": "MIT",
   "repository": "git@github.com:graphcool/graphql-binding.git",
+  "author": "Johannes Schickling <johannes@graph.cool>",
+  "contributors": [
+    "Kim Brandwijk <kim.brandwijk@gmail.com>"
+  ],
   "files": [
     "dist"
   ],
