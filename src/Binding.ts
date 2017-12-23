@@ -7,21 +7,21 @@ import { QueryMap, BindingOptions, FragmentReplacements } from './types'
 export class Binding {
   query: QueryMap
   mutation: QueryMap
-  remoteSchema: GraphQLSchema
+  schema: GraphQLSchema
 
   private fragmentReplacements: FragmentReplacements
 
-  constructor({ executableSchema, fragmentReplacements }: BindingOptions) {
+  constructor({ schema, fragmentReplacements }: BindingOptions) {
     this.fragmentReplacements = fragmentReplacements || {}
-    this.remoteSchema = executableSchema
+    this.schema = schema
 
     this.query = makeProxy<QueryMap>({
-      schema: this.remoteSchema,
+      schema: this.schema,
       fragmentReplacements: this.fragmentReplacements,
       operation: 'query'
     })
     this.mutation = makeProxy<QueryMap>({
-      schema: this.remoteSchema,
+      schema: this.schema,
       fragmentReplacements: this.fragmentReplacements,
       operation: 'mutation'
     })
@@ -31,7 +31,7 @@ export class Binding {
     query: string,
     variables?: { [key: string]: any }
   ): Promise<T> {
-    return graphql(this.remoteSchema, query, null, null, variables).then(
+    return graphql(this.schema, query, null, null, variables).then(
       r => r.data![Object.keys(r.data!)[0]]
     )
   }
@@ -47,10 +47,10 @@ export class Binding {
     },
     info?: GraphQLResolveInfo | string
   ) {
-    info = buildInfo(fieldName, operation, this.remoteSchema, info)
+    info = buildInfo(fieldName, operation, this.schema, info)
 
     return delegateToSchema(
-      this.remoteSchema,
+      this.schema,
       this.fragmentReplacements,
       operation,
       fieldName,

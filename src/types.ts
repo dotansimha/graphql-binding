@@ -15,5 +15,5 @@ export interface QueryMap {
 
 export interface BindingOptions {
   fragmentReplacements?: FragmentReplacements
-  executableSchema: GraphQLSchema
+  schema: GraphQLSchema
 }
