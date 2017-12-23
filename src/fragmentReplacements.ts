@@ -1,11 +1,6 @@
 import { InlineFragmentNode, parse, Kind } from 'graphql'
+import { FragmentReplacements } from './types'
 import { IResolvers } from 'graphql-tools/dist/Interfaces'
-
-export interface FragmentReplacements {
-  [typeName: string]: {
-    [fieldName: string]: InlineFragmentNode
-  }
-}
 
 export function extractFragmentReplacements(
   resolvers: IResolvers,

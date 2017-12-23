@@ -9,6 +9,20 @@ import {
 } from 'graphql'
 import { isScalar, getTypeForRootFieldName } from './utils'
 
+export function buildInfo(
+  rootFieldName: string,
+  operation: 'query' | 'mutation',
+  schema: GraphQLSchema,
+  info?: GraphQLResolveInfo | string
+): GraphQLResolveInfo {
+  if (!info) {
+    info = buildInfoForAllScalars(rootFieldName, this.schema, operation)
+  } else if (typeof info === 'string') {
+    info = buildInfoFromFragment(rootFieldName, this.schema, operation, info)
+  }
+  return info
+}
+
 export function buildInfoForAllScalars(
   rootFieldName: string,
   schema: GraphQLSchema,
