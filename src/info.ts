@@ -16,9 +16,9 @@ export function buildInfo(
   info?: GraphQLResolveInfo | string
 ): GraphQLResolveInfo {
   if (!info) {
-    info = buildInfoForAllScalars(rootFieldName, this.schema, operation)
+    info = buildInfoForAllScalars(rootFieldName, schema, operation)
   } else if (typeof info === 'string') {
-    info = buildInfoFromFragment(rootFieldName, this.schema, operation, info)
+    info = buildInfoFromFragment(rootFieldName, schema, operation, info)
   }
   return info
 }
