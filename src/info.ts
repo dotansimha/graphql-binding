@@ -7,13 +7,14 @@ import {
   parse,
   validate,
 } from 'graphql'
+import { Operation } from './types'
 import { isScalar, getTypeForRootFieldName } from './utils'
 
 export function buildInfo(
   rootFieldName: string,
-  operation: 'query' | 'mutation',
+  operation: Operation,
   schema: GraphQLSchema,
-  info?: GraphQLResolveInfo | string
+  info?: GraphQLResolveInfo | string,
 ): GraphQLResolveInfo {
   if (!info) {
     info = buildInfoForAllScalars(rootFieldName, schema, operation)
@@ -26,7 +27,7 @@ export function buildInfo(
 export function buildInfoForAllScalars(
   rootFieldName: string,
   schema: GraphQLSchema,
-  operation: 'query' | 'mutation',
+  operation: Operation,
 ): GraphQLResolveInfo {
   const fieldNodes: FieldNode[] = []
   const type = getTypeForRootFieldName(rootFieldName, operation, schema)
@@ -51,8 +52,11 @@ export function buildInfoForAllScalars(
     fieldNodes.push(fieldNode)
   }
 
-  const parentType =
-    operation === 'query' ? schema.getQueryType() : schema.getMutationType()!
+  const parentType = {
+    query: () => schema.getQueryType(),
+    mutation: () => schema.getMutationType()!,
+    subscription: () => schema.getSubscriptionType()!,
+  }[operation]()
 
   return {
     fieldNodes,
@@ -62,7 +66,7 @@ export function buildInfoForAllScalars(
     returnType: type,
     parentType,
     path: undefined,
-    rootValue: null,
+    rootValue: undefined,
     operation: {
       kind: 'OperationDefinition',
       operation,
@@ -75,7 +79,7 @@ export function buildInfoForAllScalars(
 export function buildInfoFromFragment(
   rootFieldName: string,
   schema: GraphQLSchema,
-  operation: 'query' | 'mutation',
+  operation: Operation,
   query: string,
 ): GraphQLResolveInfo {
   const type = getTypeForRootFieldName(
@@ -97,7 +101,7 @@ export function buildInfoFromFragment(
     returnType: type,
     parentType: schema.getQueryType(),
     path: undefined,
-    rootValue: null,
+    rootValue: undefined,
     operation: {
       kind: 'OperationDefinition',
       operation,

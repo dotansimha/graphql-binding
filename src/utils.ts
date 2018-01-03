@@ -10,6 +10,7 @@ import {
   GraphQLSchema,
   getNamedType,
 } from 'graphql'
+import { Operation } from './types'
 
 export function isScalar(t: GraphQLOutputType): boolean {
   if (t instanceof GraphQLScalarType || t instanceof GraphQLEnumType) {
@@ -40,19 +41,24 @@ export function isScalar(t: GraphQLOutputType): boolean {
 
 export function getTypeForRootFieldName(
   rootFieldName: string,
-  operation: 'query' | 'mutation',
+  operation: Operation,
   schema: GraphQLSchema,
 ): GraphQLOutputType {
   if (operation === 'mutation' && !schema.getMutationType()) {
     throw new Error(`Schema doesn't have mutation type`)
   }
 
-  const rootFields =
-    operation === 'query'
-      ? schema.getQueryType().getFields()
-      : schema.getMutationType()!.getFields()
+  if (operation === 'subscription' && !schema.getSubscriptionType()) {
+    throw new Error(`Schema doesn't have subscription type`)
+  }
 
-  const rootField = rootFields[rootFieldName]
+  const rootType = {
+    query: () => schema.getQueryType(),
+    mutation: () => schema.getMutationType()!,
+    subscription: () => schema.getSubscriptionType()!,
+  }[operation]()
+
+  const rootField = rootType.getFields()[rootFieldName]
 
   if (!rootField) {
     throw new Error(`No such root field found: ${rootFieldName}`)
