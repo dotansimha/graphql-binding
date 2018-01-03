@@ -22,7 +22,7 @@
     "test": "tslint src/**/*.ts && npm run test-only"
   },
   "devDependencies": {
-    "@types/node": "8.5.4",
+    "@types/node": "8.5.5",
     "apollo-link": "1.0.7",
     "ava": "0.24.0",
     "tslint": "5.8.0",
