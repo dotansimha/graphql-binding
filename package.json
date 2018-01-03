@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "@types/graphql": "0.11.7",
-    "graphql": "^0.12.3",
-    "graphql-tools": "^2.14.1"
+    "graphql": "0.12.3",
+    "graphql-tools": "2.15.0",
+    "iterall": "^1.1.3"
   }
 }
