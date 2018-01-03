@@ -63,6 +63,7 @@ export class Binding {
     },
     info?: GraphQLResolveInfo | string,
   ) {
+    this.before()
     info = buildInfo(fieldName, operation, this.schema, info)
 
     return delegateToSchema(
