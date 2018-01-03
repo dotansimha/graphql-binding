@@ -47,6 +47,7 @@ export class Binding {
     query: string,
     variables?: { [key: string]: any },
   ): Promise<T> {
+    this.before()
     return graphql(this.schema, query, null, null, variables).then(
       r => r.data![Object.keys(r.data!)[0]],
     )
@@ -64,6 +65,7 @@ export class Binding {
     info?: GraphQLResolveInfo | string,
   ) {
     this.before()
+
     info = buildInfo(fieldName, operation, this.schema, info)
 
     return delegateToSchema(
