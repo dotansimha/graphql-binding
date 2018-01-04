@@ -9,6 +9,7 @@ import {
   GraphQLList,
   GraphQLSchema,
   getNamedType,
+  GraphQLResolveInfo,
 } from 'graphql'
 import { Operation } from './types'
 
@@ -65,4 +66,21 @@ export function getTypeForRootFieldName(
   }
 
   return getNamedType(rootField.type) as GraphQLOutputType
+}
+
+export function forwardTo(bindingName: string) {
+  return (parent: any, args: any, context: any, info: GraphQLResolveInfo) => {
+    let message = `Forward to '${bindingName}.${info.parentType.name.toLowerCase()}.${info.fieldName}' failed. `
+    if (context[bindingName]) {
+      if (context[bindingName][info.parentType.name.toLowerCase()][info.fieldName]) {
+        return context[bindingName][info.parentType.name.toLowerCase()][info.fieldName](args, info)
+      } else {
+        message += `Field '${info.parentType.name.toLowerCase()}.${info.fieldName}' not found on binding '${bindingName}'.`
+      }
+    } else {
+      message += `Binding '${bindingName}' not found.`
+    }
+
+    throw new Error(message)
+  }
 }
