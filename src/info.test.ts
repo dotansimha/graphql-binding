@@ -80,7 +80,7 @@ test('buildInfoForAllScalars: minimal static root field', t => {
   }
   `)
   const info = buildInfoForAllScalars('count', schema, 'query')
-  t.is(info.fieldNodes.length, 0)
+  t.is(info.fieldNodes.length, 1)
 })
 
 test('buildInfoForAllScalars: mutation', t => {
