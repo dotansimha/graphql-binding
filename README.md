@@ -18,13 +18,43 @@ yarn add graphql-binding
 
 ### `Binding`
 
-#### `constructor: Binding`
+#### `constructor(options: BindingOptions): Binding`
 
-#### `binding.query(...)` & `binding.mutation(...)`
+[`BindingOptions`](./src/types.ts#L27) has the following properties:
 
-#### `binding.subscription(...)`
+| Key | Required |  Type | Default | Note |
+| ---  | --- | --- | --- | --- |
+| `schema` | Yes | `GraphQLSchema` |  - | The executable [GraphQL schema](https://blog.graph.cool/ac5e2950214e) for binding  |
+| `fragmentReplacements` | No | `FragmentReplacements` |  `{}` | A list of GraphQL fragment definitions, specifying fields that are required for the resolver to function correctly |
+| `before` | No | `() => void` |  `(() => undefined)` | A function that will be executed before a query/mutation is sent to the GraphQL API |
+| `handler` | No | `any` |  `null` | The [`handler`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler) object from [JS Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) |
+| `subscriptionHandler` | No | `any` |  `null` | ... |
+
+#### `binding.query(...): Promise<any>` & `binding.mutation(): Promise<any>`
+
+A binding object exposes two properties which can be used to send queries and mutations to the API: `binding.query` and `binding.mutation`.
+
+Both are of type [`QueryMap`](src/types.ts#L11) and will expose methods that are named after the schema's root fields on the `Query` and `Mutation` types.
+
+These methods take three arguments:
+
+| Name | Required |  Type | Note |
+| ---  | --- | --- | --- | --- |
+| `args` | No | `[key: string]: any` |  An object that contains the arguments of the root field |
+| `context` | No | `[key: string]: any` |  The `context` object that's passed down the GraphQL resolver chain; every resolver can read from and write to that object |
+| `info` | No | `GraphQLResolveInfo | string,` |  The `info` object (which contains an AST of the incoming query/mutation) that's passed down the GraphQL resolver chain or a string containing a [selection set](https://medium.com/front-end-developers/graphql-selection-sets-d588f6782e90) |
+
+#### `binding.subscription(...):  AsyncIterator<any> | Promise<AsyncIterator<any>>`
+
+The `binding.subscription` property follows the same idea as `query` and `mutation`, but rather than returning a single value using a `Promise`, it returns a _stream_ of values using `AsyncIterator`.
+
+ It is of type [`SubscriptionMap`](./src/types.ts#L19) and will expose methods that are named after the schema's root fields on the `Subscription` type.
+
+ These methods take same three arguments as the generated methods on `query` and `mutation`, see above for the details.
 
 ## Example
+
+### Minimal example
 
 ```js
 const { makeExecutableSchema } = require('graphql-tools')
@@ -64,7 +94,13 @@ findUserBinding.findUser({ name: 'Bob' })
   .then(result => console.log(result))
 ```
 
-You can find some examples here:
+## Public GraphQL bindings
+
+You can find practical, production-ready examples here:
 
 - [`graphql-binding-github`](https://github.com/graphcool/graphql-binding-github)
 - [`graphcool-binding`](https://github.com/graphcool/graphcool-binding)
+
+> Note: If you've created your own GraphQL binding based on this package, please add it to this via a PR 🙌
+
+If you have any questions, share some ideas or just want to chat about GraphQL bindings, join the [`#graphql-bindings`](https://graphcool.slack.com/messages/graphql-bindings) channel in our [Slack](https://slack.graph.cool/).
