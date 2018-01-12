@@ -29,4 +29,5 @@ export interface BindingOptions {
   schema: GraphQLSchema
   before?: () => void
   handler?: any
+  subscriptionHandler?: any
 }

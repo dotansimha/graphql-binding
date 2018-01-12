@@ -27,13 +27,17 @@ export function makeSubscriptionProxy<T extends object = any>({
   schema,
   fragmentReplacements,
   before,
+  handler
 }: {
   schema: GraphQLSchema
   fragmentReplacements: FragmentReplacements
   before: () => void
+  handler?: { new<T extends object>(schema, fragmentReplacements, before): ProxyHandler<T> }
 }): T {
   return new Proxy(
     {} as T,
-    new SubscriptionHandler<T>(schema, fragmentReplacements, before),
+    handler
+      ? new handler<T>(schema, fragmentReplacements, before)
+      : new SubscriptionHandler<T>(schema, fragmentReplacements, before),
   )
 }

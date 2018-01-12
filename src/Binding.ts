@@ -14,7 +14,7 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
 
   private fragmentReplacements: FragmentReplacements
 
-  constructor({ schema, fragmentReplacements, before, handler }: BindingOptions) {
+  constructor({ schema, fragmentReplacements, before, handler, subscriptionHandler }: BindingOptions) {
     this.fragmentReplacements = fragmentReplacements || {}
     this.schema = schema
     this.before = before || (() => undefined)
@@ -36,7 +36,8 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
     this.subscription = makeSubscriptionProxy<TSubscriptionMap>({
       schema: this.schema,
       fragmentReplacements: this.fragmentReplacements,
-      before: this.before
+      before: this.before,
+      handler: subscriptionHandler
     })
   }
 
