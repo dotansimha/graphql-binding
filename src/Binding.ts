@@ -5,36 +5,39 @@ import { delegateToSchema } from 'graphql-tools'
 import { makeProxy, makeSubscriptionProxy } from './proxy'
 import { QueryMap, BindingOptions, FragmentReplacements, SubscriptionMap, Operation } from './types'
 
-export class Binding {
-  query: QueryMap
-  mutation: QueryMap
-  subscription: SubscriptionMap
+export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap extends object = SubscriptionMap> {
+  query: TQueryMap
+  mutation: TQueryMap
+  subscription: TSubscriptionMap
   schema: GraphQLSchema
   before: () => void
 
   private fragmentReplacements: FragmentReplacements
 
-  constructor({ schema, fragmentReplacements, before }: BindingOptions) {
+  constructor({ schema, fragmentReplacements, before, handler, subscriptionHandler }: BindingOptions) {
     this.fragmentReplacements = fragmentReplacements || {}
     this.schema = schema
     this.before = before || (() => undefined)
 
-    this.query = makeProxy<QueryMap>({
+    this.query = makeProxy<TQueryMap>({
       schema: this.schema,
       fragmentReplacements: this.fragmentReplacements,
       operation: 'query',
-      before: this.before
+      before: this.before,
+      handler
     })
-    this.mutation = makeProxy<QueryMap>({
+    this.mutation = makeProxy<TQueryMap>({
       schema: this.schema,
       fragmentReplacements: this.fragmentReplacements,
       operation: 'mutation',
-      before: this.before
+      before: this.before,
+      handler
     })
-    this.subscription = makeSubscriptionProxy<SubscriptionMap>({
+    this.subscription = makeSubscriptionProxy<TSubscriptionMap>({
       schema: this.schema,
       fragmentReplacements: this.fragmentReplacements,
-      before: this.before
+      before: this.before,
+      handler: subscriptionHandler
     })
   }
 
@@ -72,6 +75,7 @@ export class Binding {
   public async delegateSubscription(
     fieldName: string,
     args?: { [key: string]: any },
+    context?: { [key: string]: any },
     infoOrQuery?: GraphQLResolveInfo | string
   ): Promise<AsyncIterator<any>> {
     this.before()
@@ -84,7 +88,7 @@ export class Binding {
       'subscription',
       fieldName,
       args || {},
-      {},
+      context || {},
       info
     )
 

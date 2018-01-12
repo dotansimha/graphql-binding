@@ -32,9 +32,10 @@ export function buildInfoForAllScalars(
   const fieldNodes: FieldNode[] = []
   const type = getTypeForRootFieldName(rootFieldName, operation, schema)
 
+  let selections: FieldNode[] | undefined
   if (type instanceof GraphQLObjectType) {
     const fields = type.getFields()
-    const selections = Object.keys(fields)
+    selections = Object.keys(fields)
       .filter(f => isScalar(fields[f].type))
       .map<FieldNode>(fieldName => {
         const field = fields[fieldName]
@@ -43,14 +44,15 @@ export function buildInfoForAllScalars(
           name: { kind: 'Name', value: field.name },
         }
       })
-    const fieldNode: FieldNode = {
-      kind: 'Field',
-      name: { kind: 'Name', value: rootFieldName },
-      selectionSet: { kind: 'SelectionSet', selections },
-    }
-
-    fieldNodes.push(fieldNode)
   }
+
+  const fieldNode: FieldNode = {
+    kind: 'Field',
+    name: { kind: 'Name', value: rootFieldName },
+    selectionSet: selections ? { kind: 'SelectionSet', selections } : undefined,
+  }
+
+  fieldNodes.push(fieldNode)
 
   const parentType = {
     query: () => schema.getQueryType(),
