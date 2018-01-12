@@ -75,6 +75,7 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
   public async delegateSubscription(
     fieldName: string,
     args?: { [key: string]: any },
+    context?: { [key: string]: any },
     infoOrQuery?: GraphQLResolveInfo | string
   ): Promise<AsyncIterator<any>> {
     this.before()
@@ -87,7 +88,7 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
       'subscription',
       fieldName,
       args || {},
-      {},
+      context || {},
       info
     )
 
