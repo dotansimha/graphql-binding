@@ -10,7 +10,8 @@ export interface FragmentReplacements {
 
 export interface QueryMap {
   [rootField: string]: (
-    args?: any,
+    args?: { [key: string]: any },
+    context?: { [key: string]: any },
     info?: GraphQLResolveInfo | string,
   ) => Promise<any>
 }
@@ -18,6 +19,7 @@ export interface QueryMap {
 export interface SubscriptionMap {
   [rootField: string]: (
     args?: any,
+    context?: { [key: string]: any },
     info?: GraphQLResolveInfo | string,
   ) => AsyncIterator<any> | Promise<AsyncIterator<any>>
 }
@@ -26,4 +28,5 @@ export interface BindingOptions {
   fragmentReplacements?: FragmentReplacements
   schema: GraphQLSchema
   before?: () => void
+  handler?: any
 }

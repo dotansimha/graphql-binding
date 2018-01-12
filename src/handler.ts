@@ -15,6 +15,7 @@ export class Handler<T extends object> implements ProxyHandler<T> {
   get(target: T, rootFieldName: string) {
     return (
       args?: { [key: string]: any },
+      context?: { [key: string]: any },
       info?: GraphQLResolveInfo | string,
     ): Promise<ExecutionResult> => {
       this.before()
@@ -28,7 +29,7 @@ export class Handler<T extends object> implements ProxyHandler<T> {
         operation,
         rootFieldName,
         args || {},
-        {},
+        context || {},
         info,
       )
     }
@@ -45,6 +46,7 @@ export class SubscriptionHandler<T extends object> implements ProxyHandler<T> {
   get(target: T, rootFieldName: string) {
     return async (
       args?: { [key: string]: any },
+      context?: { [key: string]: any },
       infoOrQuery?: GraphQLResolveInfo | string,
     ): Promise<AsyncIterator<any>> => {
       this.before()
@@ -62,7 +64,7 @@ export class SubscriptionHandler<T extends object> implements ProxyHandler<T> {
         'subscription',
         rootFieldName,
         args || {},
-        {},
+        context || {},
         info,
       )
 

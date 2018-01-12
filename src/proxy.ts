@@ -7,15 +7,19 @@ export function makeProxy<T extends object = any>({
   fragmentReplacements,
   operation,
   before,
+  handler
 }: {
   schema: GraphQLSchema
   fragmentReplacements: FragmentReplacements
   operation: 'query' | 'mutation'
-  before: () => void
+  before: () => void,
+  handler?: { new<T extends object>(schema, fragmentReplacements, operation, before): ProxyHandler<T> }
 }): T {
   return new Proxy(
     {} as T,
-    new Handler<T>(schema, fragmentReplacements, operation, before),
+    handler
+      ? new handler<T>(schema, fragmentReplacements, operation, before)
+      : new Handler<T>(schema, fragmentReplacements, operation, before),
   )
 }
 
