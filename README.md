@@ -14,6 +14,16 @@
 yarn add graphql-binding
 ```
 
+## API
+
+### `Binding`
+
+#### `constructor: Binding`
+
+#### `binding.query(...)` & `binding.mutation(...)`
+
+#### `binding.subscription(...)`
+
 ## Example
 
 ```js
