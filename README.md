@@ -68,7 +68,7 @@ binding.mutation.createUser()
 
 When using the binding in a resolver implementation, it can be used as follows:
 
-```
+```js
 findUser(parent, args, context, info) {
   return binding.user({ id: args.id }, context, info)
 }
