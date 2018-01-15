@@ -30,7 +30,7 @@ yarn add graphql-binding
 | `handler` | No | `any` |  `null` | The [`handler`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler) object from [JS Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) |
 | `subscriptionHandler` | No | `any` |  `null` | ... |
 
-#### `binding.query(...): Promise<any>` & `binding.mutation(): Promise<any>`
+#### `binding.query.<rootField>(): Promise<any>` & `binding.mutation.<rootField>(): Promise<any>`
 
 A binding object exposes two properties which can be used to send queries and mutations to the API: `binding.query` and `binding.mutation`.
 
@@ -44,7 +44,41 @@ These methods take three arguments:
 | `context` | No | `[key: string]: any` |  The `context` object that's passed down the GraphQL resolver chain; every resolver can read from and write to that object |
 | `info` | No | `GraphQLResolveInfo` | `string` |  The `info` object (which contains an AST of the incoming query/mutation) that's passed down the GraphQL resolver chain or a string containing a [selection set](https://medium.com/front-end-developers/graphql-selection-sets-d588f6782e90) |
 
-#### `binding.subscription(...):  AsyncIterator<any> | Promise<AsyncIterator<any>>`
+##### Example
+
+Assume the following schema:
+
+```graphql
+
+type Query {
+  user(id: ID!): User
+}
+
+type Mutation {
+  createUser(): User!
+}
+```
+
+If there is a `binding` for a GraphQL API that implements this schema, you can invoke the following methods on it: 
+
+```js
+binding.query.user({ id: 'abc' })
+binding.mutation.createUser()
+```
+
+When using the binding in a resolver implementation, it can be used as follows:
+
+```
+findUser(parent, args, context, info) {
+  return binding.user({ id: args.id }, context, info)
+}
+
+newUser(parent, args, context, info) {
+  return binding.createUser({}, context, info)
+}
+```
+
+#### `binding.subscription.<rootField>(...):  AsyncIterator<any> | Promise<AsyncIterator<any>>`
 
 The `binding.subscription` property follows the same idea as `query` and `mutation`, but rather than returning a single value using a `Promise`, it returns a _stream_ of values using `AsyncIterator`.
 
@@ -101,6 +135,6 @@ You can find practical, production-ready examples here:
 - [`graphql-binding-github`](https://github.com/graphcool/graphql-binding-github)
 - [`graphcool-binding`](https://github.com/graphcool/graphcool-binding)
 
-> Note: If you've created your own GraphQL binding based on this package, please add it to this via a PR 🙌
+> Note: If you've created your own GraphQL binding based on this package, please add it to this list via a PR 🙌
 
 If you have any questions, share some ideas or just want to chat about GraphQL bindings, join the [`#graphql-bindings`](https://graphcool.slack.com/messages/graphql-bindings) channel in our [Slack](https://slack.graph.cool/).
