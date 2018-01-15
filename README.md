@@ -42,7 +42,7 @@ These methods take three arguments:
 | ---  | --- | --- | --- | --- |
 | `args` | No | `[key: string]: any` |  An object that contains the arguments of the root field |
 | `context` | No | `[key: string]: any` |  The `context` object that's passed down the GraphQL resolver chain; every resolver can read from and write to that object |
-| `info` | No | `GraphQLResolveInfo | string,` |  The `info` object (which contains an AST of the incoming query/mutation) that's passed down the GraphQL resolver chain or a string containing a [selection set](https://medium.com/front-end-developers/graphql-selection-sets-d588f6782e90) |
+| `info` | No | `GraphQLResolveInfo` | `string` |  The `info` object (which contains an AST of the incoming query/mutation) that's passed down the GraphQL resolver chain or a string containing a [selection set](https://medium.com/front-end-developers/graphql-selection-sets-d588f6782e90) |
 
 #### `binding.subscription(...):  AsyncIterator<any> | Promise<AsyncIterator<any>>`
 
