@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "graphql": "0.12.3",
-    "graphql-tools": "2.18.0",
+    "graphql-tools": "2.19.0",
     "iterall": "1.1.3"
   }
 }
