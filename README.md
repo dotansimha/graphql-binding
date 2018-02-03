@@ -133,7 +133,7 @@ findUserBinding.findUser({ name: 'Bob' })
 You can find practical, production-ready examples here:
 
 - [`graphql-binding-github`](https://github.com/graphcool/graphql-binding-github)
-- [`graphcool-binding`](https://github.com/graphcool/graphcool-binding)
+- [`prisma-binding`](https://github.com/graphcool/prisma-binding)
 
 > Note: If you've created your own GraphQL binding based on this package, please add it to this list via a PR 🙌
 
