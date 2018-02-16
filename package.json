@@ -29,7 +29,7 @@
     "tslint": "5.9.1",
     "tslint-config-standard": "7.0.0",
     "graphql": "0.13.1",
-    "typescript": "2.7.1"
+    "typescript": "2.7.2"
   },
   "dependencies": {
     "graphql-tools": "2.21.0",
