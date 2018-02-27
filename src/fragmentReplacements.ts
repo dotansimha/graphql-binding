@@ -18,7 +18,7 @@ export function extractFragmentReplacements(
         const remoteTypeName = fragment.typeCondition!.name.value
 
         // lazy init type level for fragmentReplacements
-        fragmentReplacements[remoteTypeName] = fragmentReplacements[typeName] || {}
+        fragmentReplacements[remoteTypeName] = fragmentReplacements[remoteTypeName] || {}
         fragmentReplacements[remoteTypeName][fieldName] = fragment
       }
     }
