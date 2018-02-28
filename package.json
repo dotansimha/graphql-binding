@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "graphql-tools": "2.21.0",
-    "iterall": "1.2.1"
+    "iterall": "1.2.2"
   },
   "peerDependencies": {
     "graphql": "^0.11.0 || ^0.12.0 || ^0.13.0"
