@@ -1,6 +1,10 @@
 import { TestContext, test } from 'ava'
 import { buildSchema, SelectionNode, FieldNode } from 'graphql'
-import { buildInfoForAllScalars, buildInfoFromFragment } from './info'
+import {
+  buildInfoForAllScalars,
+  buildInfoFromFragment,
+  buildInfoFromSelection,
+} from './info'
 
 test('buildInfoForAllScalars: 1 field', t => {
   const schema = buildSchema(`
@@ -164,6 +168,95 @@ test('buildInfoFromFragment: invalid selection', t => {
   }
   `)
   t.throws(() => buildInfoFromFragment('book', schema, 'query', `{ xxx }`))
+})
+
+test('buildInfoFromFieldSelection: no required fields', t => {
+  const schema = buildSchema(`
+  type Query {
+    book: Book
+  }
+
+  type Book {
+    title: String
+    otherBook: Book
+  }
+  `)
+  const fragment = `{ otherBook { title } }`
+  const info = buildInfoFromFragment('book', schema, 'query', fragment)
+  const newInfo = buildInfoFromSelection('book', schema, 'query', {
+    info,
+    field: 'otherBook',
+  })
+  const selections = newInfo.fieldNodes[0].selectionSet!.selections
+
+  assertFields(t, selections, ['title'])
+})
+
+test('buildInfoFromFieldSelection: required fields', t => {
+  const schema = buildSchema(`
+  type Query {
+    book: Book
+  }
+
+  type Book {
+    id: ID!
+    title: String
+    otherBook: Book
+  }
+  `)
+  const fragment = `{ otherBook { title } }`
+  const info = buildInfoFromFragment('book', schema, 'query', fragment)
+  const newInfo = buildInfoFromSelection('book', schema, 'query', {
+    info,
+    field: 'otherBook',
+    required: '{ id otherBook { id } }'
+  })
+  const selections = newInfo.fieldNodes[0].selectionSet!.selections
+
+  assertFields(t, selections, ['id', 'title', 'otherBook'])
+  selections.forEach(s => {
+    if (s.kind === 'Field' && s.name.value === 'otherBook') {
+      assertFields(t, s.selectionSet!.selections, ['id'])
+    }
+  })
+})
+
+test('buildInfoFromFieldSelection: repeated required fields', t => {
+  const schema = buildSchema(`
+  type Query {
+    book: Book
+  }
+
+  type Book {
+    id: ID!
+    title: String
+    otherBook: Book
+  }
+  `)
+  const fragment = `{ otherBook { title otherBook { title } } }`
+  const info = buildInfoFromFragment('book', schema, 'query', fragment)
+  const newInfo = buildInfoFromSelection('book', schema, 'query', {
+    info,
+    field: 'otherBook',
+    required: '{ id otherBook { id } }'
+  })
+  const selections = newInfo.fieldNodes[0].selectionSet!.selections
+
+  // There will be one 'otherBook { title }' from the fragment and
+  // other 'otherBook { id }' from the requirement. This is valid GraphQL.
+  assertFields(t, selections, ['id', 'title', 'otherBook', 'otherBook'])
+
+  // Check if there is an 'id' and a 'title' as selection of 'otherBook'
+  const otherBookFields = new Set(
+    selections
+      .filter(s => s.kind === 'Field' && s.name.value === 'otherBook')
+      .map((otherBookField: FieldNode) => otherBookField.selectionSet!.selections)
+      .reduce((flat, subSel) => flat.concat(subSel))
+      .filter(s => s.kind === 'Field')
+      .map((s: FieldNode) => s.name.value)
+    )
+  t.true(otherBookFields.has('title'))
+  t.true(otherBookFields.has('id'))
 })
 
 function assertFields(

@@ -31,3 +31,9 @@ export interface BindingOptions {
   handler?: any
   subscriptionHandler?: any
 }
+
+export interface InfoFieldSelection {
+  info: GraphQLResolveInfo
+  field: string
+  required?: string
+}

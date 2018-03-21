@@ -7,19 +7,21 @@ import {
   parse,
   validate,
 } from 'graphql'
-import { Operation } from './types'
-import { isScalar, getTypeForRootFieldName } from './utils'
+import { Operation, InfoFieldSelection } from './types'
+import { isScalar, getTypeForRootFieldName, isInfoFieldSelection } from './utils'
 
 export function buildInfo(
   rootFieldName: string,
   operation: Operation,
   schema: GraphQLSchema,
-  info?: GraphQLResolveInfo | string,
+  info?: GraphQLResolveInfo | string | InfoFieldSelection,
 ): GraphQLResolveInfo {
   if (!info) {
     info = buildInfoForAllScalars(rootFieldName, schema, operation)
   } else if (typeof info === 'string') {
     info = buildInfoFromFragment(rootFieldName, schema, operation, info)
+  } else if (isInfoFieldSelection(info)) {
+    info = buildInfoFromSelection(rootFieldName, schema, operation, info)
   }
   return info
 }
@@ -135,4 +137,56 @@ function extractQuerySelectionSet(
   }
 
   return queryNode.selectionSet
+}
+
+/**
+ * Get the named fields from the selection of info's root field
+ */
+function getFieldsByName(name: string, info: GraphQLResolveInfo): FieldNode[] {
+  const infoField = info.fieldNodes[0]
+  const { selectionSet } = infoField
+  if (!selectionSet) {
+    throw new Error(`Field '${infoField.name.value}' have no selection.`)
+  }
+
+  const { selections } = selectionSet
+  const found = selections.filter(
+    field => field.kind === 'Field' && field.name.value === name,
+  ) as FieldNode[]
+
+  if (found.length > 0) return found
+
+  throw new Error(
+    `Field '${name}' not found in '${infoField.name.value}' selection`,
+  )
+}
+
+function flatMap<T, U>(
+  array: T[],
+  mapper: (value: T, index: number, array: T[]) => U[],
+): U[] {
+  return ([] as U[]).concat(...array.map(mapper))
+}
+
+export function buildInfoFromSelection(
+  rootFieldName: string,
+  schema: GraphQLSchema,
+  operation: Operation,
+  selection: InfoFieldSelection,
+): GraphQLResolveInfo {
+  const { field: fieldName, info, required } = selection
+
+  const fields = getFieldsByName(fieldName, info)
+  const oldSelections = flatMap(fields, field => field.selectionSet ? field.selectionSet.selections : [])
+
+  const newInfo = buildInfo(rootFieldName, operation, schema, required)
+  const { selectionSet } = newInfo.fieldNodes[0]
+
+  if (required) {
+    selectionSet!.selections = selectionSet!.selections.concat(oldSelections)
+  } else {
+    selectionSet!.selections = oldSelections
+  }
+
+  return newInfo
 }

@@ -11,7 +11,7 @@ import {
   getNamedType,
   GraphQLResolveInfo,
 } from 'graphql'
-import { Operation } from './types'
+import { Operation, InfoFieldSelection } from './types'
 
 export function isScalar(t: GraphQLOutputType): boolean {
   if (t instanceof GraphQLScalarType || t instanceof GraphQLEnumType) {
@@ -83,4 +83,10 @@ export function forwardTo(bindingName: string) {
 
     throw new Error(message)
   }
+}
+
+export function isInfoFieldSelection(
+  selection: InfoFieldSelection | GraphQLResolveInfo
+): selection is InfoFieldSelection {
+  return (selection as InfoFieldSelection).field != null
 }
