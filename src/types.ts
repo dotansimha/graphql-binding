@@ -12,7 +12,7 @@ export interface QueryMap {
   [rootField: string]: (
     args?: { [key: string]: any },
     context?: { [key: string]: any },
-    info?: GraphQLResolveInfo | string,
+    info?: GraphQLResolveInfo | InfoFieldSelection | string,
   ) => Promise<any>
 }
 
@@ -20,7 +20,7 @@ export interface SubscriptionMap {
   [rootField: string]: (
     args?: any,
     context?: { [key: string]: any },
-    info?: GraphQLResolveInfo | string,
+    info?: GraphQLResolveInfo | InfoFieldSelection | string,
   ) => AsyncIterator<any> | Promise<AsyncIterator<any>>
 }
 

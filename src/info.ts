@@ -14,7 +14,7 @@ export function buildInfo(
   rootFieldName: string,
   operation: Operation,
   schema: GraphQLSchema,
-  info?: GraphQLResolveInfo | string | InfoFieldSelection,
+  info?: GraphQLResolveInfo | InfoFieldSelection | string,
 ): GraphQLResolveInfo {
   if (!info) {
     info = buildInfoForAllScalars(rootFieldName, schema, operation)

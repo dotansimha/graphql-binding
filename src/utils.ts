@@ -88,5 +88,5 @@ export function forwardTo(bindingName: string) {
 export function isInfoFieldSelection(
   selection: InfoFieldSelection | GraphQLResolveInfo
 ): selection is InfoFieldSelection {
-  return (selection as InfoFieldSelection).field != null
+  return (selection as InfoFieldSelection).field !== undefined
 }

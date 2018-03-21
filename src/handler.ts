@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo, ExecutionResult, GraphQLSchema } from 'graphql'
 import { delegateToSchema } from 'graphql-tools'
 import { $$asyncIterator } from 'iterall'
-import { FragmentReplacements } from './types'
+import { FragmentReplacements, InfoFieldSelection } from './types'
 import { buildInfo } from './info'
 
 export class Handler<T extends object> implements ProxyHandler<T> {
@@ -16,7 +16,7 @@ export class Handler<T extends object> implements ProxyHandler<T> {
     return (
       args?: { [key: string]: any },
       context?: { [key: string]: any },
-      info?: GraphQLResolveInfo | string,
+      info?: GraphQLResolveInfo | InfoFieldSelection | string,
     ): Promise<ExecutionResult> => {
       this.before()
 
@@ -47,7 +47,7 @@ export class SubscriptionHandler<T extends object> implements ProxyHandler<T> {
     return async (
       args?: { [key: string]: any },
       context?: { [key: string]: any },
-      infoOrQuery?: GraphQLResolveInfo | string,
+      infoOrQuery?: GraphQLResolveInfo | InfoFieldSelection | string,
     ): Promise<AsyncIterator<any>> => {
       this.before()
 

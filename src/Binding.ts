@@ -3,7 +3,7 @@ import { buildInfo } from './info'
 import { GraphQLResolveInfo, graphql, GraphQLSchema } from 'graphql'
 import { delegateToSchema } from 'graphql-tools'
 import { makeProxy, makeSubscriptionProxy } from './proxy'
-import { QueryMap, BindingOptions, FragmentReplacements, SubscriptionMap, Operation } from './types'
+import { QueryMap, BindingOptions, FragmentReplacements, SubscriptionMap, Operation, InfoFieldSelection } from './types'
 
 export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap extends object = SubscriptionMap> {
   query: TQueryMap
@@ -55,7 +55,7 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
     context: {
       [key: string]: any
     },
-    info?: GraphQLResolveInfo | string
+    info?: GraphQLResolveInfo | InfoFieldSelection | string
   ) {
     this.before()
 
@@ -76,7 +76,7 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
     fieldName: string,
     args?: { [key: string]: any },
     context?: { [key: string]: any },
-    infoOrQuery?: GraphQLResolveInfo | string
+    infoOrQuery?: GraphQLResolveInfo | InfoFieldSelection | string
   ): Promise<AsyncIterator<any>> {
     this.before()
 
