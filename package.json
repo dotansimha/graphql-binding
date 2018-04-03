@@ -22,7 +22,7 @@
     "test": "tslint src/**/*.ts && npm run test-only"
   },
   "devDependencies": {
-    "@types/graphql": "0.12.7",
+    "@types/graphql": "0.13.0",
     "@types/node": "9.4.6",
     "apollo-link": "1.2.1",
     "ava": "0.25.0",
