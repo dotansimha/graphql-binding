@@ -8,7 +8,7 @@ export function extractFragmentReplacements(
   const fragmentReplacements: FragmentReplacements = {}
 
   for (const typeName in resolvers) {
-    const fieldResolvers = resolvers[typeName]
+    const fieldResolvers: any = resolvers[typeName]
     for (const fieldName in fieldResolvers) {
       const fieldResolver = fieldResolvers[fieldName]
       if (typeof fieldResolver === 'object' && 'fragment' in fieldResolver) {

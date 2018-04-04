@@ -8,6 +8,7 @@
     "strictNullChecks": true,
     "rootDir": "./src",
     "outDir": "./dist",
+    "strict": true,
     "lib": [
       "dom", "esnext", "es2016"
     ]
