@@ -1,6 +1,10 @@
 import { TestContext, test } from 'ava'
 import { buildSchema, SelectionNode, FieldNode } from 'graphql'
-import { buildInfoForAllScalars, buildInfoFromFragment } from './info'
+import {
+  buildInfoForAllScalars,
+  buildInfoFromFragment,
+  addFragmentToInfo,
+} from './info'
 
 test('buildInfoForAllScalars: 1 field', t => {
   const schema = buildSchema(`
@@ -164,6 +168,62 @@ test('buildInfoFromFragment: invalid selection', t => {
   }
   `)
   t.throws(() => buildInfoFromFragment('book', schema, 'query', `{ xxx }`))
+})
+
+test('addFragmentToInfo: add field by simple query', t => {
+  const schema = buildSchema(`
+  type Query {
+    book: Book
+  }
+
+  type Book {
+    title: String
+    extraField: String
+  }
+  `)
+  const info = buildInfoFromFragment('book', schema, 'query', `{ title }`)
+  const patchedInfo = addFragmentToInfo(info, '{extraField}')
+  const selections = patchedInfo.fieldNodes[0].selectionSet!.selections
+
+  assertFields(t, selections, ['title', 'extraField'])
+})
+
+test('addFragmentToInfo: add field by fragment', t => {
+  const schema = buildSchema(`
+  type Query {
+    book: Book
+  }
+
+  type Book {
+    title: String
+    extraField: String
+  }
+  `)
+  const info = buildInfoFromFragment('book', schema, 'query', `{ title }`)
+  const patchedInfo = addFragmentToInfo(
+    info,
+    'fragment F on Book { extraField }',
+  )
+  const selections = patchedInfo.fieldNodes[0].selectionSet!.selections
+
+  assertFields(t, selections, ['title', 'extraField'])
+})
+
+test("addFragmentToInfo: dont add field by fragment when type doesn't match", t => {
+  const schema = buildSchema(`
+  type Query {
+    book: Book
+  }
+
+  type Book {
+    title: String
+    extraField: String
+  }
+  `)
+  const info = buildInfoFromFragment('book', schema, 'query', `{ title }`)
+  t.throws(() =>
+    addFragmentToInfo(info, 'fragment F on UnknownType { extraField }'),
+  )
 })
 
 function assertFields(

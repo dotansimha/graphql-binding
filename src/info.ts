@@ -6,9 +6,14 @@ import {
   SelectionSetNode,
   parse,
   validate,
+  OperationDefinitionNode,
+  FragmentDefinitionNode,
+  GraphQLScalarType,
+  GraphQLOutputType,
 } from 'graphql'
 import { Operation } from './types'
 import { isScalar, getTypeForRootFieldName } from './utils'
+import { update } from 'object-path-immutable'
 
 export function buildInfo(
   rootFieldName: string,
@@ -135,4 +140,49 @@ function extractQuerySelectionSet(
   }
 
   return queryNode.selectionSet
+}
+
+export function addFragmentToInfo(
+  info: GraphQLResolveInfo,
+  fragment: string,
+): GraphQLResolveInfo {
+  const returnType = getDeepType(info.returnType)
+  if (returnType instanceof GraphQLScalarType) {
+    throw new Error(
+      `Can't add fragment "${fragment}" because return type of info object is a scalar type ${info.returnType.toString()}`,
+    )
+  }
+
+  const ast = parse(fragment)
+
+  if (
+    ast.definitions[0].kind === 'FragmentDefinition' &&
+    (ast.definitions[0] as FragmentDefinitionNode).typeCondition.name.value !==
+      returnType.name
+  ) {
+    throw new Error(
+      `Type ${
+        (ast.definitions[0] as FragmentDefinitionNode).typeCondition.name.value
+      } specified in fragment doesn't match return type ${returnType.toString()}`,
+    )
+  }
+
+  return update(
+    info,
+    ['fieldNodes', 0, 'selectionSet', 'selections'],
+    selections =>
+      selections.concat(
+        (ast.definitions[0] as OperationDefinitionNode).selectionSet.selections,
+      ),
+  )
+}
+
+function getDeepType(
+  type: GraphQLOutputType,
+): GraphQLObjectType | GraphQLScalarType {
+  if ((type as any).ofType) {
+    return (type as any).ofType
+  }
+
+  return type as any
 }
