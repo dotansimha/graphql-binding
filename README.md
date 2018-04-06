@@ -86,6 +86,28 @@ The `binding.subscription` property follows the same idea as `query` and `mutati
 
  These methods take same three arguments as the generated methods on `query` and `mutation`, see above for the details.
 
+### `utils`
+
+#### `addFragmentToInfo(info: GraphQLResolverInfo, fragment: string): GraphQLResolverInfo`
+
+Can be used to ensure that specific fields are included in the `info` object passed into the bindings.
+
+##### Example
+
+```ts
+import {addFragmentToInfo} from 'graphql-binding'
+
+async findUser(parent, args, context, info) {
+  const user = await binding.user({ id: args.id }, context, addFragmentToInfo(info, 'fragment EnsureEmail on User { email }'))
+
+  if (blackList.includes(user.email)) {
+    throw new Error('This user is blocked')
+  }
+
+  return user
+}
+```
+
 ## Example
 
 ### Minimal example
