@@ -263,7 +263,40 @@ test('makeSubInfo: works when path has been selected', t => {
   t.snapshot(getRelevantPartsFromInfo(subInfo))
 })
 
-test.only('makeSubInfo: works with inline fragment', t => {
+test('makeSubInfo: works when path has been selected and adds fragment', t => {
+  const schema = buildSchema(`
+    type Query {
+      book: Book
+    }
+
+    type Book {
+      title: String
+      extraField: String
+      page: Page
+    }
+
+    type Page {
+      content: String
+      wordCount: Int
+    }
+  `)
+  const info = buildInfoFromFragment(
+    'book',
+    schema,
+    'query',
+    `{ title page { content } }`,
+  )
+
+  const subInfo = makeSubInfo(
+    info,
+    'page',
+    'fragment Frag on Page { wordCount }',
+  )!
+
+  t.snapshot(printDocumentFromInfo(subInfo))
+})
+
+test('makeSubInfo: works with inline fragment', t => {
   const schema = buildSchema(`
     type Query {
       book: Book

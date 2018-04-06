@@ -10,6 +10,7 @@ import {
   FragmentDefinitionNode,
   GraphQLScalarType,
   GraphQLOutputType,
+  Kind,
 } from 'graphql'
 import { Operation } from './types'
 import { isScalar, getTypeForRootFieldName } from './utils'
@@ -188,7 +189,6 @@ export function makeSubInfo(
   path: string,
   fragment?: string,
 ): GraphQLResolveInfo | null {
-  debugger
   const returnType = getDeepType(info.returnType)
   if (returnType instanceof GraphQLScalarType) {
     throw new Error(`Can't make subInfo for type ${info.returnType.toString()}`)
@@ -263,7 +263,7 @@ export function makeSubInfo(
     selectionSet: currentSelectionSet,
   }
 
-  return {
+  const newInfo = {
     fieldNodes: [fieldNode],
     fragments: {},
     schema: info.schema,
@@ -273,12 +273,18 @@ export function makeSubInfo(
     path: currentPath,
     rootValue: undefined,
     operation: {
-      kind: 'OperationDefinition',
+      kind: Kind.OPERATION_DEFINITION,
       operation: currentFieldName,
-      selectionSet: { kind: 'SelectionSet', selections: [] },
+      selectionSet: { kind: Kind.SELECTION_SET, selections: [] },
     },
     variableValues: {},
   }
+
+  if (fragment) {
+    return addFragmentToInfo(newInfo, fragment)
+  }
+
+  return newInfo
 }
 
 function getDeepType(
