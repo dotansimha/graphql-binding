@@ -1,9 +1,16 @@
 import { TestContext, test } from 'ava'
-import { buildSchema, SelectionNode, FieldNode } from 'graphql'
+import {
+  buildSchema,
+  SelectionNode,
+  FieldNode,
+  GraphQLResolveInfo,
+  print,
+} from 'graphql'
 import {
   buildInfoForAllScalars,
   buildInfoFromFragment,
   addFragmentToInfo,
+  makeSubInfo,
 } from './info'
 
 test('buildInfoForAllScalars: 1 field', t => {
@@ -226,6 +233,116 @@ test("addFragmentToInfo: dont add field by fragment when type doesn't match", t 
   )
 })
 
+test('makeSubInfo: works when path has been selected', t => {
+  const schema = buildSchema(`
+    type Query {
+      book: Book
+    }
+
+    type Book {
+      title: String
+      extraField: String
+      page: Page
+    }
+
+    type Page {
+      content: String
+      wordCount: Int
+    }
+  `)
+  const info = buildInfoFromFragment(
+    'book',
+    schema,
+    'query',
+    `{ title page { content wordCount } }`,
+  )
+
+  const subInfo = makeSubInfo(info, 'page')!
+
+  t.snapshot(printDocumentFromInfo(subInfo))
+  t.snapshot(getRelevantPartsFromInfo(subInfo))
+})
+
+test.only('makeSubInfo: works with inline fragment', t => {
+  const schema = buildSchema(`
+    type Query {
+      book: Book
+    }
+
+    type Book {
+      title: String
+      extraField: String
+      page: Page
+    }
+
+    type Page {
+      content: String
+      wordCount: Int
+    }
+  `)
+  const info = buildInfoFromFragment(
+    'book',
+    schema,
+    'query',
+    `{ title ... on Book { page { content } } }`,
+  )
+
+  const subInfo = makeSubInfo(info, 'page')!
+
+  t.snapshot(printDocumentFromInfo(subInfo))
+  t.snapshot(getRelevantPartsFromInfo(subInfo))
+})
+
+function getRelevantPartsFromInfo(info: GraphQLResolveInfo) {
+  const {
+    fragments,
+    fieldName,
+    returnType,
+    parentType,
+    path,
+    rootValue,
+    operation,
+    variableValues,
+    fieldNodes,
+  } = info
+
+  return {
+    fragments,
+    fieldName,
+    returnType: returnType.toString(),
+    parentType: parentType.toString(),
+    path,
+    rootValue,
+    operation,
+    variableValues,
+    selectionSet: fieldNodes[0].selectionSet,
+  }
+}
+
+test('makeSubInfo: returns null when path has not been selected', t => {
+  const schema = buildSchema(`
+    type Query {
+      book: Book
+    }
+
+    type Book {
+      title: String
+      extraField: String
+      page: Page
+    }
+
+    type Page {
+      content: String
+      wordCount: Int
+    }
+  `)
+  const info = buildInfoFromFragment('book', schema, 'query', `{ title }`)
+
+  const subInfo = makeSubInfo(info, 'page')!
+
+  t.is(subInfo, null)
+})
+
 function assertFields(
   t: TestContext,
   selections: SelectionNode[],
@@ -245,4 +362,19 @@ function assertFields(
   }
 
   t.is(selections.length, names.length)
+}
+
+function printDocumentFromInfo(info: GraphQLResolveInfo) {
+  const doc = {
+    kind: 'Document',
+    definitions: [
+      {
+        kind: 'OperationDefinition',
+        operation: 'query',
+        selectionSet: info.fieldNodes[0].selectionSet,
+      },
+    ],
+  }
+
+  return print(doc)
 }
