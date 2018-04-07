@@ -2,6 +2,9 @@ import { GraphQLSchema } from 'graphql'
 import { FragmentReplacements } from './types'
 import { Handler, SubscriptionHandler } from './handler'
 
+export type Operation = 'query' | 'mutation'
+export type Before = () => void
+
 export function makeProxy<T extends object = any>({
   schema,
   fragmentReplacements,
@@ -11,9 +14,9 @@ export function makeProxy<T extends object = any>({
 }: {
   schema: GraphQLSchema
   fragmentReplacements: FragmentReplacements
-  operation: 'query' | 'mutation'
-  before: () => void,
-  handler?: { new<T extends object>(schema, fragmentReplacements, operation, before): ProxyHandler<T> }
+  operation: Operation
+  before: Before
+  handler?: { new <T extends object>(schema: GraphQLSchema, fragmentReplacements: FragmentReplacements, operation: Operation, before: Before): ProxyHandler<T> }
 }): T {
   return new Proxy(
     {} as T,
@@ -31,8 +34,8 @@ export function makeSubscriptionProxy<T extends object = any>({
 }: {
   schema: GraphQLSchema
   fragmentReplacements: FragmentReplacements
-  before: () => void
-  handler?: { new<T extends object>(schema, fragmentReplacements, before): ProxyHandler<T> }
+  before: Before
+  handler?: { new <T extends object>(schema: GraphQLSchema, fragmentReplacements: FragmentReplacements, before: Before): ProxyHandler<T> }
 }): T {
   return new Proxy(
     {} as T,
