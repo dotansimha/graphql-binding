@@ -236,7 +236,7 @@ export function makeSubInfo(
     if (!suitableSelection) {
       // if there is no field selection, there still could be fragments
       currentSelectionSet = currentSelectionSet.selections.reduce(
-        (acc, curr) => {
+        (acc: any, curr) => {
           if (acc) {
             return acc
           }

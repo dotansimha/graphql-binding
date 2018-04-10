@@ -6,12 +6,11 @@
     "sourceMap": true,
     "noUnusedLocals": true,
     "strictNullChecks": true,
+    "noImplicitAny": false,
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
-    "lib": [
-      "dom", "esnext", "es2016"
-    ]
+    "lib": ["dom", "esnext", "es2016"]
   },
   "exclude": ["node_modules", "dist", "examples"]
 }
