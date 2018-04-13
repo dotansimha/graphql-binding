@@ -1,7 +1,15 @@
 import { $$asyncIterator } from 'iterall'
 import { buildInfo } from './info'
-import { GraphQLResolveInfo, graphql, GraphQLSchema } from 'graphql'
+import {
+  GraphQLResolveInfo,
+  graphql,
+  GraphQLSchema,
+  buildSchema,
+  GraphQLUnionType,
+  GraphQLInterfaceType,
+} from 'graphql'
 import { delegateToSchema, makeRemoteExecutableSchema } from 'graphql-tools'
+import { IResolvers } from 'graphql-tools/dist/Interfaces'
 import { makeProxy, makeSubscriptionProxy } from './proxy'
 import {
   QueryMap,
@@ -137,5 +145,35 @@ export class Binding<
         return this
       },
     }
+  }
+
+  getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers {
+    const typeMap = this.schema.getTypeMap()
+
+    if (filterSchema && typeof filterSchema === 'string') {
+      filterSchema = buildSchema(filterSchema)
+    }
+    const filterTypeMap =
+      filterSchema instanceof GraphQLSchema
+        ? filterSchema.getTypeMap()
+        : typeMap
+    const filterType = typeName => typeName in filterTypeMap
+
+    const resolvers = {}
+    Object.keys(typeMap)
+      .filter(filterType)
+      .forEach(typeName => {
+        const type = typeMap[typeName]
+        if (
+          type instanceof GraphQLUnionType ||
+          type instanceof GraphQLInterfaceType
+        ) {
+          resolvers[typeName] = {
+            __resolveType: type.resolveType,
+          }
+        }
+      })
+
+    return resolvers
   }
 }
