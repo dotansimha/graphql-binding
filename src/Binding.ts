@@ -1,11 +1,20 @@
 import { $$asyncIterator } from 'iterall'
 import { buildInfo } from './info'
 import { GraphQLResolveInfo, graphql, GraphQLSchema } from 'graphql'
-import { delegateToSchema } from 'graphql-tools'
+import { delegateToSchema, makeRemoteExecutableSchema } from 'graphql-tools'
 import { makeProxy, makeSubscriptionProxy } from './proxy'
-import { QueryMap, BindingOptions, FragmentReplacements, SubscriptionMap, Operation } from './types'
+import {
+  QueryMap,
+  BindingOptions,
+  FragmentReplacements,
+  SubscriptionMap,
+  Operation,
+} from './types'
 
-export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap extends object = SubscriptionMap> {
+export class Binding<
+  TQueryMap extends object = QueryMap,
+  TSubscriptionMap extends object = SubscriptionMap
+> {
   query: TQueryMap
   mutation: TQueryMap
   subscription: TSubscriptionMap
@@ -14,9 +23,24 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
 
   private fragmentReplacements: FragmentReplacements
 
-  constructor({ schema, fragmentReplacements, before, handler, subscriptionHandler }: BindingOptions) {
+  constructor({
+    schema,
+    fragmentReplacements,
+    before,
+    handler,
+    subscriptionHandler,
+    link,
+    typeDefs,
+  }: BindingOptions) {
     this.fragmentReplacements = fragmentReplacements || {}
-    this.schema = schema
+    if (schema) {
+      this.schema = schema
+    } else if (typeDefs && link) {
+      this.schema = makeRemoteExecutableSchema({ schema: typeDefs, link })
+    } else {
+      throw new Error(`Please either provide a schema or typeDefs and link`)
+    }
+
     this.before = before || (() => undefined)
 
     this.query = makeProxy<TQueryMap>({
@@ -24,26 +48,31 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
       fragmentReplacements: this.fragmentReplacements,
       operation: 'query',
       before: this.before,
-      handler
+      handler,
     })
     this.mutation = makeProxy<TQueryMap>({
       schema: this.schema,
       fragmentReplacements: this.fragmentReplacements,
       operation: 'mutation',
       before: this.before,
-      handler
+      handler,
     })
     this.subscription = makeSubscriptionProxy<TSubscriptionMap>({
       schema: this.schema,
       fragmentReplacements: this.fragmentReplacements,
       before: this.before,
-      handler: subscriptionHandler
+      handler: subscriptionHandler,
     })
   }
 
-  public async request<T = any>(query: string, variables?: { [key: string]: any }): Promise<T> {
+  public async request<T = any>(
+    query: string,
+    variables?: { [key: string]: any },
+  ): Promise<T> {
     this.before()
-    return graphql(this.schema, query, null, null, variables).then(r => r.data![Object.keys(r.data!)[0]])
+    return graphql(this.schema, query, null, null, variables).then(
+      r => r.data as any,
+    )
   }
 
   public async delegate(
@@ -52,10 +81,10 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
     args: {
       [key: string]: any
     },
-    context: {
+    info?: GraphQLResolveInfo | string,
+    context?: {
       [key: string]: any
     },
-    info?: GraphQLResolveInfo | string
   ) {
     this.before()
 
@@ -67,16 +96,16 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
       operation,
       fieldName,
       args,
-      context,
-      info
+      context || {},
+      info,
     )
   }
 
   public async delegateSubscription(
     fieldName: string,
     args?: { [key: string]: any },
+    infoOrQuery?: GraphQLResolveInfo | string,
     context?: { [key: string]: any },
-    infoOrQuery?: GraphQLResolveInfo | string
   ): Promise<AsyncIterator<any>> {
     this.before()
 
@@ -89,7 +118,7 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
       fieldName,
       args || {},
       context || {},
-      info
+      info,
     )
 
     return {
@@ -106,7 +135,7 @@ export class Binding<TQueryMap extends object = QueryMap, TSubscriptionMap exten
       },
       [$$asyncIterator]() {
         return this
-      }
+      },
     }
   }
 }

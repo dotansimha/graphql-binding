@@ -1316,6 +1316,12 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
+graphql-import@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/graphql-import/-/graphql-import-0.5.0.tgz#5f678a6d4636d02a829308884aa1f2fa2197f06d"
+  dependencies:
+    lodash "^4.17.4"
+
 graphql-tools@2.21.0:
   version "2.21.0"
   resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-2.21.0.tgz#c0d0fbda6f40a87c8d267a2989ade2ae8b9a288e"

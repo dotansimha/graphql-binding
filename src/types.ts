@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLSchema, InlineFragmentNode } from 'graphql'
+import { ApolloLink } from 'apollo-link'
 
 export type Operation = 'query' | 'mutation' | 'subscription'
 
@@ -26,8 +27,10 @@ export interface SubscriptionMap {
 
 export interface BindingOptions {
   fragmentReplacements?: FragmentReplacements
-  schema: GraphQLSchema
+  schema?: GraphQLSchema
   before?: () => void
   handler?: any
   subscriptionHandler?: any
+  link?: ApolloLink
+  typeDefs?: string
 }
