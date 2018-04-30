@@ -76,7 +76,7 @@ export function getTypeForRootFieldName(
 }
 
 export function forwardTo(bindingName: string) {
-  return (parent: any, args: any, context: any, info: GraphQLResolveInfo) => {
+  return <PARENT, ARGS, CONTEXT>(parent: PARENT, args: ARGS, context: CONTEXT, info: GraphQLResolveInfo) => {
     let message = `Forward to '${bindingName}.${info.parentType.name.toLowerCase()}.${
       info.fieldName
     }' failed. `
