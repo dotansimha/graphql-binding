@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/graphql": "0.12.7",
     "@types/node": "9.4.6",
-    "apollo-link": "1.2.1",
+    "apollo-link": "1.2.2",
     "ava": "0.25.0",
     "graphql": "0.13.2",
     "tslint": "5.9.1",
