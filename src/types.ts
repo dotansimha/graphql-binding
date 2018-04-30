@@ -1,12 +1,13 @@
-import { GraphQLResolveInfo, GraphQLSchema, InlineFragmentNode } from 'graphql'
-import { ApolloLink } from 'apollo-link'
+import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
+import { Transform } from 'graphql-tools'
 
 export type Operation = 'query' | 'mutation' | 'subscription'
+// needed to exclude 'subscription' in delegate api
+export type QueryOrMutation = 'query' | 'mutation'
 
-export interface FragmentReplacements {
-  [typeName: string]: {
-    [fieldName: string]: InlineFragmentNode
-  }
+export interface FragmentReplacement {
+  field: string
+  fragment: string
 }
 
 export interface QueryMap {
@@ -26,11 +27,27 @@ export interface SubscriptionMap {
 }
 
 export interface BindingOptions {
-  fragmentReplacements?: FragmentReplacements
-  schema?: GraphQLSchema
+  fragmentReplacements?: FragmentReplacement[]
+  schema: GraphQLSchema
   before?: () => void
-  handler?: any
-  subscriptionHandler?: any
-  link?: ApolloLink
-  typeDefs?: string
+}
+// args: {
+//   [key: string]: any
+// },
+// info?: GraphQLResolveInfo | string,
+// context?: {
+//   [key: string]: any
+// },
+
+export interface Args {
+  [key: string]: any
+}
+
+export interface Context {
+  [key: string]: any
+}
+
+export interface Options {
+  transforms?: Transform[]
+  context?: Context
 }
