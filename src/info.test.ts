@@ -378,7 +378,7 @@ test('makeSubInfo: returns null when path has not been selected', t => {
 
 function assertFields(
   t: TestContext,
-  selections: SelectionNode[],
+  selections: ReadonlyArray<SelectionNode>,
   names: string[],
 ) {
   const fields = names.map<FieldNode>(value => ({

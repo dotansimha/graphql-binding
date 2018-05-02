@@ -53,11 +53,12 @@ export function getTypeForRootFieldName(
     throw new Error(`Schema doesn't have subscription type`)
   }
 
-  const rootType = {
-    query: () => schema.getQueryType(),
-    mutation: () => schema.getMutationType()!,
-    subscription: () => schema.getSubscriptionType()!,
-  }[operation]()
+  const rootType =
+    {
+      query: () => schema.getQueryType(),
+      mutation: () => schema.getMutationType()!,
+      subscription: () => schema.getSubscriptionType()!,
+    }[operation]() || undefined!
 
   const rootField = rootType.getFields()[rootFieldName]
 
@@ -70,12 +71,20 @@ export function getTypeForRootFieldName(
 
 export function forwardTo(bindingName: string) {
   return (parent: any, args: any, context: any, info: GraphQLResolveInfo) => {
-    let message = `Forward to '${bindingName}.${info.parentType.name.toLowerCase()}.${info.fieldName}' failed. `
+    let message = `Forward to '${bindingName}.${info.parentType.name.toLowerCase()}.${
+      info.fieldName
+    }' failed. `
     if (context[bindingName]) {
-      if (context[bindingName][info.parentType.name.toLowerCase()][info.fieldName]) {
-        return context[bindingName][info.parentType.name.toLowerCase()][info.fieldName](args, info)
+      if (
+        context[bindingName][info.parentType.name.toLowerCase()][info.fieldName]
+      ) {
+        return context[bindingName][info.parentType.name.toLowerCase()][
+          info.fieldName
+        ](args, info)
       } else {
-        message += `Field '${info.parentType.name.toLowerCase()}.${info.fieldName}' not found on binding '${bindingName}'.`
+        message += `Field '${info.parentType.name.toLowerCase()}.${
+          info.fieldName
+        }' not found on binding '${bindingName}'.`
       }
     } else {
       message += `Binding '${bindingName}' not found.`

@@ -60,11 +60,12 @@ export function buildInfoForAllScalars(
 
   fieldNodes.push(fieldNode)
 
-  const parentType = {
-    query: () => schema.getQueryType(),
-    mutation: () => schema.getMutationType()!,
-    subscription: () => schema.getSubscriptionType()!,
-  }[operation]()
+  const parentType =
+    {
+      query: () => schema.getQueryType(),
+      mutation: () => schema.getMutationType()!,
+      subscription: () => schema.getSubscriptionType()!,
+    }[operation]() || undefined
 
   return {
     fieldNodes,
@@ -72,8 +73,8 @@ export function buildInfoForAllScalars(
     schema,
     fieldName: rootFieldName,
     returnType: type,
-    parentType,
-    path: undefined,
+    parentType: parentType!,
+    path: undefined!,
     rootValue: undefined,
     operation: {
       kind: 'OperationDefinition',
@@ -107,8 +108,8 @@ export function buildInfoFromFragment(
     schema,
     fieldName: rootFieldName,
     returnType: type,
-    parentType: schema.getQueryType(),
-    path: undefined,
+    parentType: schema.getQueryType() || undefined!,
+    path: undefined!,
     rootValue: undefined,
     operation: {
       kind: 'OperationDefinition',

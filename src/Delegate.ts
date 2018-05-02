@@ -11,19 +11,14 @@ import {
 import { delegateToSchema, ReplaceFieldWithFragment } from 'graphql-tools'
 import { IResolvers } from 'graphql-tools/dist/Interfaces'
 import {
-  QueryMap,
   BindingOptions,
-  SubscriptionMap,
   Options,
   QueryOrMutation,
   Operation,
   FragmentReplacement,
 } from './types'
 
-export class Delegate<
-  TQueryMap extends object = QueryMap,
-  TSubscriptionMap extends object = SubscriptionMap
-> {
+export class Delegate {
   schema: GraphQLSchema
   before: () => void
 
