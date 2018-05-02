@@ -37,6 +37,7 @@
     "graphql-tools": "3.0.0",
     "iterall": "1.2.2",
     "object-path-immutable": "^1.0.1",
+    "resolve-cwd": "^2.0.0",
     "ts-node": "^6.0.2",
     "yargs": "^11.0.0"
   },

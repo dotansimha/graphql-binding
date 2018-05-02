@@ -1,22 +1,29 @@
+const resolveCwd = require('resolve-cwd')
+const graphqlPackagePath = resolveCwd.silent('graphql')
+const {
+  isNonNullType,
+  isListType,
+  printSchema,
+  GraphQLObjectType,
+} = require(graphqlPackagePath || 'graphql')
+
 import {
   GraphQLSchema,
   GraphQLUnionType,
   GraphQLInterfaceType,
-  GraphQLObjectType,
   GraphQLInputObjectType,
   GraphQLInputField,
   GraphQLField,
-  isNonNullType,
   GraphQLInputType,
   GraphQLOutputType,
   GraphQLWrappingType,
-  isListType,
   GraphQLNamedType,
   GraphQLScalarType,
   GraphQLEnumType,
   GraphQLFieldMap,
-  printSchema,
+  GraphQLObjectType as GraphQLObjectTypeRef,
 } from 'graphql'
+
 import { Generator } from './Generator'
 
 export class TypescriptGenerator extends Generator {
@@ -40,15 +47,24 @@ export class TypescriptGenerator extends Generator {
     },
 
     GraphQLObjectType: (
-      type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
+      type:
+        | GraphQLObjectTypeRef
+        | GraphQLInputObjectType
+        | GraphQLInterfaceType,
     ): string => this.renderInterfaceOrObject(type),
 
     GraphQLInterfaceType: (
-      type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
+      type:
+        | GraphQLObjectTypeRef
+        | GraphQLInputObjectType
+        | GraphQLInterfaceType,
     ): string => this.renderInterfaceOrObject(type),
 
     GraphQLInputObjectType: (
-      type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
+      type:
+        | GraphQLObjectTypeRef
+        | GraphQLInputObjectType
+        | GraphQLInterfaceType,
     ): string => {
       const fieldDefinition = Object.keys(type.getFields())
         .map(f => {
@@ -61,7 +77,7 @@ export class TypescriptGenerator extends Generator {
 
       let interfaces: GraphQLInterfaceType[] = []
       if (type instanceof GraphQLObjectType) {
-        interfaces = type.getInterfaces()
+        interfaces = (type as any).getInterfaces()
       }
 
       return this.renderInterfaceWrapper(
@@ -224,11 +240,17 @@ ${this.renderTypedefs()}`
     const methods = Object.keys(fields)
       .map(f => {
         const field = fields[f]
-        return `    ${
-          field.name
-        }: (args, info, context) => Promise<${this.renderFieldType(
-          field.type,
-        )}${!isNonNullType(field.type) ? ' | null' : ''}> `
+        return `    ${field.name}: (args: {${
+          field.args.length > 0 ? ' ' : ''
+        }${field.args
+          .map(
+            f => `${this.renderFieldName(f)}: ${this.renderFieldType(f.type)}`,
+          )
+          .join(', ')}${
+          field.args.length > 0 ? ' ' : ''
+        }}, info, context) => Promise<${this.renderFieldType(field.type)}${
+          !isNonNullType(field.type) ? ' | null' : ''
+        }> `
       })
       .join(',\n')
 
@@ -253,7 +275,7 @@ ${this.renderTypedefs()}`
   }
 
   renderInterfaceOrObject(
-    type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
+    type: GraphQLObjectTypeRef | GraphQLInputObjectType | GraphQLInterfaceType,
   ): string {
     const fieldDefinition = Object.keys(type.getFields())
       .map(f => {
@@ -266,7 +288,7 @@ ${this.renderTypedefs()}`
 
     let interfaces: GraphQLInterfaceType[] = []
     if (type instanceof GraphQLObjectType) {
-      interfaces = type.getInterfaces()
+      interfaces = (type as any).getInterfaces()
     }
 
     return this.renderInterfaceWrapper(
