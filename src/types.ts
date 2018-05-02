@@ -31,6 +31,12 @@ export interface BindingOptions {
   schema: GraphQLSchema
   before?: () => void
 }
+
+export interface BindingWithoutSchemaOptions {
+  fragmentReplacements?: FragmentReplacement[]
+  before?: () => void
+}
+
 // args: {
 //   [key: string]: any
 // },

@@ -23,7 +23,7 @@ export class Binding extends Delegate {
     this.subscription = subscription
   }
 
-  private buildMethods() {
+  buildMethods() {
     const cachedMethods = methodCache.get(this.schema)
     if (cachedMethods) {
       return cachedMethods
@@ -37,7 +37,7 @@ export class Binding extends Delegate {
     return methods
   }
 
-  private buildQueryMethods(operation: QueryOrMutation): QueryMap {
+  buildQueryMethods(operation: QueryOrMutation): QueryMap {
     const queryType = this.schema.getQueryType()
     if (!queryType) {
       return {}
@@ -55,7 +55,7 @@ export class Binding extends Delegate {
       .reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {})
   }
 
-  private buildSubscriptionMethods(): SubscriptionMap {
+  buildSubscriptionMethods(): SubscriptionMap {
     const queryType = this.schema.getQueryType()
     if (!queryType) {
       return {}
