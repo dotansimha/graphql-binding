@@ -1,16 +1,18 @@
-import {
-  GraphQLOutputType,
-  GraphQLScalarType,
-  GraphQLEnumType,
-  GraphQLNonNull,
+const resolveCwd = require('resolve-cwd')
+const graphqlPackagePath = resolveCwd.silent('graphql')
+const {
   GraphQLObjectType,
+  GraphQLScalarType,
   GraphQLInterfaceType,
   GraphQLUnionType,
   GraphQLList,
-  GraphQLSchema,
+  GraphQLEnumType,
   getNamedType,
-  GraphQLResolveInfo,
-} from 'graphql'
+  GraphQLNonNull,
+} = require(graphqlPackagePath || 'graphql')
+
+import { GraphQLSchema, GraphQLResolveInfo, GraphQLOutputType } from 'graphql'
+
 import { Operation } from './types'
 
 export function isScalar(t: GraphQLOutputType): boolean {
@@ -27,7 +29,7 @@ export function isScalar(t: GraphQLOutputType): boolean {
     return false
   }
 
-  const nnt = t as GraphQLOutputType
+  const nnt = t as any
   if (nnt instanceof GraphQLNonNull) {
     if (
       nnt.ofType instanceof GraphQLScalarType ||

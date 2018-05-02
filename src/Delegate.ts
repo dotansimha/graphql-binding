@@ -136,12 +136,12 @@ export class Delegate {
     infoOrQuery?: GraphQLResolveInfo | string,
     options?: Options,
   ): { info: any; result: Promise<any> } {
-    const info = buildInfo(fieldName, 'subscription', this.schema, infoOrQuery)
+    const info = buildInfo(fieldName, operation, this.schema, infoOrQuery)
 
     const transforms = options && options.transforms ? options.transforms : []
     const result = delegateToSchema({
       schema: this.schema,
-      operation: 'subscription',
+      operation,
       fieldName,
       args: args || {},
       context: options && options.context ? options.context : {},

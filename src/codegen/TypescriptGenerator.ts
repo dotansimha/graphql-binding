@@ -164,7 +164,7 @@ ${this.renderTypes()}
 ${this.renderTypedefs()}`
   }
   renderExports() {
-    return `export const Binding = makeBinding<BindingConstructor<BindingInstance>>({schema})`
+    return `export const Binding = makeBinding<BindingConstructor<BindingInstance>>(schema)`
   }
   renderQueries() {
     const queryType = this.schema.getQueryType()

@@ -37,10 +37,18 @@ ${this.renderExports()}`
     )
   }
   getRelativeSchemaPath() {
-    return path.relative(
-      this.outputBindingPath,
-      this.inputSchemaPath.replace(/\.(t|j)s$/, ''),
-    )
+    const result = path
+      .relative(
+        path.dirname(this.outputBindingPath) + '/',
+        this.inputSchemaPath,
+      )
+      .replace(/\.(t|j)s$/, '')
+
+    if (result.startsWith('.')) {
+      return result
+    }
+
+    return `./` + result
   }
   renderImports() {
     return `\
@@ -48,6 +56,6 @@ import { makeBinding } from 'graphql-binding'
 import schema from  '${this.getRelativeSchemaPath()}'`
   }
   renderExports() {
-    return `export const Binding = makeBinding({schema})`
+    return `export const Binding = makeBinding(schema)`
   }
 }

@@ -1,17 +1,25 @@
-import {
-  GraphQLResolveInfo,
+const resolveCwd = require('resolve-cwd')
+const graphqlPackagePath = resolveCwd.silent('graphql')
+const {
   GraphQLObjectType,
-  FieldNode,
-  GraphQLSchema,
-  SelectionSetNode,
+  GraphQLScalarType,
   parse,
   validate,
-  OperationDefinitionNode,
-  FragmentDefinitionNode,
-  GraphQLScalarType,
-  GraphQLOutputType,
   Kind,
+} = require(graphqlPackagePath || 'graphql')
+
+import {
+  GraphQLSchema,
+  GraphQLResolveInfo,
+  FieldNode,
+  SelectionSetNode,
+  GraphQLOutputType,
+  GraphQLObjectType as GraphQLObjectTypeRef,
+  GraphQLScalarType as GraphQLScalarTypeRef,
+  FragmentDefinitionNode,
+  OperationDefinitionNode,
 } from 'graphql'
+
 import { Operation } from './types'
 import { isScalar, getTypeForRootFieldName } from './utils'
 import { update } from 'object-path-immutable'
@@ -40,7 +48,7 @@ export function buildInfoForAllScalars(
 
   let selections: FieldNode[] | undefined
   if (type instanceof GraphQLObjectType) {
-    const fields = type.getFields()
+    const fields = (type as any).getFields()
     selections = Object.keys(fields)
       .filter(f => isScalar(fields[f].type))
       .map<FieldNode>(fieldName => {
@@ -80,6 +88,7 @@ export function buildInfoForAllScalars(
       kind: 'OperationDefinition',
       operation,
       selectionSet: { kind: 'SelectionSet', selections: [] },
+      variableDefinitions: [],
     },
     variableValues: {},
   }
@@ -91,15 +100,11 @@ export function buildInfoFromFragment(
   operation: Operation,
   query: string,
 ): GraphQLResolveInfo {
-  const type = getTypeForRootFieldName(
-    rootFieldName,
-    operation,
-    schema,
-  ) as GraphQLObjectType
+  const type = getTypeForRootFieldName(rootFieldName, operation, schema)
   const fieldNode: FieldNode = {
     kind: 'Field',
     name: { kind: 'Name', value: rootFieldName },
-    selectionSet: extractQuerySelectionSet(query, type.name, schema),
+    selectionSet: extractQuerySelectionSet(query, (type as any).name, schema),
   }
 
   return {
@@ -115,6 +120,7 @@ export function buildInfoFromFragment(
       kind: 'OperationDefinition',
       operation,
       selectionSet: { kind: 'SelectionSet', selections: [] },
+      variableDefinitions: [],
     },
     variableValues: {},
   }
@@ -214,7 +220,7 @@ export function makeSubInfo(
       )
     }
 
-    const fields = currentType.getFields()
+    const fields = (currentType as any).getFields()
     if (!fields[currentFieldName]) {
       throw new Error(
         `Type ${currentType.toString()} has no field called ${currentFieldName}`,
@@ -277,6 +283,7 @@ export function makeSubInfo(
       kind: Kind.OPERATION_DEFINITION,
       operation: currentFieldName,
       selectionSet: { kind: Kind.SELECTION_SET, selections: [] },
+      variableDefinitions: [],
     },
     variableValues: {},
   }
@@ -290,7 +297,7 @@ export function makeSubInfo(
 
 function getDeepType(
   type: GraphQLOutputType,
-): GraphQLObjectType | GraphQLScalarType {
+): GraphQLObjectTypeRef | GraphQLScalarTypeRef {
   if ((type as any).ofType) {
     return (type as any).ofType
   }

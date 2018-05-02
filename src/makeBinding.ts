@@ -6,8 +6,8 @@ export function makeBinding<T>(
   schema: GraphQLSchema,
 ): Constructor<BaseBinding> {
   return class Binding extends BaseBinding {
-    constructor({ fragmentReplacements, before }: BindingWithoutSchemaOptions) {
-      super({ schema, fragmentReplacements, before })
+    constructor(options: BindingWithoutSchemaOptions) {
+      super({ schema, ...options })
     }
   }
 }
