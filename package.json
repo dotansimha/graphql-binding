@@ -1,6 +1,6 @@
 {
   "name": "graphql-binding",
-  "version": "1.4.0-beta.11",
+  "version": "1.4.0-beta.14",
   "license": "MIT",
   "repository": "git@github.com:graphcool/graphql-binding.git",
   "author": "Johannes Schickling <johannes@graph.cool>",
@@ -31,6 +31,7 @@
     "apollo-link": "1.2.1",
     "ava": "0.25.0",
     "graphql": "0.13.2",
+    "graphql-tag": "^2.9.2",
     "tslint": "5.9.1",
     "tslint-config-standard": "7.0.0",
     "typescript": "2.8.3"

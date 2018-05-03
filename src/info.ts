@@ -17,6 +17,8 @@ import {
   GraphQLObjectType as GraphQLObjectTypeRef,
   GraphQLScalarType as GraphQLScalarTypeRef,
   getNamedType,
+  DocumentNode,
+  print,
 } from 'graphql'
 
 import { Operation } from './types'
@@ -27,14 +29,17 @@ export function buildInfo(
   rootFieldName: string,
   operation: Operation,
   schema: GraphQLSchema,
-  info?: GraphQLResolveInfo | string,
+  info?: GraphQLResolveInfo | string | DocumentNode,
 ): GraphQLResolveInfo {
   if (!info) {
     info = buildInfoForAllScalars(rootFieldName, schema, operation)
-  } else if (typeof info === 'string') {
+  } else if ((info as any).kind && (info as any).kind === 'Document') {
+    info = print(info)
+  }
+  if (typeof info === 'string') {
     info = buildInfoFromFragment(rootFieldName, schema, operation, info)
   }
-  return info
+  return info as any
 }
 
 export function buildInfoForAllScalars(
