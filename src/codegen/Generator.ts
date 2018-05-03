@@ -52,10 +52,10 @@ ${this.renderExports()}`
   }
   renderImports() {
     return `\
-import { makeBinding } from 'graphql-binding'
-import schema from  '${this.getRelativeSchemaPath()}'`
+const { makeBindingClass } = require('graphql-binding')
+const schema = require('${this.getRelativeSchemaPath()}')`
   }
   renderExports() {
-    return `export const Binding = makeBinding(schema)`
+    return `module.exports = makeBindingClass(schema)`
   }
 }

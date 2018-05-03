@@ -157,7 +157,7 @@ ${this.renderExports()}
 ${this.renderTypes()}`
   }
   renderExports() {
-    return `export const Binding = makeBinding<BindingConstructor<BindingInstance>>(schema)`
+    return `export const Binding = makeBindingClass<BindingConstructor<BindingInstance>>(schema)`
   }
   renderQueries() {
     const queryType = this.schema.getQueryType()
@@ -360,7 +360,7 @@ ${description.split('\n').map(l => ` * ${l}\n`)}
   }
   renderImports() {
     return `\
-import { makeBinding } from 'graphql-binding'
+import { makeBindingClass } from 'graphql-binding'
 import { GraphQLResolveInfo } from 'graphql'
 import schema from  '${this.getRelativeSchemaPath()}'`
   }
