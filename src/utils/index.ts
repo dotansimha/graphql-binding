@@ -7,13 +7,12 @@ const {
   GraphQLUnionType,
   GraphQLList,
   GraphQLEnumType,
-  getNamedType,
   GraphQLNonNull,
 } = require(graphqlPackagePath || 'graphql')
 
 import { GraphQLSchema, GraphQLResolveInfo, GraphQLOutputType } from 'graphql'
 
-import { Operation } from './types'
+import { Operation } from '../types'
 
 export function isScalar(t: GraphQLOutputType): boolean {
   if (t instanceof GraphQLScalarType || t instanceof GraphQLEnumType) {
@@ -68,7 +67,7 @@ export function getTypeForRootFieldName(
     throw new Error(`No such root field found: ${rootFieldName}`)
   }
 
-  return getNamedType(rootField.type) as GraphQLOutputType
+  return rootField.type
 }
 
 export function forwardTo(bindingName: string) {

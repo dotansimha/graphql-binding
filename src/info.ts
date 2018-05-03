@@ -16,13 +16,12 @@ import {
   GraphQLOutputType,
   GraphQLObjectType as GraphQLObjectTypeRef,
   GraphQLScalarType as GraphQLScalarTypeRef,
-  FragmentDefinitionNode,
-  OperationDefinitionNode,
+  getNamedType,
 } from 'graphql'
 
 import { Operation } from './types'
 import { isScalar, getTypeForRootFieldName } from './utils'
-import { update } from 'object-path-immutable'
+import { addFragmentToInfo } from './utils/addFragmentToInfo'
 
 export function buildInfo(
   rootFieldName: string,
@@ -101,10 +100,11 @@ export function buildInfoFromFragment(
   query: string,
 ): GraphQLResolveInfo {
   const type = getTypeForRootFieldName(rootFieldName, operation, schema)
+  const namedType = getNamedType(type)!
   const fieldNode: FieldNode = {
     kind: 'Field',
     name: { kind: 'Name', value: rootFieldName },
-    selectionSet: extractQuerySelectionSet(query, (type as any).name, schema),
+    selectionSet: extractQuerySelectionSet(query, namedType.name!, schema),
   }
 
   return {
@@ -148,41 +148,6 @@ function extractQuerySelectionSet(
   }
 
   return queryNode.selectionSet
-}
-
-export function addFragmentToInfo(
-  info: GraphQLResolveInfo,
-  fragment: string,
-): GraphQLResolveInfo {
-  const returnType = getDeepType(info.returnType)
-  if (returnType instanceof GraphQLScalarType) {
-    throw new Error(
-      `Can't add fragment "${fragment}" because return type of info object is a scalar type ${info.returnType.toString()}`,
-    )
-  }
-
-  const ast = parse(fragment)
-
-  if (
-    ast.definitions[0].kind === 'FragmentDefinition' &&
-    (ast.definitions[0] as FragmentDefinitionNode).typeCondition.name.value !==
-      returnType.name
-  ) {
-    throw new Error(
-      `Type ${
-        (ast.definitions[0] as FragmentDefinitionNode).typeCondition.name.value
-      } specified in fragment doesn't match return type ${returnType.toString()}`,
-    )
-  }
-
-  return update(
-    info,
-    ['fieldNodes', 0, 'selectionSet', 'selections'],
-    selections =>
-      selections.concat(
-        (ast.definitions[0] as OperationDefinitionNode).selectionSet.selections,
-      ),
-  )
 }
 
 /**
@@ -295,16 +260,16 @@ export function makeSubInfo(
   return newInfo
 }
 
-function getDeepType(
+export function getDeepType(
   type: GraphQLOutputType,
 ): GraphQLObjectTypeRef | GraphQLScalarTypeRef {
   if ((type as any).ofType) {
-    return (type as any).ofType
+    return getDeepType((type as any).ofType)
   }
 
   return type as any
 }
 
-function addPath(prev, key) {
+export function addPath(prev, key) {
   return { prev, key }
 }

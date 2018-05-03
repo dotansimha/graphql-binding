@@ -9,9 +9,9 @@ import {
 import {
   buildInfoForAllScalars,
   buildInfoFromFragment,
-  addFragmentToInfo,
   makeSubInfo,
 } from './info'
+import { omitDeep } from './utils/removeKey'
 
 test('buildInfoForAllScalars: 1 field', t => {
   const schema = buildSchema(`
@@ -177,62 +177,6 @@ test('buildInfoFromFragment: invalid selection', t => {
   t.throws(() => buildInfoFromFragment('book', schema, 'query', `{ xxx }`))
 })
 
-test('addFragmentToInfo: add field by simple query', t => {
-  const schema = buildSchema(`
-  type Query {
-    book: Book
-  }
-
-  type Book {
-    title: String
-    extraField: String
-  }
-  `)
-  const info = buildInfoFromFragment('book', schema, 'query', `{ title }`)
-  const patchedInfo = addFragmentToInfo(info, '{extraField}')
-  const selections = patchedInfo.fieldNodes[0].selectionSet!.selections
-
-  assertFields(t, selections, ['title', 'extraField'])
-})
-
-test('addFragmentToInfo: add field by fragment', t => {
-  const schema = buildSchema(`
-  type Query {
-    book: Book
-  }
-
-  type Book {
-    title: String
-    extraField: String
-  }
-  `)
-  const info = buildInfoFromFragment('book', schema, 'query', `{ title }`)
-  const patchedInfo = addFragmentToInfo(
-    info,
-    'fragment F on Book { extraField }',
-  )
-  const selections = patchedInfo.fieldNodes[0].selectionSet!.selections
-
-  assertFields(t, selections, ['title', 'extraField'])
-})
-
-test("addFragmentToInfo: dont add field by fragment when type doesn't match", t => {
-  const schema = buildSchema(`
-  type Query {
-    book: Book
-  }
-
-  type Book {
-    title: String
-    extraField: String
-  }
-  `)
-  const info = buildInfoFromFragment('book', schema, 'query', `{ title }`)
-  t.throws(() =>
-    addFragmentToInfo(info, 'fragment F on UnknownType { extraField }'),
-  )
-})
-
 test('makeSubInfo: works when path has been selected', t => {
   const schema = buildSchema(`
     type Query {
@@ -348,7 +292,7 @@ function getRelevantPartsFromInfo(info: GraphQLResolveInfo) {
     rootValue,
     operation,
     variableValues,
-    selectionSet: fieldNodes[0].selectionSet,
+    selectionSet: omitDeep(fieldNodes[0].selectionSet, 'loc'),
   }
 }
 
@@ -376,7 +320,7 @@ test('makeSubInfo: returns null when path has not been selected', t => {
   t.is(subInfo, null)
 })
 
-function assertFields(
+export function assertFields(
   t: TestContext,
   selections: ReadonlyArray<SelectionNode>,
   names: string[],
@@ -397,7 +341,10 @@ function assertFields(
   t.is(selections.length, names.length)
 }
 
-function printDocumentFromInfo(info: GraphQLResolveInfo) {
+export function printDocumentFromInfo(info: GraphQLResolveInfo) {
+  const fragments = Object.keys(info.fragments).map(
+    fragment => info.fragments[fragment],
+  )
   const doc = {
     kind: 'Document',
     definitions: [
@@ -406,6 +353,7 @@ function printDocumentFromInfo(info: GraphQLResolveInfo) {
         operation: 'query',
         selectionSet: info.fieldNodes[0].selectionSet,
       },
+      ...fragments,
     ],
   }
 

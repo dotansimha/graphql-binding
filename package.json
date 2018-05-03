@@ -20,8 +20,10 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "rm -rf dist && tsc -d",
-    "test-only": "npm run build && ava --verbose dist/**/*.test.js",
-    "test": "tslint src/**/*.ts && npm run test-only"
+    "test-only":
+      "npm run build && ava --verbose dist/**/*.test.js dist/*.test.js",
+    "test": "tslint src/**/*.ts && npm run test-only",
+    "ava": "ava"
   },
   "devDependencies": {
     "@types/graphql": "0.13.0",

@@ -1,5 +1,7 @@
+export { addFragmentToInfo } from './utils/addFragmentToInfo'
+
 export { extractFragmentReplacements } from './fragmentReplacements'
-export { buildInfo, addFragmentToInfo } from './info'
+export { buildInfo } from './info'
 export { Binding } from './Binding'
 export { BindingOptions, FragmentReplacement } from './types'
 export { forwardTo } from './utils'
