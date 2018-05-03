@@ -3,7 +3,6 @@ const graphqlPackagePath = resolveCwd.silent('graphql')
 const {
   isNonNullType,
   isListType,
-  printSchema,
   GraphQLObjectType,
 } = require(graphqlPackagePath || 'graphql')
 
@@ -155,13 +154,7 @@ ${this.renderExports()}
  * Types
 */
 
-${this.renderTypes()}
-
-/**
- * Type Defs
-*/
-
-${this.renderTypedefs()}`
+${this.renderTypes()}`
   }
   renderExports() {
     return `export const Binding = makeBinding<BindingConstructor<BindingInstance>>(schema)`
@@ -227,11 +220,6 @@ ${this.renderTypedefs()}`
       })
       .join('\n\n')
   }
-  renderTypedefs() {
-    return (
-      'const typeDefs = `' + printSchema(this.schema).replace(/`/g, '\\`') + '`'
-    )
-  }
 
   renderMainMethodFields(
     operation: string,
@@ -240,17 +228,18 @@ ${this.renderTypedefs()}`
     const methods = Object.keys(fields)
       .map(f => {
         const field = fields[f]
-        return `    ${field.name}: (args: {${
-          field.args.length > 0 ? ' ' : ''
+        const hasArgs = field.args.length > 0
+        return `    ${field.name}: (args${hasArgs ? '' : '?'}: {${
+          hasArgs ? ' ' : ''
         }${field.args
           .map(
             f => `${this.renderFieldName(f)}: ${this.renderFieldType(f.type)}`,
           )
           .join(', ')}${
           field.args.length > 0 ? ' ' : ''
-        }}, info, context) => Promise<${this.renderFieldType(field.type)}${
-          !isNonNullType(field.type) ? ' | null' : ''
-        }> `
+        }}, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<${this.renderFieldType(
+          field.type,
+        )}${!isNonNullType(field.type) ? ' | null' : ''}> `
       })
       .join(',\n')
 
@@ -368,5 +357,11 @@ ${description.split('\n').map(l => ` * ${l}\n`)}
 `
         : ''
     }`
+  }
+  renderImports() {
+    return `\
+import { makeBinding } from 'graphql-binding'
+import { GraphQLResolveInfo } from 'graphql'
+import schema from  '${this.getRelativeSchemaPath()}'`
   }
 }

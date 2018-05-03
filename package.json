@@ -1,6 +1,6 @@
 {
   "name": "graphql-binding",
-  "version": "0.0.0-semantic-release",
+  "version": "1.4.0-beta.7",
   "license": "MIT",
   "repository": "git@github.com:graphcool/graphql-binding.git",
   "author": "Johannes Schickling <johannes@graph.cool>",
@@ -8,9 +8,10 @@
     "Kim Brandwijk <kim.brandwijk@gmail.com>",
     "Tim Suchanek <suchanek@prisma.io>"
   ],
-  "files": [
-    "dist"
-  ],
+  "bin": {
+    "graphql-binding": "./dist/bin.js"
+  },
+  "files": ["dist"],
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "typescript": {

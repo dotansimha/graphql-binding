@@ -38,7 +38,10 @@ export class Binding extends Delegate {
   }
 
   buildQueryMethods(operation: QueryOrMutation): QueryMap {
-    const queryType = this.schema.getQueryType()
+    const queryType =
+      operation === 'query'
+        ? this.schema.getQueryType()
+        : this.schema.getMutationType()
     if (!queryType) {
       return {}
     }
