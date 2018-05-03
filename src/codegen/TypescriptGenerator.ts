@@ -144,6 +144,7 @@ interface BindingInstance {
   query: ${this.renderQueries()}
   mutation: ${this.renderMutations()}
   subscription: ${this.renderSubscriptions()}
+  request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
 }
 
 interface BindingConstructor<T> {
@@ -231,17 +232,17 @@ ${this.renderTypes()}`
       .map(f => {
         const field = fields[f]
         const hasArgs = field.args.length > 0
-        return `    ${field.name}: (args${hasArgs ? '' : '?'}: {${
-          hasArgs ? ' ' : ''
-        }${field.args
+        return `    ${field.name}: (args${
+          hasArgs ? '' : '?'
+        }: <T = ${this.renderFieldType(field.type)}${
+          !isNonNullType(field.type) ? ' | null' : ''
+        }>{${hasArgs ? ' ' : ''}${field.args
           .map(
             f => `${this.renderFieldName(f)}: ${this.renderFieldType(f.type)}`,
           )
           .join(', ')}${
           field.args.length > 0 ? ' ' : ''
-        }}, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<${this.renderFieldType(
-          field.type,
-        )}${!isNonNullType(field.type) ? ' | null' : ''}> `
+        }}, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> `
       })
       .join(',\n')
 

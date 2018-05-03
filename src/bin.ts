@@ -16,10 +16,10 @@ const argv = yargs
       describe: 'Path to schema.js or schema.ts file',
       type: 'string',
     },
-    generator: {
-      alias: 'g',
+    language: {
+      alias: 'l',
       describe:
-        'Type of the generator. Available generators: typescript, javascript',
+        'Type of the generator. Available languages: typescript, javascript',
       type: 'string',
     },
     outputBinding: {
@@ -33,12 +33,12 @@ const argv = yargs
       type: 'string',
     },
   })
-  .demandOption(['i', 'g', 'b']).argv
+  .demandOption(['i', 'l', 'b']).argv
 
 run(argv).catch(e => console.error(e))
 
 async function run(argv) {
-  const { input, generator, outputBinding, outputTypedefs } = argv
+  const { input, language, outputBinding, outputTypedefs } = argv
 
   const schema = getSchemaFromInput(input)
   const args = {
@@ -46,11 +46,11 @@ async function run(argv) {
     inputSchemaPath: path.resolve(input),
     outputBindingPath: path.resolve(outputBinding),
   }
-  if (generator === 'typescript') {
+  if (language === 'typescript') {
     require('ts-node').register()
   }
   const generatorInstance =
-    generator === 'typescript'
+    language === 'typescript'
       ? new TypescriptGenerator(args)
       : new Generator(args)
   const code = generatorInstance.render()
