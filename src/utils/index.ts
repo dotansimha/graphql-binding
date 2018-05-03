@@ -10,7 +10,12 @@ const {
   GraphQLNonNull,
 } = require(graphqlPackagePath || 'graphql')
 
-import { GraphQLSchema, GraphQLResolveInfo, GraphQLOutputType } from 'graphql'
+import {
+  GraphQLSchema,
+  GraphQLResolveInfo,
+  GraphQLOutputType,
+  print,
+} from 'graphql'
 
 import { Operation } from '../types'
 
@@ -93,4 +98,23 @@ export function forwardTo(bindingName: string) {
 
     throw new Error(message)
   }
+}
+
+export function printDocumentFromInfo(info: GraphQLResolveInfo) {
+  const fragments = Object.keys(info.fragments).map(
+    fragment => info.fragments[fragment],
+  )
+  const doc = {
+    kind: 'Document',
+    definitions: [
+      {
+        kind: 'OperationDefinition',
+        operation: 'query',
+        selectionSet: info.fieldNodes[0].selectionSet,
+      },
+      ...fragments,
+    ],
+  }
+
+  return print(doc)
 }

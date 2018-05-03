@@ -2,8 +2,9 @@ import { test } from 'ava'
 import { buildSchema, GraphQLResolveInfo } from 'graphql'
 import { buildInfoFromFragment } from '../info'
 import { addFragmentToInfo } from './addFragmentToInfo'
-import { assertFields, printDocumentFromInfo } from '../info.test'
+import { assertFields } from '../info.test'
 import { omitDeep } from './removeKey'
+import { printDocumentFromInfo } from '.'
 
 test('addFragmentToInfo: add field by simple query', t => {
   const schema = buildSchema(`
@@ -35,8 +36,7 @@ test('addFragmentToInfo: add field to array payload', t => {
   }
   `)
   const info = buildInfoFromFragment('books', schema, 'query', `{ title }`)
-  debugger
-  const patchedInfo = addFragmentToInfo(info, '{extraField}')
+  const patchedInfo = addFragmentToInfo(info, '{ extraField }')
 
   t.snapshot(printDocumentFromInfo(patchedInfo))
   t.snapshot(getRelevantPartsFromInfo(info))

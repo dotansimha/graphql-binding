@@ -52,7 +52,7 @@ export function buildInfoForAllScalars(
   const namedType = getNamedType(type)
 
   let selections: FieldNode[] | undefined
-  if (type instanceof GraphQLObjectType) {
+  if (namedType instanceof GraphQLObjectType) {
     const fields = (namedType as any).getFields()
     selections = Object.keys(fields)
       .filter(f => isScalar(fields[f].type))

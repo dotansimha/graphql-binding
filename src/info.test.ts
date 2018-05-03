@@ -4,7 +4,6 @@ import {
   SelectionNode,
   FieldNode,
   GraphQLResolveInfo,
-  print,
 } from 'graphql'
 import {
   buildInfoForAllScalars,
@@ -12,6 +11,7 @@ import {
   makeSubInfo,
 } from './info'
 import { omitDeep } from './utils/removeKey'
+import { printDocumentFromInfo } from './utils'
 
 test('buildInfoForAllScalars: 1 field', t => {
   const schema = buildSchema(`
@@ -339,23 +339,4 @@ export function assertFields(
   }
 
   t.is(selections.length, names.length)
-}
-
-export function printDocumentFromInfo(info: GraphQLResolveInfo) {
-  const fragments = Object.keys(info.fragments).map(
-    fragment => info.fragments[fragment],
-  )
-  const doc = {
-    kind: 'Document',
-    definitions: [
-      {
-        kind: 'OperationDefinition',
-        operation: 'query',
-        selectionSet: info.fieldNodes[0].selectionSet,
-      },
-      ...fragments,
-    ],
-  }
-
-  return print(doc)
 }
