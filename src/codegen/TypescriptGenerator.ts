@@ -127,12 +127,14 @@ export type ${type.name}_Output = string`
     schema,
     inputSchemaPath,
     outputBindingPath,
+    isDefaultExport,
   }: {
     schema: GraphQLSchema
     inputSchemaPath: string
     outputBindingPath: string
+    isDefaultExport: boolean
   }) {
-    super({ schema, inputSchemaPath, outputBindingPath })
+    super({ schema, inputSchemaPath, outputBindingPath, isDefaultExport })
   }
   render() {
     return this.compile`\
@@ -362,6 +364,8 @@ ${description.split('\n').map(l => ` * ${l}\n`)}
     return `\
 import { makeBindingClass } from 'graphql-binding'
 import { GraphQLResolveInfo } from 'graphql'
-import schema from  '${this.getRelativeSchemaPath()}'`
+import ${
+      this.isDefaultExport ? '' : '* as '
+    }schema from  '${this.getRelativeSchemaPath()}'`
   }
 }

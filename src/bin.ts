@@ -43,7 +43,7 @@ async function run(argv) {
 
   const schema = getSchemaFromInput(input)
   const args = {
-    schema,
+    ...schema,
     inputSchemaPath: path.resolve(input),
     outputBindingPath: path.resolve(outputBinding),
   }
@@ -58,7 +58,7 @@ async function run(argv) {
 
   if (outputTypedefs) {
     mkdirp(path.dirname(outputTypedefs))
-    fs.writeFileSync(outputTypedefs, printSchema(schema))
+    fs.writeFileSync(outputTypedefs, printSchema(schema.schema))
   }
 
   console.log('Done generating binding')
@@ -74,8 +74,16 @@ function getSchemaFromInput(input) {
   if (input.endsWith('.js') || input.endsWith('.ts')) {
     const schema = require(path.resolve(input))
     if (schema.default) {
-      return schema.default
+      return {
+        isDefaultExport: true,
+        schema: schema.default,
+      }
     }
-    return schema
+    return {
+      isDefaultExport: false,
+      schema,
+    }
   }
+
+  throw new Error(`Can't handle schema ${input}`)
 }

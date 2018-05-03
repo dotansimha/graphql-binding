@@ -44,10 +44,11 @@ export function buildInfoForAllScalars(
 ): GraphQLResolveInfo {
   const fieldNodes: FieldNode[] = []
   const type = getTypeForRootFieldName(rootFieldName, operation, schema)
+  const namedType = getNamedType(type)
 
   let selections: FieldNode[] | undefined
   if (type instanceof GraphQLObjectType) {
-    const fields = (type as any).getFields()
+    const fields = (namedType as any).getFields()
     selections = Object.keys(fields)
       .filter(f => isScalar(fields[f].type))
       .map<FieldNode>(fieldName => {

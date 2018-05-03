@@ -14,6 +14,7 @@ test('typescript generator', t => {
     schema,
     inputSchemaPath: 'src/schema.js',
     outputBindingPath: 'src/generated/binding.js',
+    isDefaultExport: false,
   })
   const result = generator.render()
   t.snapshot(result)

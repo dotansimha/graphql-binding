@@ -8,19 +8,23 @@ export class Generator {
   schema: GraphQLSchema
   inputSchemaPath: string
   outputBindingPath: string
+  isDefaultExport: boolean
 
   constructor({
     schema,
     inputSchemaPath,
     outputBindingPath,
+    isDefaultExport,
   }: {
     schema: GraphQLSchema
     inputSchemaPath: string
     outputBindingPath: string
+    isDefaultExport: boolean
   }) {
     this.schema = schema
     this.inputSchemaPath = inputSchemaPath
     this.outputBindingPath = outputBindingPath
+    this.isDefaultExport = isDefaultExport
   }
   render() {
     return this.compile`\
@@ -53,7 +57,9 @@ ${this.renderExports()}`
   renderImports() {
     return `\
 const { makeBindingClass } = require('graphql-binding')
-const schema = require('${this.getRelativeSchemaPath()}')`
+const schema = require('${this.getRelativeSchemaPath()}')${
+      this.isDefaultExport ? '.default' : ''
+    }`
   }
   renderExports() {
     return `module.exports = makeBindingClass({ schema })`
