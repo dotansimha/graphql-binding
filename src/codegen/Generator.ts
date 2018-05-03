@@ -56,6 +56,6 @@ const { makeBindingClass } = require('graphql-binding')
 const schema = require('${this.getRelativeSchemaPath()}')`
   }
   renderExports() {
-    return `module.exports = makeBindingClass(schema)`
+    return `module.exports = makeBindingClass({ schema })`
   }
 }

@@ -6,7 +6,7 @@ import * as mkdirp from 'mkdirp'
 import * as path from 'path'
 import { Generator } from './codegen/Generator'
 import { TypescriptGenerator } from './codegen/TypescriptGenerator'
-import { buildSchema, printSchema } from 'graphql'
+import { printSchema } from 'graphql'
 require('ts-node').register()
 
 const argv = yargs

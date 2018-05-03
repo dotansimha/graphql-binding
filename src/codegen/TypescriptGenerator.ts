@@ -157,7 +157,7 @@ ${this.renderExports()}
 ${this.renderTypes()}`
   }
   renderExports() {
-    return `export const Binding = makeBindingClass<BindingConstructor<BindingInstance>>(schema)`
+    return `export const Binding = makeBindingClass<BindingConstructor<BindingInstance>>({ schema })`
   }
   renderQueries() {
     const queryType = this.schema.getQueryType()
