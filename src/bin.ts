@@ -14,7 +14,7 @@ const argv = yargs
   .options({
     input: {
       alias: 'i',
-      describe: 'Path to schema.graphql, schema.js or schema.ts file',
+      describe: 'Path to schema.js or schema.ts file',
       type: 'string',
     },
     generator: {
@@ -66,7 +66,9 @@ async function run(argv) {
 
 function getSchemaFromInput(input) {
   if (input.endsWith('.graphql') || input.endsWith('.gql')) {
-    return buildSchema(fs.readFileSync(input, 'utf-8'))
+    throw new Error(
+      'graphql-bindings 2.0 can only be generated based on an executable Schema exposed by a .js or .ts file',
+    )
   }
 
   if (input.endsWith('.js') || input.endsWith('.ts')) {
