@@ -17,6 +17,9 @@ import {
   Operation,
   FragmentReplacement,
 } from './types'
+import { importSchema } from 'graphql-import'
+import * as fs from 'fs'
+import * as path from 'path'
 
 export class Delegate {
   schema: GraphQLSchema
@@ -103,6 +106,15 @@ export class Delegate {
     const typeMap = this.schema.getTypeMap()
 
     if (filterSchema && typeof filterSchema === 'string') {
+      if (filterSchema.endsWith('graphql')) {
+        const schemaPath = path.resolve(filterSchema)
+
+        if (!fs.existsSync(schemaPath)) {
+          throw new Error(`No schema found for path: ${schemaPath}`)
+        }
+
+        filterSchema = importSchema(schemaPath)
+      }
       filterSchema = buildSchema(filterSchema)
     }
     const filterTypeMap =

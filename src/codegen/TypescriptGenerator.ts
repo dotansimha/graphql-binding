@@ -151,6 +151,13 @@ export interface BindingInstance {
   mutation: Mutation
   subscription: Subscription
   request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
+  delegate(operation: QueryOrMutation, fieldName: string, args: {
+      [key: string]: any;
+  }, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<any>;
+  delegateSubscription(fieldName: string, args?: {
+      [key: string]: any;
+  }, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<AsyncIterator<any>>;
+  getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
 }
 
 export interface BindingConstructor<T> {
@@ -369,6 +376,7 @@ ${description.split('\n').map(l => ` * ${l}\n`)}
     return `\
 import { makeBindingClass } from 'graphql-binding'
 import { GraphQLResolveInfo } from 'graphql'
+import { IResolvers } from 'graphql-tools/dist/Interfaces';
 import ${
       this.isDefaultExport ? '' : '* as '
     }schema from  '${this.getRelativeSchemaPath()}'`

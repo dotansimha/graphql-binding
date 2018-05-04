@@ -1,6 +1,6 @@
 {
   "name": "graphql-binding",
-  "version": "1.4.0-beta.20",
+  "version": "1.4.0-beta.21",
   "license": "MIT",
   "repository": "git@github.com:graphcool/graphql-binding.git",
   "author": "Johannes Schickling <johannes@graph.cool>",
@@ -37,7 +37,7 @@
     "typescript": "2.8.3"
   },
   "dependencies": {
-    "graphql-import": "^0.5.0",
+    "graphql-import": "^0.5.2",
     "graphql-tools": "3.0.0",
     "iterall": "1.2.2",
     "object-path-immutable": "^1.0.1",
