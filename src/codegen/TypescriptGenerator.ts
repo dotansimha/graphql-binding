@@ -151,7 +151,7 @@ export interface BindingInstance {
   mutation: Mutation
   subscription: Subscription
   request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
-  delegate(operation: QueryOrMutation, fieldName: string, args: {
+  delegate(operation: 'query' | 'mutation', fieldName: string, args: {
       [key: string]: any;
   }, infoOrQuery?: GraphQLResolveInfo | string, options?: Options): Promise<any>;
   delegateSubscription(fieldName: string, args?: {
@@ -374,9 +374,9 @@ ${description.split('\n').map(l => ` * ${l}\n`)}
   }
   renderImports() {
     return `\
-import { makeBindingClass } from 'graphql-binding'
-import { GraphQLResolveInfo } from 'graphql'
-import { IResolvers } from 'graphql-tools/dist/Interfaces';
+import { makeBindingClass, Options } from 'graphql-binding'
+import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
+import { IResolvers } from 'graphql-tools/dist/Interfaces'
 import ${
       this.isDefaultExport ? '' : '* as '
     }schema from  '${this.getRelativeSchemaPath()}'`
