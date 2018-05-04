@@ -140,14 +140,20 @@ export type ${type.name}_Output = string`
     return this.compile`\
 ${this.renderImports()}
 
-interface BindingInstance {
-  query: ${this.renderQueries()}
-  mutation: ${this.renderMutations()}
-  subscription: ${this.renderSubscriptions()}
+export interface Query ${this.renderQueries()}
+
+export interface Mutation ${this.renderMutations()}
+
+export interface Subscription ${this.renderSubscriptions()}
+
+export interface BindingInstance {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
   request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
 }
 
-interface BindingConstructor<T> {
+export interface BindingConstructor<T> {
   new(...args): T
 }
 
