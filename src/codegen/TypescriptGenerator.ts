@@ -232,11 +232,9 @@ ${this.renderTypes()}`
       .map(f => {
         const field = fields[f]
         const hasArgs = field.args.length > 0
-        return `    ${field.name}: (args${
-          hasArgs ? '' : '?'
-        }: <T = ${this.renderFieldType(field.type)}${
+        return `    ${field.name}: <T = ${this.renderFieldType(field.type)}${
           !isNonNullType(field.type) ? ' | null' : ''
-        }>{${hasArgs ? ' ' : ''}${field.args
+        }>(args${hasArgs ? '' : '?'}: {${hasArgs ? ' ' : ''}${field.args
           .map(
             f => `${this.renderFieldName(f)}: ${this.renderFieldType(f.type)}`,
           )
