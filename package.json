@@ -32,7 +32,7 @@
     "typescript": "2.7.2"
   },
   "dependencies": {
-    "graphql-tools": "3.0.0",
+    "graphql-tools": "3.0.1",
     "iterall": "1.2.2",
     "object-path-immutable": "^1.0.1"
   },
