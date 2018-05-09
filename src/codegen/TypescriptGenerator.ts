@@ -253,13 +253,20 @@ ${this.renderTypes()}`
           )
           .join(', ')}${
           field.args.length > 0 ? ' ' : ''
-        }}, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => ${
-          operation === 'subscription' ? 'AsyncIterator' : 'Promise'
-        }<T> `
+        }}, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => ${this.getPayloadType(
+          operation,
+        )} `
       })
       .join(',\n')
 
     return `{\n${methods}\n  }`
+  }
+
+  getPayloadType(operation: string) {
+    if (operation === 'subscription') {
+      return `Promise<AsyncIterator<T>>`
+    }
+    return `Promise<T>`
   }
 
   renderMainSubscriptionMethodFields(
