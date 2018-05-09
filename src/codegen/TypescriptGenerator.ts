@@ -146,7 +146,7 @@ export interface Mutation ${this.renderMutations()}
 
 export interface Subscription ${this.renderSubscriptions()}
 
-export interface BindingInstance {
+export interface Binding {
   query: Query
   mutation: Mutation
   subscription: Subscription
@@ -173,7 +173,7 @@ ${this.renderExports()}
 ${this.renderTypes()}`
   }
   renderExports() {
-    return `export const Binding = makeBindingClass<BindingConstructor<BindingInstance>>({ schema })`
+    return `export const Binding = makeBindingClass<BindingConstructor<Binding>>({ schema })`
   }
   renderQueries() {
     const queryType = this.schema.getQueryType()
