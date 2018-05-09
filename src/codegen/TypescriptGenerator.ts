@@ -253,7 +253,9 @@ ${this.renderTypes()}`
           )
           .join(', ')}${
           field.args.length > 0 ? ' ' : ''
-        }}, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> `
+        }}, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => ${
+          operation === 'subscription' ? 'AsyncIterator' : 'Promise'
+        }<T> `
       })
       .join(',\n')
 
