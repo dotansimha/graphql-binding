@@ -1,12 +1,16 @@
 {
   "name": "graphql-binding",
-  "version": "0.0.0-semantic-release",
+  "version": "1.4.0-beta.29",
   "license": "MIT",
   "repository": "git@github.com:graphcool/graphql-binding.git",
   "author": "Johannes Schickling <johannes@graph.cool>",
   "contributors": [
-    "Kim Brandwijk <kim.brandwijk@gmail.com>"
+    "Kim Brandwijk <kim.brandwijk@gmail.com>",
+    "Tim Suchanek <suchanek@prisma.io>"
   ],
+  "bin": {
+    "graphql-binding": "./dist/bin.js"
+  },
   "files": [
     "dist"
   ],
@@ -18,23 +22,28 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "rm -rf dist && tsc -d",
-    "test-only": "npm run build && ava --verbose dist/**/*.test.js",
+    "test-only": "npm run build && ava --verbose dist/**/*.test.js dist/*.test.js",
     "test": "tslint src/**/*.ts && npm run test-only"
   },
   "devDependencies": {
-    "@types/graphql": "0.12.7",
-    "@types/node": "9.4.6",
-    "apollo-link": "1.2.1",
-    "ava": "0.25.0",
+    "@types/graphql": "0.13.0",
+    "@types/node": "10.0.2",
+    "apollo-link": "1.2.2",
+    "ava": "^0.25.0",
     "graphql": "0.13.2",
+    "graphql-tag": "^2.9.2",
     "tslint": "5.9.1",
     "tslint-config-standard": "7.0.0",
-    "typescript": "2.7.2"
+    "typescript": "2.8.3"
   },
   "dependencies": {
-    "graphql-tools": "3.0.0",
+    "graphql-import": "^0.5.2",
+    "graphql-tools": "3.0.1",
     "iterall": "1.2.2",
-    "object-path-immutable": "^1.0.1"
+    "object-path-immutable": "^1.0.1",
+    "resolve-cwd": "^2.0.0",
+    "ts-node": "^6.0.2",
+    "yargs": "^11.0.0"
   },
   "peerDependencies": {
     "graphql": "^0.11.0 || ^0.12.0 || ^0.13.0"

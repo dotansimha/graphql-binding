@@ -1,6 +1,10 @@
+export { addFragmentToInfo } from './utils/addFragmentToInfo'
+
 export { extractFragmentReplacements } from './fragmentReplacements'
-export { makeProxy } from './proxy'
-export { buildInfo, addFragmentToInfo } from './info'
+export { buildInfo } from './info'
 export { Binding } from './Binding'
-export { FragmentReplacements, BindingOptions } from './types'
+export { BindingOptions, FragmentReplacement, Options } from './types'
 export { forwardTo } from './utils'
+export { makeBindingClass } from './makeBindingClass'
+export { Generator } from './codegen/Generator'
+export { TypescriptGenerator } from './codegen/TypescriptGenerator'

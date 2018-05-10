@@ -1,17 +1,23 @@
-import {
-  GraphQLOutputType,
-  GraphQLScalarType,
-  GraphQLEnumType,
-  GraphQLNonNull,
+const resolveCwd = require('resolve-cwd')
+const graphqlPackagePath = resolveCwd.silent('graphql')
+const {
   GraphQLObjectType,
+  GraphQLScalarType,
   GraphQLInterfaceType,
   GraphQLUnionType,
   GraphQLList,
+  GraphQLEnumType,
+  GraphQLNonNull,
+} = require(graphqlPackagePath || 'graphql')
+
+import {
   GraphQLSchema,
-  getNamedType,
   GraphQLResolveInfo,
+  GraphQLOutputType,
+  print,
 } from 'graphql'
-import { Operation } from './types'
+
+import { Operation } from '../types'
 
 export function isScalar(t: GraphQLOutputType): boolean {
   if (t instanceof GraphQLScalarType || t instanceof GraphQLEnumType) {
@@ -27,7 +33,7 @@ export function isScalar(t: GraphQLOutputType): boolean {
     return false
   }
 
-  const nnt = t as GraphQLOutputType
+  const nnt = t as any
   if (nnt instanceof GraphQLNonNull) {
     if (
       nnt.ofType instanceof GraphQLScalarType ||
@@ -53,11 +59,12 @@ export function getTypeForRootFieldName(
     throw new Error(`Schema doesn't have subscription type`)
   }
 
-  const rootType = {
-    query: () => schema.getQueryType(),
-    mutation: () => schema.getMutationType()!,
-    subscription: () => schema.getSubscriptionType()!,
-  }[operation]()
+  const rootType =
+    {
+      query: () => schema.getQueryType(),
+      mutation: () => schema.getMutationType()!,
+      subscription: () => schema.getSubscriptionType()!,
+    }[operation]() || undefined!
 
   const rootField = rootType.getFields()[rootFieldName]
 
@@ -65,17 +72,25 @@ export function getTypeForRootFieldName(
     throw new Error(`No such root field found: ${rootFieldName}`)
   }
 
-  return getNamedType(rootField.type) as GraphQLOutputType
+  return rootField.type
 }
 
 export function forwardTo(bindingName: string) {
   return (parent: any, args: any, context: any, info: GraphQLResolveInfo) => {
-    let message = `Forward to '${bindingName}.${info.parentType.name.toLowerCase()}.${info.fieldName}' failed. `
+    let message = `Forward to '${bindingName}.${info.parentType.name.toLowerCase()}.${
+      info.fieldName
+    }' failed. `
     if (context[bindingName]) {
-      if (context[bindingName][info.parentType.name.toLowerCase()][info.fieldName]) {
-        return context[bindingName][info.parentType.name.toLowerCase()][info.fieldName](args, info)
+      if (
+        context[bindingName][info.parentType.name.toLowerCase()][info.fieldName]
+      ) {
+        return context[bindingName][info.parentType.name.toLowerCase()][
+          info.fieldName
+        ](args, info)
       } else {
-        message += `Field '${info.parentType.name.toLowerCase()}.${info.fieldName}' not found on binding '${bindingName}'.`
+        message += `Field '${info.parentType.name.toLowerCase()}.${
+          info.fieldName
+        }' not found on binding '${bindingName}'.`
       }
     } else {
       message += `Binding '${bindingName}' not found.`
@@ -83,4 +98,23 @@ export function forwardTo(bindingName: string) {
 
     throw new Error(message)
   }
+}
+
+export function printDocumentFromInfo(info: GraphQLResolveInfo) {
+  const fragments = Object.keys(info.fragments).map(
+    fragment => info.fragments[fragment],
+  )
+  const doc = {
+    kind: 'Document',
+    definitions: [
+      {
+        kind: 'OperationDefinition',
+        operation: 'query',
+        selectionSet: info.fieldNodes[0].selectionSet,
+      },
+      ...fragments,
+    ],
+  }
+
+  return print(doc)
 }

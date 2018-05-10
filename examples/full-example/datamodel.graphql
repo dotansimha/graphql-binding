@@ -1,0 +1,14 @@
+type User {
+  id: ID! @unique
+  name: String!
+}
+
+type A {
+  id: ID! @unique
+  name: String!
+}
+
+type B {
+  id: ID! @unique
+  name: String!
+}

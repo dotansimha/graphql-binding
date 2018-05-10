@@ -1,0 +1,31 @@
+projects:
+  db:
+    schemaPath: schema.graphql
+    extensions:
+      prisma: prisma.yml
+      codegen:
+        - generator: typegen
+          language: typescript
+          input: "{binding,prisma}/*.ts"
+          output:
+            typings: typings.ts
+        - generator: prisma-binding
+          language: typescript 
+          input: schema.js
+          output:
+            binding: prisma/ts-prisma.ts
+#         - generator: prisma-binding
+#           language: javascript
+#           input: schema.js
+#           output:
+#             binding: prisma/prisma.js
+#         - generator: graphql-binding
+#           language: typescript 
+#           input: schema.js
+#           output:
+#             binding: binding/ts-binding.ts
+#         - generator: graphql-binding
+#           language: javascript
+#           input: schema.js
+#           output:
+#             binding: binding/binding.js
