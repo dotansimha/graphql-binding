@@ -9,7 +9,9 @@ import { TypescriptGenerator } from './codegen/TypescriptGenerator'
 import { printSchema } from 'graphql'
 
 const argv = yargs
-  .usage(`Usage: $0 -i [input] -g [generator] -b [outputBinding]`)
+  .usage(
+    `Usage: $0 -i [input] -l [language] -b [outputBinding] -t [outputTypedefs]`,
+  )
   .options({
     input: {
       alias: 'i',
