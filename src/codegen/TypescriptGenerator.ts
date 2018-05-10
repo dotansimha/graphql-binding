@@ -253,7 +253,7 @@ ${this.renderTypes()}`
           )
           .join(', ')}${
           field.args.length > 0 ? ' ' : ''
-        }}, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => ${this.getPayloadType(
+        }}, info?: GraphQLResolveInfo | string, options?: Options) => ${this.getPayloadType(
           operation,
         )} `
       })
@@ -267,23 +267,6 @@ ${this.renderTypes()}`
       return `Promise<AsyncIterator<T>>`
     }
     return `Promise<T>`
-  }
-
-  renderMainSubscriptionMethodFields(
-    fields: GraphQLFieldMap<any, any>,
-  ): string {
-    return Object.keys(fields)
-      .map(f => {
-        const field = fields[f]
-        return `    ${
-          field.name
-        }: (args, infoOrQuery, context): Promise<AsyncIterator<${this.renderFieldType(
-          field.type,
-        )}>> => super.delegateSubscription('${
-          field.name
-        }', args, infoOrQuery, context)`
-      })
-      .join(',\n')
   }
 
   renderInterfaceOrObject(
