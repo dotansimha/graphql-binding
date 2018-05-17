@@ -3,3 +3,4 @@ datamodel: datamodel.graphql
 hooks:
   post-deploy:
     - graphql get-schema
+    - graphql codegen
