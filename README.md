@@ -14,8 +14,8 @@
 yarn add graphql-binding
 ```
 
-## [Docs :books:](https://oss.prisma.io/graphql-binding)
-Check out the docs on [oss.prisma.io](https://oss.prisma.io/graphql-binding).
+## [Docs :books:](https://oss.prisma.io/content/GraphQL-Binding/01-Overview.html)
+Check out the docs on [oss.prisma.io](https://oss.prisma.io/content/GraphQL-Binding/01-Overview.html).
 
 ## Public GraphQL bindings
 
