@@ -4,7 +4,7 @@
 
 ## Overview
 
-🔗 GraphQL bindings are **modular building blocks** that allow to embed existing GraphQL APIs into your own GraphQL server. Think about it as turning (parts of) GraphQL APIs into reusable LEGO building blocks.
+🔗 GraphQL bindings are **modular building blocks** that allow to embed existing GraphQL APIs into your own GraphQL server. Think about it as turning (parts of) GraphQL APIs into reusable LEGO building blocks. Bindings may be generated in JavaScript, TypeScript, or Flow. 
 
 > The idea of GraphQL bindings is introduced in detail in this blog post: [Reusing & Composing GraphQL APIs with GraphQL Bindings](https://blog.graph.cool/80a4aa37cff5)
 
@@ -27,3 +27,4 @@ You can find practical, production-ready examples here:
 > Note: If you've created your own GraphQL binding based on this package, please add it to this list via a PR 🙌
 
 If you have any questions, share some ideas or just want to chat about GraphQL bindings, join the [`#graphql-bindings`](https://graphcool.slack.com/messages/graphql-bindings) channel in our [Slack](https://slack.graph.cool/).
+
