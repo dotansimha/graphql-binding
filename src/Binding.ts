@@ -59,11 +59,11 @@ export class Binding extends Delegate {
   }
 
   buildSubscriptionMethods(): SubscriptionMap {
-    const queryType = this.schema.getQueryType()
-    if (!queryType) {
+    const subscriptionType = this.schema.getSubscriptionType()
+    if (!subscriptionType) {
       return {}
     }
-    const fields = queryType.getFields()
+    const fields = subscriptionType.getFields()
     return Object.entries(fields)
       .map(([fieldName, field]) => {
         return {
