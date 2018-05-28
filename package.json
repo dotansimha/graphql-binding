@@ -29,9 +29,9 @@
     "@types/graphql": "0.13.0",
     "@types/node": "10.0.2",
     "apollo-link": "1.2.2",
-    "ava": "^0.25.0",
+    "ava": "0.25.0",
     "graphql": "0.13.2",
-    "graphql-tag": "^2.9.2",
+    "graphql-tag": "2.9.2",
     "tslint": "5.9.1",
     "tslint-config-standard": "7.0.0",
     "typescript": "2.8.3"
