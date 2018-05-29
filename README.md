@@ -27,3 +27,4 @@ You can find practical, production-ready examples here:
 > Note: If you've created your own GraphQL binding based on this package, please add it to this list via a PR 🙌
 
 If you have any questions, share some ideas or just want to chat about GraphQL bindings, join the [`#graphql-bindings`](https://graphcool.slack.com/messages/graphql-bindings) channel in our [Slack](https://slack.graph.cool/).
+
