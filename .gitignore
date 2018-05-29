@@ -5,3 +5,5 @@ dist
 *.log
 
 src/*.test.js.md
+/.prettierrc.json
+/.flowconfig
