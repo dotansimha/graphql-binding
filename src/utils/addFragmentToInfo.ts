@@ -6,7 +6,7 @@ import {
   OperationDefinitionNode,
 } from 'graphql'
 import { getDeepType } from '../info'
-import { update } from 'object-path-immutable'
+import * as immutable from 'object-path-immutable'
 
 export function addFragmentToInfo(
   info: GraphQLResolveInfo,
@@ -35,7 +35,7 @@ export function addFragmentToInfo(
     )
   }
 
-  return update(
+  return (immutable as any).update(
     info,
     ['fieldNodes', 0, 'selectionSet', 'selections'],
     selections =>
