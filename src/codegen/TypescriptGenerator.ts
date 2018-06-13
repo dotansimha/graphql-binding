@@ -33,6 +33,7 @@ export class TypescriptGenerator extends Generator {
     Float: 'number',
     Boolean: 'boolean',
     DateTime: 'Date | string',
+    Json: 'any',
   }
 
   graphqlRenderers = {
