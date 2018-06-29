@@ -4,43 +4,43 @@ import { Options } from 'graphql-binding'
 import { makePrismaBindingClass, BasePrismaOptions } from 'prisma-binding'
 
 export interface Query {
-    users: <T = User[]>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    as: <T = A[]>(args: { where?: AWhereInput, orderBy?: AOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    bs: <T = B[]>(args: { where?: BWhereInput, orderBy?: BOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    a: <T = A | null>(args: { where: AWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    b: <T = B | null>(args: { where: BWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    usersConnection: <T = UserConnection>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    asConnection: <T = AConnection>(args: { where?: AWhereInput, orderBy?: AOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    bsConnection: <T = BConnection>(args: { where?: BWhereInput, orderBy?: BOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> 
+    users: <T = User[]>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    as: <T = A[]>(args: { where?: AWhereInput, orderBy?: AOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    bs: <T = B[]>(args: { where?: BWhereInput, orderBy?: BOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    a: <T = A | null>(args: { where: AWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    b: <T = B | null>(args: { where: BWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    usersConnection: <T = UserConnection>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    asConnection: <T = AConnection>(args: { where?: AWhereInput, orderBy?: AOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    bsConnection: <T = BConnection>(args: { where?: BWhereInput, orderBy?: BOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Mutation {
-    createUser: <T = User>(args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    createA: <T = A>(args: { data: ACreateInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    createB: <T = B>(args: { data: BCreateInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    updateA: <T = A | null>(args: { data: AUpdateInput, where: AWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    updateB: <T = B | null>(args: { data: BUpdateInput, where: BWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    deleteA: <T = A | null>(args: { where: AWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    deleteB: <T = B | null>(args: { where: BWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    upsertA: <T = A>(args: { where: AWhereUniqueInput, create: ACreateInput, update: AUpdateInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    upsertB: <T = B>(args: { where: BWhereUniqueInput, create: BCreateInput, update: BUpdateInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    updateManyAs: <T = BatchPayload>(args: { data: AUpdateInput, where?: AWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    updateManyBs: <T = BatchPayload>(args: { data: BUpdateInput, where?: BWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    deleteManyAs: <T = BatchPayload>(args: { where?: AWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    deleteManyBs: <T = BatchPayload>(args: { where?: BWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> 
+    createUser: <T = User>(args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createA: <T = A>(args: { data: ACreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    createB: <T = B>(args: { data: BCreateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateA: <T = A | null>(args: { data: AUpdateInput, where: AWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateB: <T = B | null>(args: { data: BUpdateInput, where: BWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteA: <T = A | null>(args: { where: AWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteB: <T = B | null>(args: { where: BWhereUniqueInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertA: <T = A>(args: { where: AWhereUniqueInput, create: ACreateInput, update: AUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    upsertB: <T = B>(args: { where: BWhereUniqueInput, create: BCreateInput, update: BUpdateInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyAs: <T = BatchPayload>(args: { data: AUpdateInput, where?: AWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    updateManyBs: <T = BatchPayload>(args: { data: BUpdateInput, where?: BWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyAs: <T = BatchPayload>(args: { where?: AWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    deleteManyBs: <T = BatchPayload>(args: { where?: BWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Subscription {
-    user: <T = UserSubscriptionPayload | null>(args: { where?: UserSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<AsyncIterator<T>> ,
-    a: <T = ASubscriptionPayload | null>(args: { where?: ASubscriptionWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<AsyncIterator<T>> ,
-    b: <T = BSubscriptionPayload | null>(args: { where?: BSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<AsyncIterator<T>> 
+    user: <T = UserSubscriptionPayload | null>(args: { where?: UserSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    a: <T = ASubscriptionPayload | null>(args: { where?: ASubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> ,
+    b: <T = BSubscriptionPayload | null>(args: { where?: BSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<AsyncIterator<T>> 
   }
 
 export interface Exists {
