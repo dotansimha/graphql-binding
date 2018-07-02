@@ -3,7 +3,7 @@
 ## Usage
 ```bash
 $ yarn install
-$ npm install -g graphql-cli@beta typescript
+$ npm install -g graphql-cli typescript
 $ graphql codegen
 
 ## Run Prisma Binding

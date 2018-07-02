@@ -1,4 +1,3 @@
-import {buildSchema} from 'graphql'
 import {makeExecutableSchema} from 'graphql-tools'
 
 const schema = makeExecutableSchema({
