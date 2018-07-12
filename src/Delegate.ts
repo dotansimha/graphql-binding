@@ -40,7 +40,7 @@ export class Delegate {
   ): Promise<T> {
     this.before()
     return graphql(this.schema, query, null, null, variables).then(
-      r => r.data as any,
+      r => r as any,
     )
   }
 
