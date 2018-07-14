@@ -1,5 +1,5 @@
-const resolveCwd = require('resolve-cwd')
-const graphqlPackagePath = resolveCwd.silent('graphql')
+declare const __non_webpack_require__
+const isWebpack = typeof __non_webpack_require__ !== 'undefined'
 const {
   GraphQLObjectType,
   GraphQLScalarType,
@@ -8,7 +8,14 @@ const {
   GraphQLList,
   GraphQLEnumType,
   GraphQLNonNull,
-} = require(graphqlPackagePath || 'graphql')
+} = (isWebpack => {
+  if (isWebpack) return require('graphql')
+
+  const resolveCwd = require('resolve-cwd')
+  const graphqlPackagePath = resolveCwd.silent('graphql')
+
+  return require(graphqlPackagePath || 'graphql')
+})(isWebpack)
 
 import {
   GraphQLSchema,
