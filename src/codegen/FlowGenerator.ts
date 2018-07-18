@@ -1,10 +1,16 @@
-const resolveCwd = require('resolve-cwd')
-const graphqlPackagePath = resolveCwd.silent('graphql')
+declare const __non_webpack_require__
 const {
   isNonNullType,
   isListType,
   GraphQLObjectType,
-} = require(graphqlPackagePath || 'graphql')
+} = (isWebpack => {
+  if (isWebpack) return require('graphql')
+
+  const resolveCwd = require('resolve-cwd')
+  const graphqlPackagePath = resolveCwd.silent('graphql')
+
+  return require(graphqlPackagePath || 'graphql')
+})(typeof __non_webpack_require__ !== 'undefined')
 
 import { Generator } from './Generator'
 
