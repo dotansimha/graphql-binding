@@ -2,6 +2,12 @@ import { Binding } from './ts-binding'
 
 const binding = new Binding()
 
+;(async function() {
+
+  const x = await binding.query.users().
+})()
+
+
 // binding.mutation
 //   .createUser({
 //     data: {
@@ -10,16 +16,21 @@ const binding = new Binding()
 //   })
 //   .catch(e => console.error(e))
 
-binding.query
-  .users(
-    {},
-    `
-      fragment Frogo on User {
-        id
-      }
-    `,
-  )
-  .then(r => {
-    console.log(r)
-  })
-  .catch(e => console.error(e))
+// binding.query .users(
+//     {},
+//     `
+//       fragment Frogo on User {
+//         id
+//       }
+//     `,
+//   )
+// ;(async function() {
+//   const result = await binding.query
+//     .users({
+//       where: {
+//         id: 'a5',
+//       },
+//     })
+//     .friend()
+//     .friend()
+// })()

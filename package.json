@@ -30,7 +30,7 @@
     "@types/node": "10.0.2",
     "apollo-link": "1.2.2",
     "ava": "^0.25.0",
-    "graphql": "0.13.2",
+    "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "semantic-release": "^15.5.2",
     "tslint": "5.9.1",

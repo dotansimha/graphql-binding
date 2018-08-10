@@ -2,6 +2,10 @@ declare const __non_webpack_require__
 const {
   isNonNullType,
   isListType,
+  isScalarType,
+  isInputType,
+  isObjectType,
+  isEnumType,
   GraphQLObjectType,
 } = (isWebpack => {
   if (isWebpack) return require('graphql')
@@ -57,7 +61,13 @@ export class TypescriptGenerator extends Generator {
         | GraphQLObjectTypeRef
         | GraphQLInputObjectType
         | GraphQLInterfaceType,
-    ): string => this.renderInterfaceOrObject(type),
+    ): string => {
+      return (
+        this.renderInterfaceOrObject(type, true) +
+        '\n\n' +
+        this.renderInterfaceOrObject(type, false)
+      )
+    },
 
     GraphQLInterfaceType: (
       type:
@@ -153,6 +163,9 @@ export interface Mutation ${this.renderMutations()}
 
 export interface Subscription ${this.renderSubscriptions()}
 
+export interface Node {
+}
+
 export interface Binding {
   query: Query
   mutation: Mutation
@@ -244,6 +257,13 @@ ${this.renderTypes()}`
       .join('\n\n')
   }
 
+  renderArgs(args) {
+    const hasArgs = args.length > 0
+    return `args${hasArgs ? '' : '?'}: {${hasArgs ? ' ' : ''}${args
+      .map(f => `${this.renderFieldName(f)}: ${this.renderFieldType(f)}`)
+      .join(', ')}${args.length > 0 ? ' ' : ''}}`
+  }
+
   renderMainMethodFields(
     operation: string,
     fields: GraphQLFieldMap<any, any>,
@@ -251,22 +271,36 @@ ${this.renderTypes()}`
     const methods = Object.keys(fields)
       .map(f => {
         const field = fields[f]
-        const hasArgs = field.args.length > 0
-        return `    ${field.name}: <T = ${this.renderFieldType(field.type)}${
+        return `    ${field.name}: <T = ${this.renderFieldType(field, true)}${
           !isNonNullType(field.type) ? ' | null' : ''
-        }>(args${hasArgs ? '' : '?'}: {${hasArgs ? ' ' : ''}${field.args
-          .map(
-            f => `${this.renderFieldName(f)}: ${this.renderFieldType(f.type)}`,
-          )
-          .join(', ')}${
-          field.args.length > 0 ? ' ' : ''
-        }}, info?: GraphQLResolveInfo | string, options?: Options) => ${this.getPayloadType(
-          operation,
-        )} `
+        }>(${this.renderArgs(
+          field.args,
+        )}, info?: GraphQLResolveInfo | string, options?: Options) => ${
+          operation === 'subscription'
+            ? 'Promise<AsyncIterator<T>>'
+            : this.renderFieldType(field, false)
+        } `
       })
       .join(',\n')
 
     return `{\n${methods}\n  }`
+  }
+
+  getDeepType(type) {
+    if (type.ofType) {
+      return this.getDeepType(type.ofType)
+    }
+
+    return type
+  }
+
+  getInternalTypeName(type) {
+    const deepType = this.getDeepType(type)
+    // if (isListType(type)) {
+    //   return `${deepType}Array`
+    // }
+    const name = String(deepType)
+    return name === 'ID' ? 'ID_Output' : name
   }
 
   getPayloadType(operation: string) {
@@ -278,12 +312,19 @@ ${this.renderTypes()}`
 
   renderInterfaceOrObject(
     type: GraphQLObjectTypeRef | GraphQLInputObjectType | GraphQLInterfaceType,
+    node = true,
   ): string {
-    const fieldDefinition = Object.keys(type.getFields())
+    const fields = type.getFields()
+    const fieldDefinition = Object.keys(fields)
+      .filter(f => {
+        const deepType = this.getDeepType(fields[f].type)
+        return node ? !isObjectType(deepType) : true
+      })
       .map(f => {
-        const field = type.getFields()[f]
+        const field = fields[f]
         return `  ${this.renderFieldName(field)}: ${this.renderFieldType(
-          field.type,
+          field,
+          node,
         )}`
       })
       .join('\n')
@@ -294,10 +335,11 @@ ${this.renderTypes()}`
     }
 
     return this.renderInterfaceWrapper(
-      type.name,
+      `${type.name}${node ? 'Node' : ``}`,
       type.description,
       interfaces,
       fieldDefinition,
+      !node,
     )
   }
 
@@ -305,16 +347,45 @@ ${this.renderTypes()}`
     return `${field.name}${isNonNullType(field.type) ? '' : '?'}`
   }
 
-  renderFieldType(type: GraphQLInputType | GraphQLOutputType) {
-    if (isNonNullType(type)) {
-      return this.renderFieldType((type as GraphQLWrappingType).ofType)
+  renderFieldType(field, node: boolean = true) {
+    const { type } = field
+    const deepType = this.getDeepType(type)
+    const isList = isListType(type) || isListType(type.ofType)
+    const isOptional = !isNonNullType(type)
+    const isScalar = isScalarType(deepType) || isEnumType(deepType)
+    const isInput = isInputType(deepType)
+
+    let typeString = this.getInternalTypeName(type)
+
+    if (isList || node) {
+      if (!isScalar && !isInput) {
+        typeString += 'Node'
+      }
+
+      if (isOptional) {
+        typeString += ' | undefined'
+      }
     }
-    if (isListType(type)) {
-      return `${this.renderFieldType((type as GraphQLWrappingType).ofType)}[]`
+
+    if (node && (!isInput || isScalar)) {
+      if (isList) {
+        return `${typeString}[]`
+      } else {
+        return typeString
+      }
     }
-    return `${(type as GraphQLNamedType).name}${
-      (type as GraphQLNamedType).name === 'ID' ? '_Output' : ''
-    }`
+
+    if (isList) {
+      if (isOptional) {
+        return `Promise<Array<${typeString}>>`
+      } else {
+        return `Promise<${typeString}[]>`
+      }
+    } else {
+      return `(${
+        field.args && field.args.length > 0 ? this.renderArgs(field.args) : ''
+      }) => ${typeString}`
+    }
   }
 
   renderInputFieldType(type: GraphQLInputType | GraphQLOutputType) {
@@ -349,12 +420,21 @@ ${fieldDefinition}
     typeDescription: string | void,
     interfaces: GraphQLInterfaceType[],
     fieldDefinition: string,
+    promise?: boolean,
   ): string {
+    const actualInterfaces = promise
+      ? [
+          {
+            name: `Promise<${typeName}Node>`,
+          },
+        ].concat(interfaces)
+      : interfaces
+
     return `${this.renderDescription(
       typeDescription,
     )}export interface ${typeName}${
-      interfaces.length > 0
-        ? ` extends ${interfaces.map(i => i.name).join(', ')}`
+      actualInterfaces.length > 0
+        ? ` extends ${actualInterfaces.map(i => i.name).join(', ')}`
         : ''
     } {
 ${fieldDefinition}
