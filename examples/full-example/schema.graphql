@@ -1,39 +1,8 @@
-# source: https://eu1.prisma.sh/lol/session65/dev
-# timestamp: Wed May 09 2018 09:46:02 GMT+0200 (CEST)
-
-type A implements Node {
-  id: ID!
-  name: String!
-}
-
-"""A connection to a list of items."""
-type AConnection {
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """A list of edges."""
-  edges: [AEdge]!
-  aggregate: AggregateA!
-}
-
-input ACreateInput {
-  name: String!
-}
-
-"""An edge in a connection."""
-type AEdge {
-  """The item at the end of the edge."""
-  node: A!
-
-  """A cursor for use in pagination."""
-  cursor: String!
-}
-
-type AggregateA {
+type AggregateBar {
   count: Int!
 }
 
-type AggregateB {
+type AggregateCar {
   count: Int!
 }
 
@@ -41,194 +10,312 @@ type AggregateUser {
   count: Int!
 }
 
-enum AOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
-}
-
-type APreviousValues {
+type Bar implements Node {
   id: ID!
-  name: String!
+  a: String
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  lol: String
 }
 
-type ASubscriptionPayload {
-  mutation: MutationType!
-  node: A
-  updatedFields: [String!]
-  previousValues: APreviousValues
-}
-
-input ASubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [ASubscriptionWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [ASubscriptionWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [ASubscriptionWhereInput!]
-
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
-  mutation_in: [MutationType!]
-
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
-  updatedFields_contains: String
-
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
-  updatedFields_contains_every: [String!]
-
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
-  updatedFields_contains_some: [String!]
-  node: AWhereInput
-}
-
-input AUpdateInput {
-  name: String
-}
-
-input AWhereInput {
-  """Logical AND on all given filters."""
-  AND: [AWhereInput!]
-
-  """Logical OR on all given filters."""
-  OR: [AWhereInput!]
-
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [AWhereInput!]
-  id: ID
-
-  """All values that are not equal to given value."""
-  id_not: ID
-
-  """All values that are contained in given list."""
-  id_in: [ID!]
-
-  """All values that are not contained in given list."""
-  id_not_in: [ID!]
-
-  """All values less than the given value."""
-  id_lt: ID
-
-  """All values less than or equal the given value."""
-  id_lte: ID
-
-  """All values greater than the given value."""
-  id_gt: ID
-
-  """All values greater than or equal the given value."""
-  id_gte: ID
-
-  """All values containing the given string."""
-  id_contains: ID
-
-  """All values not containing the given string."""
-  id_not_contains: ID
-
-  """All values starting with the given string."""
-  id_starts_with: ID
-
-  """All values not starting with the given string."""
-  id_not_starts_with: ID
-
-  """All values ending with the given string."""
-  id_ends_with: ID
-
-  """All values not ending with the given string."""
-  id_not_ends_with: ID
-  name: String
-
-  """All values that are not equal to given value."""
-  name_not: String
-
-  """All values that are contained in given list."""
-  name_in: [String!]
-
-  """All values that are not contained in given list."""
-  name_not_in: [String!]
-
-  """All values less than the given value."""
-  name_lt: String
-
-  """All values less than or equal the given value."""
-  name_lte: String
-
-  """All values greater than the given value."""
-  name_gt: String
-
-  """All values greater than or equal the given value."""
-  name_gte: String
-
-  """All values containing the given string."""
-  name_contains: String
-
-  """All values not containing the given string."""
-  name_not_contains: String
-
-  """All values starting with the given string."""
-  name_starts_with: String
-
-  """All values not starting with the given string."""
-  name_not_starts_with: String
-
-  """All values ending with the given string."""
-  name_ends_with: String
-
-  """All values not ending with the given string."""
-  name_not_ends_with: String
-}
-
-input AWhereUniqueInput {
-  id: ID
-}
-
-type B implements Node {
-  id: ID!
-  name: String!
-}
-
-type BatchPayload {
-  """The number of nodes that have been affected by the Batch operation."""
-  count: Long!
-}
-
-"""A connection to a list of items."""
-type BConnection {
-  """Information to aid in pagination."""
+# A connection to a list of items.
+type BarConnection {
+  # Information to aid in pagination.
   pageInfo: PageInfo!
 
-  """A list of edges."""
-  edges: [BEdge]!
-  aggregate: AggregateB!
+  # A list of edges.
+  edges: [BarEdge]!
+  aggregate: AggregateBar!
 }
 
-input BCreateInput {
-  name: String!
+input BarCreateInput {
+  a: String
+  lol: String
+  users: UserCreateManyWithoutBarsInput
 }
 
-"""An edge in a connection."""
-type BEdge {
-  """The item at the end of the edge."""
-  node: B!
+input BarCreateManyWithoutUsersInput {
+  create: [BarCreateWithoutUsersInput!]
+  connect: [BarWhereUniqueInput!]
+}
 
-  """A cursor for use in pagination."""
+input BarCreateWithoutUsersInput {
+  a: String
+  lol: String
+}
+
+# An edge in a connection.
+type BarEdge {
+  # The item at the end of the edge.
+  node: Bar!
+
+  # A cursor for use in pagination.
   cursor: String!
 }
 
-enum BOrderByInput {
+enum BarOrderByInput {
+  id_ASC
+  id_DESC
+  a_ASC
+  a_DESC
+  lol_ASC
+  lol_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type BarPreviousValues {
+  id: ID!
+  a: String
+  lol: String
+}
+
+type BarSubscriptionPayload {
+  mutation: MutationType!
+  node: Bar
+  updatedFields: [String!]
+  previousValues: BarPreviousValues
+}
+
+input BarSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [BarSubscriptionWhereInput!]
+
+  # Logical OR on all given filters.
+  OR: [BarSubscriptionWhereInput!]
+
+  # Logical NOT on all given filters combined by AND.
+  NOT: [BarSubscriptionWhereInput!]
+
+  # The subscription event gets dispatched when it's listed in mutation_in
+  mutation_in: [MutationType!]
+
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
+  updatedFields_contains: String
+
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
+  updatedFields_contains_every: [String!]
+
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
+  updatedFields_contains_some: [String!]
+  node: BarWhereInput
+}
+
+input BarUpdateInput {
+  a: String
+  lol: String
+  users: UserUpdateManyWithoutBarsInput
+}
+
+input BarUpdateManyWithoutUsersInput {
+  create: [BarCreateWithoutUsersInput!]
+  connect: [BarWhereUniqueInput!]
+  disconnect: [BarWhereUniqueInput!]
+  delete: [BarWhereUniqueInput!]
+  update: [BarUpdateWithWhereUniqueWithoutUsersInput!]
+  upsert: [BarUpsertWithWhereUniqueWithoutUsersInput!]
+}
+
+input BarUpdateWithoutUsersDataInput {
+  a: String
+  lol: String
+}
+
+input BarUpdateWithWhereUniqueWithoutUsersInput {
+  where: BarWhereUniqueInput!
+  data: BarUpdateWithoutUsersDataInput!
+}
+
+input BarUpsertWithWhereUniqueWithoutUsersInput {
+  where: BarWhereUniqueInput!
+  update: BarUpdateWithoutUsersDataInput!
+  create: BarCreateWithoutUsersInput!
+}
+
+input BarWhereInput {
+  # Logical AND on all given filters.
+  AND: [BarWhereInput!]
+
+  # Logical OR on all given filters.
+  OR: [BarWhereInput!]
+
+  # Logical NOT on all given filters combined by AND.
+  NOT: [BarWhereInput!]
+  id: ID
+
+  # All values that are not equal to given value.
+  id_not: ID
+
+  # All values that are contained in given list.
+  id_in: [ID!]
+
+  # All values that are not contained in given list.
+  id_not_in: [ID!]
+
+  # All values less than the given value.
+  id_lt: ID
+
+  # All values less than or equal the given value.
+  id_lte: ID
+
+  # All values greater than the given value.
+  id_gt: ID
+
+  # All values greater than or equal the given value.
+  id_gte: ID
+
+  # All values containing the given string.
+  id_contains: ID
+
+  # All values not containing the given string.
+  id_not_contains: ID
+
+  # All values starting with the given string.
+  id_starts_with: ID
+
+  # All values not starting with the given string.
+  id_not_starts_with: ID
+
+  # All values ending with the given string.
+  id_ends_with: ID
+
+  # All values not ending with the given string.
+  id_not_ends_with: ID
+  a: String
+
+  # All values that are not equal to given value.
+  a_not: String
+
+  # All values that are contained in given list.
+  a_in: [String!]
+
+  # All values that are not contained in given list.
+  a_not_in: [String!]
+
+  # All values less than the given value.
+  a_lt: String
+
+  # All values less than or equal the given value.
+  a_lte: String
+
+  # All values greater than the given value.
+  a_gt: String
+
+  # All values greater than or equal the given value.
+  a_gte: String
+
+  # All values containing the given string.
+  a_contains: String
+
+  # All values not containing the given string.
+  a_not_contains: String
+
+  # All values starting with the given string.
+  a_starts_with: String
+
+  # All values not starting with the given string.
+  a_not_starts_with: String
+
+  # All values ending with the given string.
+  a_ends_with: String
+
+  # All values not ending with the given string.
+  a_not_ends_with: String
+  lol: String
+
+  # All values that are not equal to given value.
+  lol_not: String
+
+  # All values that are contained in given list.
+  lol_in: [String!]
+
+  # All values that are not contained in given list.
+  lol_not_in: [String!]
+
+  # All values less than the given value.
+  lol_lt: String
+
+  # All values less than or equal the given value.
+  lol_lte: String
+
+  # All values greater than the given value.
+  lol_gt: String
+
+  # All values greater than or equal the given value.
+  lol_gte: String
+
+  # All values containing the given string.
+  lol_contains: String
+
+  # All values not containing the given string.
+  lol_not_contains: String
+
+  # All values starting with the given string.
+  lol_starts_with: String
+
+  # All values not starting with the given string.
+  lol_not_starts_with: String
+
+  # All values ending with the given string.
+  lol_ends_with: String
+
+  # All values not ending with the given string.
+  lol_not_ends_with: String
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+}
+
+input BarWhereUniqueInput {
+  id: ID
+}
+
+type BatchPayload {
+  # The number of nodes that have been affected by the Batch operation.
+  count: Long!
+}
+
+type Car implements Node {
+  id: ID!
+  name: String!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+# A connection to a list of items.
+type CarConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of edges.
+  edges: [CarEdge]!
+  aggregate: AggregateCar!
+}
+
+input CarCreateInput {
+  name: String!
+  users: UserCreateManyWithoutCarInput
+}
+
+input CarCreateOneWithoutUsersInput {
+  create: CarCreateWithoutUsersInput
+  connect: CarWhereUniqueInput
+}
+
+input CarCreateWithoutUsersInput {
+  name: String!
+}
+
+# An edge in a connection.
+type CarEdge {
+  # The item at the end of the edge.
+  node: Car!
+
+  # A cursor for use in pagination.
+  cursor: String!
+}
+
+enum CarOrderByInput {
   id_ASC
   id_DESC
   name_ASC
@@ -239,174 +326,196 @@ enum BOrderByInput {
   createdAt_DESC
 }
 
-type BPreviousValues {
+type CarPreviousValues {
   id: ID!
   name: String!
 }
 
-type BSubscriptionPayload {
+type CarSubscriptionPayload {
   mutation: MutationType!
-  node: B
+  node: Car
   updatedFields: [String!]
-  previousValues: BPreviousValues
+  previousValues: CarPreviousValues
 }
 
-input BSubscriptionWhereInput {
-  """Logical AND on all given filters."""
-  AND: [BSubscriptionWhereInput!]
+input CarSubscriptionWhereInput {
+  # Logical AND on all given filters.
+  AND: [CarSubscriptionWhereInput!]
 
-  """Logical OR on all given filters."""
-  OR: [BSubscriptionWhereInput!]
+  # Logical OR on all given filters.
+  OR: [CarSubscriptionWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [BSubscriptionWhereInput!]
+  # Logical NOT on all given filters combined by AND.
+  NOT: [CarSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  # The subscription event gets dispatched when it's listed in mutation_in
   mutation_in: [MutationType!]
 
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
   updatedFields_contains: String
 
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
   updatedFields_contains_every: [String!]
 
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
   updatedFields_contains_some: [String!]
-  node: BWhereInput
+  node: CarWhereInput
 }
 
-input BUpdateInput {
+input CarUpdateInput {
+  name: String
+  users: UserUpdateManyWithoutCarInput
+}
+
+input CarUpdateOneWithoutUsersInput {
+  create: CarCreateWithoutUsersInput
+  connect: CarWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: CarUpdateWithoutUsersDataInput
+  upsert: CarUpsertWithoutUsersInput
+}
+
+input CarUpdateWithoutUsersDataInput {
   name: String
 }
 
-input BWhereInput {
-  """Logical AND on all given filters."""
-  AND: [BWhereInput!]
+input CarUpsertWithoutUsersInput {
+  update: CarUpdateWithoutUsersDataInput!
+  create: CarCreateWithoutUsersInput!
+}
 
-  """Logical OR on all given filters."""
-  OR: [BWhereInput!]
+input CarWhereInput {
+  # Logical AND on all given filters.
+  AND: [CarWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
-  NOT: [BWhereInput!]
+  # Logical OR on all given filters.
+  OR: [CarWhereInput!]
+
+  # Logical NOT on all given filters combined by AND.
+  NOT: [CarWhereInput!]
   id: ID
 
-  """All values that are not equal to given value."""
+  # All values that are not equal to given value.
   id_not: ID
 
-  """All values that are contained in given list."""
+  # All values that are contained in given list.
   id_in: [ID!]
 
-  """All values that are not contained in given list."""
+  # All values that are not contained in given list.
   id_not_in: [ID!]
 
-  """All values less than the given value."""
+  # All values less than the given value.
   id_lt: ID
 
-  """All values less than or equal the given value."""
+  # All values less than or equal the given value.
   id_lte: ID
 
-  """All values greater than the given value."""
+  # All values greater than the given value.
   id_gt: ID
 
-  """All values greater than or equal the given value."""
+  # All values greater than or equal the given value.
   id_gte: ID
 
-  """All values containing the given string."""
+  # All values containing the given string.
   id_contains: ID
 
-  """All values not containing the given string."""
+  # All values not containing the given string.
   id_not_contains: ID
 
-  """All values starting with the given string."""
+  # All values starting with the given string.
   id_starts_with: ID
 
-  """All values not starting with the given string."""
+  # All values not starting with the given string.
   id_not_starts_with: ID
 
-  """All values ending with the given string."""
+  # All values ending with the given string.
   id_ends_with: ID
 
-  """All values not ending with the given string."""
+  # All values not ending with the given string.
   id_not_ends_with: ID
   name: String
 
-  """All values that are not equal to given value."""
+  # All values that are not equal to given value.
   name_not: String
 
-  """All values that are contained in given list."""
+  # All values that are contained in given list.
   name_in: [String!]
 
-  """All values that are not contained in given list."""
+  # All values that are not contained in given list.
   name_not_in: [String!]
 
-  """All values less than the given value."""
+  # All values less than the given value.
   name_lt: String
 
-  """All values less than or equal the given value."""
+  # All values less than or equal the given value.
   name_lte: String
 
-  """All values greater than the given value."""
+  # All values greater than the given value.
   name_gt: String
 
-  """All values greater than or equal the given value."""
+  # All values greater than or equal the given value.
   name_gte: String
 
-  """All values containing the given string."""
+  # All values containing the given string.
   name_contains: String
 
-  """All values not containing the given string."""
+  # All values not containing the given string.
   name_not_contains: String
 
-  """All values starting with the given string."""
+  # All values starting with the given string.
   name_starts_with: String
 
-  """All values not starting with the given string."""
+  # All values not starting with the given string.
   name_not_starts_with: String
 
-  """All values ending with the given string."""
+  # All values ending with the given string.
   name_ends_with: String
 
-  """All values not ending with the given string."""
+  # All values not ending with the given string.
   name_not_ends_with: String
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
 }
 
-input BWhereUniqueInput {
+input CarWhereUniqueInput {
   id: ID
 }
 
-"""
-The `Long` scalar type represents non-fractional signed whole numeric values.
-Long can represent values between -(2^63) and 2^63 - 1.
-"""
+scalar DateTime
+
+enum Enum {
+  VALUE_A
+  VALUE_B
+}
+
+# Raw JSON value
+scalar Json
+
+# The `Long` scalar type represents non-fractional signed whole numeric values.
+# Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
-  createA(data: ACreateInput!): A!
-  createB(data: BCreateInput!): B!
+  createCar(data: CarCreateInput!): Car!
+  createBar(data: BarCreateInput!): Bar!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  updateA(data: AUpdateInput!, where: AWhereUniqueInput!): A
-  updateB(data: BUpdateInput!, where: BWhereUniqueInput!): B
+  updateCar(data: CarUpdateInput!, where: CarWhereUniqueInput!): Car
+  updateBar(data: BarUpdateInput!, where: BarWhereUniqueInput!): Bar
   deleteUser(where: UserWhereUniqueInput!): User
-  deleteA(where: AWhereUniqueInput!): A
-  deleteB(where: BWhereUniqueInput!): B
+  deleteCar(where: CarWhereUniqueInput!): Car
+  deleteBar(where: BarWhereUniqueInput!): Bar
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  upsertA(where: AWhereUniqueInput!, create: ACreateInput!, update: AUpdateInput!): A!
-  upsertB(where: BWhereUniqueInput!, create: BCreateInput!, update: BUpdateInput!): B!
+  upsertCar(where: CarWhereUniqueInput!, create: CarCreateInput!, update: CarUpdateInput!): Car!
+  upsertBar(where: BarWhereUniqueInput!, create: BarCreateInput!, update: BarUpdateInput!): Bar!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
-  updateManyAs(data: AUpdateInput!, where: AWhereInput): BatchPayload!
-  updateManyBs(data: BUpdateInput!, where: BWhereInput): BatchPayload!
+  updateManyCars(data: CarUpdateInput!, where: CarWhereInput): BatchPayload!
+  updateManyBars(data: BarUpdateInput!, where: BarWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
-  deleteManyAs(where: AWhereInput): BatchPayload!
-  deleteManyBs(where: BWhereInput): BatchPayload!
+  deleteManyCars(where: CarWhereInput): BatchPayload!
+  deleteManyBars(where: BarWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -415,76 +524,180 @@ enum MutationType {
   DELETED
 }
 
-"""An object with an ID"""
+# An object with an ID
 interface Node {
-  """The id of the object."""
+  # The id of the object.
   id: ID!
 }
 
-"""Information about pagination in a connection."""
+# Information about pagination in a connection.
 type PageInfo {
-  """When paginating forwards, are there more items?"""
+  # When paginating forwards, are there more items?
   hasNextPage: Boolean!
 
-  """When paginating backwards, are there more items?"""
+  # When paginating backwards, are there more items?
   hasPreviousPage: Boolean!
 
-  """When paginating backwards, the cursor to continue."""
+  # When paginating backwards, the cursor to continue.
   startCursor: String
 
-  """When paginating forwards, the cursor to continue."""
+  # When paginating forwards, the cursor to continue.
   endCursor: String
 }
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  as(where: AWhereInput, orderBy: AOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [A]!
-  bs(where: BWhereInput, orderBy: BOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [B]!
+  cars(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Car]!
+  bars(where: BarWhereInput, orderBy: BarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bar]!
   user(where: UserWhereUniqueInput!): User
-  a(where: AWhereUniqueInput!): A
-  b(where: BWhereUniqueInput!): B
+  car(where: CarWhereUniqueInput!): Car
+  bar(where: BarWhereUniqueInput!): Bar
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-  asConnection(where: AWhereInput, orderBy: AOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AConnection!
-  bsConnection(where: BWhereInput, orderBy: BOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BConnection!
+  carsConnection(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CarConnection!
+  barsConnection(where: BarWhereInput, orderBy: BarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BarConnection!
 
-  """Fetches an object given its ID"""
+  # Fetches an object given its ID
   node(
-    """The ID of an object"""
+    # The ID of an object
     id: ID!
   ): Node
 }
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-  a(where: ASubscriptionWhereInput): ASubscriptionPayload
-  b(where: BSubscriptionWhereInput): BSubscriptionPayload
+  car(where: CarSubscriptionWhereInput): CarSubscriptionPayload
+  bar(where: BarSubscriptionWhereInput): BarSubscriptionPayload
 }
 
 type User implements Node {
   id: ID!
   name: String!
+  optinalString: String
+  boolOpt: Boolean
+  bool: Boolean!
+  nullableInt: Int
+  int: Int!
+  jason: Json
+  nullableFloat: Float
+  flotat: Float!
+  intList: [Int!]!
+  floatList: [Float!]!
+  floatListOptional: [Float!]!
+  enum: Enum
+  enumList: [Enum!]!
+  date: DateTime
+  dateList: [DateTime!]!
+  car(where: CarWhereInput): Car
+  bars(where: BarWhereInput, orderBy: BarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Bar!]
 }
 
-"""A connection to a list of items."""
+# A connection to a list of items.
 type UserConnection {
-  """Information to aid in pagination."""
+  # Information to aid in pagination.
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  # A list of edges.
   edges: [UserEdge]!
   aggregate: AggregateUser!
 }
 
-input UserCreateInput {
-  name: String!
+input UserCreatedateListInput {
+  set: [DateTime!]
 }
 
-"""An edge in a connection."""
+input UserCreateenumListInput {
+  set: [Enum!]
+}
+
+input UserCreatefloatListInput {
+  set: [Float!]
+}
+
+input UserCreatefloatListOptionalInput {
+  set: [Float!]
+}
+
+input UserCreateInput {
+  name: String!
+  optinalString: String
+  boolOpt: Boolean
+  bool: Boolean!
+  nullableInt: Int
+  int: Int!
+  jason: Json
+  nullableFloat: Float
+  flotat: Float!
+  enum: Enum
+  date: DateTime
+  intList: UserCreateintListInput
+  floatList: UserCreatefloatListInput
+  floatListOptional: UserCreatefloatListOptionalInput
+  enumList: UserCreateenumListInput
+  dateList: UserCreatedateListInput
+  car: CarCreateOneWithoutUsersInput
+  bars: BarCreateManyWithoutUsersInput
+}
+
+input UserCreateintListInput {
+  set: [Int!]
+}
+
+input UserCreateManyWithoutBarsInput {
+  create: [UserCreateWithoutBarsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutCarInput {
+  create: [UserCreateWithoutCarInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateWithoutBarsInput {
+  name: String!
+  optinalString: String
+  boolOpt: Boolean
+  bool: Boolean!
+  nullableInt: Int
+  int: Int!
+  jason: Json
+  nullableFloat: Float
+  flotat: Float!
+  enum: Enum
+  date: DateTime
+  intList: UserCreateintListInput
+  floatList: UserCreatefloatListInput
+  floatListOptional: UserCreatefloatListOptionalInput
+  enumList: UserCreateenumListInput
+  dateList: UserCreatedateListInput
+  car: CarCreateOneWithoutUsersInput
+}
+
+input UserCreateWithoutCarInput {
+  name: String!
+  optinalString: String
+  boolOpt: Boolean
+  bool: Boolean!
+  nullableInt: Int
+  int: Int!
+  jason: Json
+  nullableFloat: Float
+  flotat: Float!
+  enum: Enum
+  date: DateTime
+  intList: UserCreateintListInput
+  floatList: UserCreatefloatListInput
+  floatListOptional: UserCreatefloatListOptionalInput
+  enumList: UserCreateenumListInput
+  dateList: UserCreatedateListInput
+  bars: BarCreateManyWithoutUsersInput
+}
+
+# An edge in a connection.
 type UserEdge {
-  """The item at the end of the edge."""
+  # The item at the end of the edge.
   node: User!
 
-  """A cursor for use in pagination."""
+  # A cursor for use in pagination.
   cursor: String!
 }
 
@@ -493,6 +706,26 @@ enum UserOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  optinalString_ASC
+  optinalString_DESC
+  boolOpt_ASC
+  boolOpt_DESC
+  bool_ASC
+  bool_DESC
+  nullableInt_ASC
+  nullableInt_DESC
+  int_ASC
+  int_DESC
+  jason_ASC
+  jason_DESC
+  nullableFloat_ASC
+  nullableFloat_DESC
+  flotat_ASC
+  flotat_DESC
+  enum_ASC
+  enum_DESC
+  date_ASC
+  date_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -502,6 +735,21 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   name: String!
+  optinalString: String
+  boolOpt: Boolean
+  bool: Boolean!
+  nullableInt: Int
+  int: Int!
+  jason: Json
+  nullableFloat: Float
+  flotat: Float!
+  intList: [Int!]!
+  floatList: [Float!]!
+  floatListOptional: [Float!]!
+  enum: Enum
+  enumList: [Enum!]!
+  date: DateTime
+  dateList: [DateTime!]!
 }
 
 type UserSubscriptionPayload {
@@ -512,132 +760,414 @@ type UserSubscriptionPayload {
 }
 
 input UserSubscriptionWhereInput {
-  """Logical AND on all given filters."""
+  # Logical AND on all given filters.
   AND: [UserSubscriptionWhereInput!]
 
-  """Logical OR on all given filters."""
+  # Logical OR on all given filters.
   OR: [UserSubscriptionWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
+  # Logical NOT on all given filters combined by AND.
   NOT: [UserSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  # The subscription event gets dispatched when it's listed in mutation_in
   mutation_in: [MutationType!]
 
-  """
-  The subscription event gets only dispatched when one of the updated fields names is included in this list
-  """
+  # The subscription event gets only dispatched when one of the updated fields names is included in this list
   updatedFields_contains: String
 
-  """
-  The subscription event gets only dispatched when all of the field names included in this list have been updated
-  """
+  # The subscription event gets only dispatched when all of the field names included in this list have been updated
   updatedFields_contains_every: [String!]
 
-  """
-  The subscription event gets only dispatched when some of the field names included in this list have been updated
-  """
+  # The subscription event gets only dispatched when some of the field names included in this list have been updated
   updatedFields_contains_some: [String!]
   node: UserWhereInput
 }
 
+input UserUpdatedateListInput {
+  set: [DateTime!]
+}
+
+input UserUpdateenumListInput {
+  set: [Enum!]
+}
+
+input UserUpdatefloatListInput {
+  set: [Float!]
+}
+
+input UserUpdatefloatListOptionalInput {
+  set: [Float!]
+}
+
 input UserUpdateInput {
   name: String
+  optinalString: String
+  boolOpt: Boolean
+  bool: Boolean
+  nullableInt: Int
+  int: Int
+  jason: Json
+  nullableFloat: Float
+  flotat: Float
+  enum: Enum
+  date: DateTime
+  intList: UserUpdateintListInput
+  floatList: UserUpdatefloatListInput
+  floatListOptional: UserUpdatefloatListOptionalInput
+  enumList: UserUpdateenumListInput
+  dateList: UserUpdatedateListInput
+  car: CarUpdateOneWithoutUsersInput
+  bars: BarUpdateManyWithoutUsersInput
+}
+
+input UserUpdateintListInput {
+  set: [Int!]
+}
+
+input UserUpdateManyWithoutBarsInput {
+  create: [UserCreateWithoutBarsInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutBarsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutBarsInput!]
+}
+
+input UserUpdateManyWithoutCarInput {
+  create: [UserCreateWithoutCarInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutCarInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutCarInput!]
+}
+
+input UserUpdateWithoutBarsDataInput {
+  name: String
+  optinalString: String
+  boolOpt: Boolean
+  bool: Boolean
+  nullableInt: Int
+  int: Int
+  jason: Json
+  nullableFloat: Float
+  flotat: Float
+  enum: Enum
+  date: DateTime
+  intList: UserUpdateintListInput
+  floatList: UserUpdatefloatListInput
+  floatListOptional: UserUpdatefloatListOptionalInput
+  enumList: UserUpdateenumListInput
+  dateList: UserUpdatedateListInput
+  car: CarUpdateOneWithoutUsersInput
+}
+
+input UserUpdateWithoutCarDataInput {
+  name: String
+  optinalString: String
+  boolOpt: Boolean
+  bool: Boolean
+  nullableInt: Int
+  int: Int
+  jason: Json
+  nullableFloat: Float
+  flotat: Float
+  enum: Enum
+  date: DateTime
+  intList: UserUpdateintListInput
+  floatList: UserUpdatefloatListInput
+  floatListOptional: UserUpdatefloatListOptionalInput
+  enumList: UserUpdateenumListInput
+  dateList: UserUpdatedateListInput
+  bars: BarUpdateManyWithoutUsersInput
+}
+
+input UserUpdateWithWhereUniqueWithoutBarsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutBarsDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutCarInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutCarDataInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutBarsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutBarsDataInput!
+  create: UserCreateWithoutBarsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutCarInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutCarDataInput!
+  create: UserCreateWithoutCarInput!
 }
 
 input UserWhereInput {
-  """Logical AND on all given filters."""
+  # Logical AND on all given filters.
   AND: [UserWhereInput!]
 
-  """Logical OR on all given filters."""
+  # Logical OR on all given filters.
   OR: [UserWhereInput!]
 
-  """Logical NOT on all given filters combined by AND."""
+  # Logical NOT on all given filters combined by AND.
   NOT: [UserWhereInput!]
   id: ID
 
-  """All values that are not equal to given value."""
+  # All values that are not equal to given value.
   id_not: ID
 
-  """All values that are contained in given list."""
+  # All values that are contained in given list.
   id_in: [ID!]
 
-  """All values that are not contained in given list."""
+  # All values that are not contained in given list.
   id_not_in: [ID!]
 
-  """All values less than the given value."""
+  # All values less than the given value.
   id_lt: ID
 
-  """All values less than or equal the given value."""
+  # All values less than or equal the given value.
   id_lte: ID
 
-  """All values greater than the given value."""
+  # All values greater than the given value.
   id_gt: ID
 
-  """All values greater than or equal the given value."""
+  # All values greater than or equal the given value.
   id_gte: ID
 
-  """All values containing the given string."""
+  # All values containing the given string.
   id_contains: ID
 
-  """All values not containing the given string."""
+  # All values not containing the given string.
   id_not_contains: ID
 
-  """All values starting with the given string."""
+  # All values starting with the given string.
   id_starts_with: ID
 
-  """All values not starting with the given string."""
+  # All values not starting with the given string.
   id_not_starts_with: ID
 
-  """All values ending with the given string."""
+  # All values ending with the given string.
   id_ends_with: ID
 
-  """All values not ending with the given string."""
+  # All values not ending with the given string.
   id_not_ends_with: ID
   name: String
 
-  """All values that are not equal to given value."""
+  # All values that are not equal to given value.
   name_not: String
 
-  """All values that are contained in given list."""
+  # All values that are contained in given list.
   name_in: [String!]
 
-  """All values that are not contained in given list."""
+  # All values that are not contained in given list.
   name_not_in: [String!]
 
-  """All values less than the given value."""
+  # All values less than the given value.
   name_lt: String
 
-  """All values less than or equal the given value."""
+  # All values less than or equal the given value.
   name_lte: String
 
-  """All values greater than the given value."""
+  # All values greater than the given value.
   name_gt: String
 
-  """All values greater than or equal the given value."""
+  # All values greater than or equal the given value.
   name_gte: String
 
-  """All values containing the given string."""
+  # All values containing the given string.
   name_contains: String
 
-  """All values not containing the given string."""
+  # All values not containing the given string.
   name_not_contains: String
 
-  """All values starting with the given string."""
+  # All values starting with the given string.
   name_starts_with: String
 
-  """All values not starting with the given string."""
+  # All values not starting with the given string.
   name_not_starts_with: String
 
-  """All values ending with the given string."""
+  # All values ending with the given string.
   name_ends_with: String
 
-  """All values not ending with the given string."""
+  # All values not ending with the given string.
   name_not_ends_with: String
+  optinalString: String
+
+  # All values that are not equal to given value.
+  optinalString_not: String
+
+  # All values that are contained in given list.
+  optinalString_in: [String!]
+
+  # All values that are not contained in given list.
+  optinalString_not_in: [String!]
+
+  # All values less than the given value.
+  optinalString_lt: String
+
+  # All values less than or equal the given value.
+  optinalString_lte: String
+
+  # All values greater than the given value.
+  optinalString_gt: String
+
+  # All values greater than or equal the given value.
+  optinalString_gte: String
+
+  # All values containing the given string.
+  optinalString_contains: String
+
+  # All values not containing the given string.
+  optinalString_not_contains: String
+
+  # All values starting with the given string.
+  optinalString_starts_with: String
+
+  # All values not starting with the given string.
+  optinalString_not_starts_with: String
+
+  # All values ending with the given string.
+  optinalString_ends_with: String
+
+  # All values not ending with the given string.
+  optinalString_not_ends_with: String
+  boolOpt: Boolean
+
+  # All values that are not equal to given value.
+  boolOpt_not: Boolean
+  bool: Boolean
+
+  # All values that are not equal to given value.
+  bool_not: Boolean
+  nullableInt: Int
+
+  # All values that are not equal to given value.
+  nullableInt_not: Int
+
+  # All values that are contained in given list.
+  nullableInt_in: [Int!]
+
+  # All values that are not contained in given list.
+  nullableInt_not_in: [Int!]
+
+  # All values less than the given value.
+  nullableInt_lt: Int
+
+  # All values less than or equal the given value.
+  nullableInt_lte: Int
+
+  # All values greater than the given value.
+  nullableInt_gt: Int
+
+  # All values greater than or equal the given value.
+  nullableInt_gte: Int
+  int: Int
+
+  # All values that are not equal to given value.
+  int_not: Int
+
+  # All values that are contained in given list.
+  int_in: [Int!]
+
+  # All values that are not contained in given list.
+  int_not_in: [Int!]
+
+  # All values less than the given value.
+  int_lt: Int
+
+  # All values less than or equal the given value.
+  int_lte: Int
+
+  # All values greater than the given value.
+  int_gt: Int
+
+  # All values greater than or equal the given value.
+  int_gte: Int
+  nullableFloat: Float
+
+  # All values that are not equal to given value.
+  nullableFloat_not: Float
+
+  # All values that are contained in given list.
+  nullableFloat_in: [Float!]
+
+  # All values that are not contained in given list.
+  nullableFloat_not_in: [Float!]
+
+  # All values less than the given value.
+  nullableFloat_lt: Float
+
+  # All values less than or equal the given value.
+  nullableFloat_lte: Float
+
+  # All values greater than the given value.
+  nullableFloat_gt: Float
+
+  # All values greater than or equal the given value.
+  nullableFloat_gte: Float
+  flotat: Float
+
+  # All values that are not equal to given value.
+  flotat_not: Float
+
+  # All values that are contained in given list.
+  flotat_in: [Float!]
+
+  # All values that are not contained in given list.
+  flotat_not_in: [Float!]
+
+  # All values less than the given value.
+  flotat_lt: Float
+
+  # All values less than or equal the given value.
+  flotat_lte: Float
+
+  # All values greater than the given value.
+  flotat_gt: Float
+
+  # All values greater than or equal the given value.
+  flotat_gte: Float
+  enum: Enum
+
+  # All values that are not equal to given value.
+  enum_not: Enum
+
+  # All values that are contained in given list.
+  enum_in: [Enum!]
+
+  # All values that are not contained in given list.
+  enum_not_in: [Enum!]
+  date: DateTime
+
+  # All values that are not equal to given value.
+  date_not: DateTime
+
+  # All values that are contained in given list.
+  date_in: [DateTime!]
+
+  # All values that are not contained in given list.
+  date_not_in: [DateTime!]
+
+  # All values less than the given value.
+  date_lt: DateTime
+
+  # All values less than or equal the given value.
+  date_lte: DateTime
+
+  # All values greater than the given value.
+  date_gt: DateTime
+
+  # All values greater than or equal the given value.
+  date_gte: DateTime
+  car: CarWhereInput
+  bars_every: BarWhereInput
+  bars_some: BarWhereInput
+  bars_none: BarWhereInput
 }
 
 input UserWhereUniqueInput {
   id: ID
 }
+

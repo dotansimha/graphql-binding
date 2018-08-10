@@ -85,9 +85,10 @@ export class TypescriptGenerator extends Generator {
       const fieldDefinition = Object.keys(type.getFields())
         .map(f => {
           const field = type.getFields()[f]
-          return `  ${this.renderFieldName(field)}: ${this.renderInputFieldType(
-            field.type,
-          )}`
+          return `  ${this.renderFieldName(
+            field,
+            false,
+          )}: ${this.renderInputFieldType(field.type)}`
         })
         .join('\n')
 
@@ -260,7 +261,7 @@ ${this.renderTypes()}`
   renderArgs(args) {
     const hasArgs = args.length > 0
     return `args${hasArgs ? '' : '?'}: {${hasArgs ? ' ' : ''}${args
-      .map(f => `${this.renderFieldName(f)}: ${this.renderFieldType(f)}`)
+      .map(f => `${this.renderFieldName(f, false)}: ${this.renderFieldType(f)}`)
       .join(', ')}${args.length > 0 ? ' ' : ''}}`
   }
 
@@ -322,7 +323,7 @@ ${this.renderTypes()}`
       })
       .map(f => {
         const field = fields[f]
-        return `  ${this.renderFieldName(field)}: ${this.renderFieldType(
+        return `  ${this.renderFieldName(field, node)}: ${this.renderFieldType(
           field,
           node,
         )}`
@@ -343,7 +344,13 @@ ${this.renderTypes()}`
     )
   }
 
-  renderFieldName(field: GraphQLInputField | GraphQLField<any, any>) {
+  renderFieldName(
+    field: GraphQLInputField | GraphQLField<any, any>,
+    node: boolean,
+  ) {
+    if (!node) {
+      return `${field.name}`
+    }
     return `${field.name}${isNonNullType(field.type) ? '' : '?'}`
   }
 
@@ -351,9 +358,10 @@ ${this.renderTypes()}`
     const { type } = field
     const deepType = this.getDeepType(type)
     const isList = isListType(type) || isListType(type.ofType)
-    const isOptional = !isNonNullType(type)
+    const isOptional = !(isNonNullType(type) || isNonNullType(type.ofType))
     const isScalar = isScalarType(deepType) || isEnumType(deepType)
     const isInput = isInputType(deepType)
+    const isObject = isObjectType(deepType)
 
     let typeString = this.getInternalTypeName(type)
 
@@ -375,7 +383,7 @@ ${this.renderTypes()}`
       }
     }
 
-    if (isList) {
+    if (isList && isObject) {
       if (isOptional) {
         return `Promise<Array<${typeString}>>`
       } else {
