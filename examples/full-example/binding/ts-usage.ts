@@ -1,12 +1,9 @@
 import { Binding } from './ts-binding'
 
 const binding = new Binding()
-
 ;(async function() {
-
-  const x = await binding.query.users().
+  const x = await binding.query.users().id()
 })()
-
 
 // binding.mutation
 //   .createUser({

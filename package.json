@@ -1,6 +1,6 @@
 {
   "name": "graphql-binding",
-  "version": "0.0.0-semantic-release",
+  "version": "3.0.0-alpha.1",
   "license": "MIT",
   "repository": "git@github.com:graphcool/graphql-binding.git",
   "author": "Johannes Schickling <johannes@graph.cool>",

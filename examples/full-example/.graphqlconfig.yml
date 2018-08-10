@@ -9,16 +9,10 @@ projects:
         #   input: "{binding,prisma}/*.ts"
         #   output:
         #     typings: typings.ts
-        # - generator: prisma-binding
-        #   language: typescript
-        #   input: schema.js
-        #   output:
-        #     binding: prisma/ts-prisma.ts
-        #         - generator: prisma-binding
-        #           language: javascript
-        #           input: schema.js
-        #           output:
-        #             binding: prisma/prisma.js
+        - generator: prisma-binding
+          language: typescript
+          output:
+            binding: prisma/ts-prisma.ts
         - generator: graphql-binding
           language: typescript
           input: schema.js
