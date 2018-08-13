@@ -27,6 +27,7 @@ export class Binding extends Delegate {
   constructor({ schema, fragmentReplacements, before }: BindingOptions) {
     super({ schema, fragmentReplacements, before })
 
+    this.buildMethods()
     this.subscription = this.buildSubscriptionMethods()
   }
 
@@ -87,6 +88,7 @@ export class Binding extends Delegate {
         },
       ],
     }
+    this.before()
     const result = await execute(this.schema, document, {}, {}, variables)
     let pointer = result
     while (pointer && typeof pointer === 'object' && !Array.isArray(pointer)) {

@@ -23,20 +23,20 @@ async function run() {
     console.log(createResult)
   }, 3000)
 
-  const subscription = await binding.subscription.user(
-    {},
-    gql`
-      {
-        node {
-          id
-        }
-      }
-    `,
-  )
-  subscription.next().then(res => {
-    console.log('got some value')
-    console.log(res)
-  })
+  // const subscription = await binding.subscription.user(
+  //   {},
+  //   gql`
+  //     {
+  //       node {
+  //         id
+  //       }
+  //     }
+  //   `,
+  // )
+  // subscription.next().then(res => {
+  //   console.log('got some value')
+  //   console.log(res)
+  // })
 }
 
 run()
