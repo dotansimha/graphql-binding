@@ -270,6 +270,66 @@ test('makeSubInfo: works with inline fragment', t => {
   t.snapshot(getRelevantPartsFromInfo(subInfo))
 })
 
+test('makeSubInfo: works with non-nullable type when path has been selected', t => {
+  const schema = buildSchema(`
+    type Query {
+      book: Book!
+    }
+
+    type Book {
+      title: String
+      extraField: String
+      page: Page!
+    }
+
+    type Page {
+      content: String
+      wordCount: Int
+    }
+  `)
+  const info = buildInfoFromFragment(
+    'book',
+    schema,
+    'query',
+    `{ title page { content wordCount } }`,
+  )
+
+  const subInfo = makeSubInfo(info, 'page')!
+
+  t.snapshot(printDocumentFromInfo(subInfo))
+  t.snapshot(getRelevantPartsFromInfo(subInfo))
+})
+
+test('makeSubInfo: works with inline fragment on non-nullable type', t => {
+  const schema = buildSchema(`
+    type Query {
+      book: Book!
+    }
+
+    type Book {
+      title: String
+      extraField: String
+      page: Page!
+    }
+
+    type Page {
+      content: String
+      wordCount: Int
+    }
+  `)
+  const info = buildInfoFromFragment(
+    'book',
+    schema,
+    'query',
+    `{ title ... on Book { page { content } } }`,
+  )
+
+  const subInfo = makeSubInfo(info, 'page')!
+
+  t.snapshot(printDocumentFromInfo(subInfo))
+  t.snapshot(getRelevantPartsFromInfo(subInfo))
+})
+
 function getRelevantPartsFromInfo(info: GraphQLResolveInfo) {
   const {
     fragments,
