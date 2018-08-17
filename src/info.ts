@@ -180,7 +180,7 @@ export function makeSubInfo(
 
   const splittedPath = path.split('.')
   const fieldsToTraverse = splittedPath.slice()
-  let currentType = info.returnType
+  let currentType = returnType
   let currentSelectionSet = info.fieldNodes[0].selectionSet!
   let currentFieldName
   let parentType
@@ -204,7 +204,7 @@ export function makeSubInfo(
       )
     }
 
-    const currentFieldType = fields[currentFieldName].type
+    const currentFieldType = getDeepType(fields[currentFieldName].type)
     if (!(currentFieldType instanceof GraphQLObjectType)) {
       throw new Error(
         `Can't get subInfo for type ${currentFieldType} of field ${currentFieldName} on type ${currentType.toString()}`,
