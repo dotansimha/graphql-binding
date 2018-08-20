@@ -85,7 +85,7 @@ export class Delegate {
     return {
       async next() {
         const { value } = await iterator.next()
-        const data = { [info.fieldName]: value.data[fieldName] }
+        const data = { [info.fieldName]: value[fieldName] }
         return { value: data, done: false }
       },
       return() {
