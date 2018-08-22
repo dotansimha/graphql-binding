@@ -47,7 +47,7 @@ ${this.renderExports()}`
         this.inputSchemaPath,
       )
       .replace(/\.(t|j)s$/, '')
-      .replace(/\\/, '/')
+      .replace(/\\/g, '/')
 
     if (result.startsWith('.')) {
       return result
