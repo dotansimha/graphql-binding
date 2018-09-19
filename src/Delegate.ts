@@ -89,6 +89,7 @@ export class Delegate {
         return { value: data, done: false }
       },
       return() {
+        iterator.return()
         return Promise.resolve({ value: undefined, done: true })
       },
       throw(error) {
