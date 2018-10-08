@@ -284,7 +284,7 @@ ${this.renderTypes()}`
         const field = type.getFields()[f]
         return `  ${this.renderFieldName(field)}: ${this.renderFieldType(
           field.type,
-        )}`
+        )}${!isNonNullType(field.type) ? ' | null' : ''}`
       })
       .join('\n')
 
