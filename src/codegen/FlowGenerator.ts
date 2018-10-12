@@ -30,6 +30,7 @@ import {
   GraphQLFieldMap,
   GraphQLObjectType as GraphQLObjectTypeRef,
 } from 'graphql'
+import Maybe from './Maybe'
 
 export class FlowGenerator extends Generator {
   scalarMapping = {
@@ -338,7 +339,7 @@ ${this.renderTypes()}`
 
   renderTypeWrapper(
     typeName: string,
-    typeDescription: string | void,
+    typeDescription: string | null,
     fieldDefinition: string,
   ): string {
     return `${this.renderDescription(
@@ -348,7 +349,7 @@ ${this.renderTypes()}`
 
   renderObjectWrapper(
     typeName: string,
-    typeDescription: string | void,
+    typeDescription: string | null,
     objects: GraphQLObjectTypeRef[],
     fieldDefinition: string,
   ): string {
@@ -360,7 +361,7 @@ ${this.renderTypes()}`
 
   renderInterfaceWrapper(
     typeName: string,
-    typeDescription: string | void,
+    typeDescription: Maybe<string>,
     interfaces: GraphQLInterfaceType[],
     fieldDefinition: string,
   ): string {
@@ -375,7 +376,7 @@ ${fieldDefinition}
 |}`
   }
 
-  renderDescription(description?: string | void): string {
+  renderDescription(description: Maybe<string>): string {
     return `${
       description
         ? `/*
