@@ -339,7 +339,7 @@ ${this.renderTypes()}`
 
   renderTypeWrapper(
     typeName: string,
-    typeDescription: string | null,
+    typeDescription: Maybe<string>,
     fieldDefinition: string,
   ): string {
     return `${this.renderDescription(
@@ -349,7 +349,7 @@ ${this.renderTypes()}`
 
   renderObjectWrapper(
     typeName: string,
-    typeDescription: string | null,
+    typeDescription: Maybe<string>,
     objects: GraphQLObjectTypeRef[],
     fieldDefinition: string,
   ): string {
