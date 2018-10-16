@@ -6,7 +6,8 @@
   "author": "Johannes Schickling <johannes@graph.cool>",
   "contributors": [
     "Kim Brandwijk <kim.brandwijk@gmail.com>",
-    "Tim Suchanek <suchanek@prisma.io>"
+    "Tim Suchanek <suchanek@prisma.io>",
+    "Marcin Pacholec <marcin11235@gmail.com>"
   ],
   "bin": {
     "graphql-binding": "./dist/bin.js"

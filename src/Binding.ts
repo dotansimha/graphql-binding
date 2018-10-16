@@ -1,5 +1,6 @@
 import {
   QueryMap,
+  MutationMap,
   BindingOptions,
   SubscriptionMap /*, Operation*/,
   QueryOrMutation,
@@ -11,7 +12,7 @@ const methodCache = new Map()
 
 export class Binding extends Delegate {
   query: QueryMap
-  mutation: QueryMap
+  mutation: MutationMap
   subscription: SubscriptionMap
 
   constructor({ schema, fragmentReplacements, before }: BindingOptions) {
