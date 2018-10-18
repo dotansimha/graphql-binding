@@ -10,6 +10,7 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
+    "declaration": true,
     "lib": ["dom", "esnext", "es2016"]
   },
   "exclude": ["node_modules", "dist", "examples"]
