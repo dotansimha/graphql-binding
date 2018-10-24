@@ -36,7 +36,7 @@
     "semantic-release": "^15.5.2",
     "tslint": "5.9.1",
     "tslint-config-standard": "7.0.0",
-    "typescript": "2.8.3"
+    "typescript": "2.9.2"
   },
   "dependencies": {
     "graphql-import": "^0.5.2",
