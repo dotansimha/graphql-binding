@@ -7,3 +7,4 @@ dist
 src/*.test.js.md
 /.prettierrc.json
 /.flowconfig
+package-lock.json
