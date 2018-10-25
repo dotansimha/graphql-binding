@@ -3200,9 +3200,11 @@ object-keys@^1.0.12:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.12.tgz#09c53855377575310cca62f55bb334abff7b3ed2"
 
-object-path-immutable@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/object-path-immutable/-/object-path-immutable-1.0.1.tgz#3c424052be3c54ec82def03f1b11b0c6e085c7ff"
+object-path-immutable@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/object-path-immutable/-/object-path-immutable-3.0.0.tgz#c242a7e6648c64e37bd9f363bbf2fb91ced69ff5"
+  dependencies:
+    is-plain-object "^2.0.4"
 
 object-visit@^1.0.0:
   version "1.0.1"
