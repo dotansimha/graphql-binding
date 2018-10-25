@@ -1,9 +1,5 @@
 declare const __non_webpack_require__
-const {
-  isNonNullType,
-  isListType,
-  GraphQLObjectType,
-} = (isWebpack => {
+const { isNonNullType, isListType, GraphQLObjectType } = (isWebpack => {
   if (isWebpack) return require('graphql')
 
   const resolveCwd = require('resolve-cwd')
@@ -252,9 +248,10 @@ ${this.renderTypes()}`
       .map(f => {
         const field = fields[f]
         const hasArgs = field.args.length > 0
-        return `    ${field.name}: <T = ${this.renderFieldType(field.type)}${
-          !isNonNullType(field.type) ? ' | null' : ''
-        }>(args${hasArgs ? '' : '?'}: {${hasArgs ? ' ' : ''}${field.args
+
+        return `    ${field.name}: <T = ${this.renderFieldType(
+          field.type,
+        )}>(args${hasArgs ? '' : '?'}: {${hasArgs ? ' ' : ''}${field.args
           .map(
             f => `${this.renderFieldName(f)}: ${this.renderFieldType(f.type)}`,
           )
@@ -262,6 +259,7 @@ ${this.renderTypes()}`
           field.args.length > 0 ? ' ' : ''
         }}, info?: GraphQLResolveInfo | string, options?: Options) => ${this.getPayloadType(
           operation,
+          isNonNullType(field.type),
         )} `
       })
       .join(',\n')
@@ -269,11 +267,12 @@ ${this.renderTypes()}`
     return `{\n${methods}\n  }`
   }
 
-  getPayloadType(operation: string) {
+  getPayloadType(operation: string, nonNullType: boolean) {
     if (operation === 'subscription') {
-      return `Promise<AsyncIterator<T>>`
+      return `Promise<AsyncIterator<T${nonNullType ? '' : ' | null'}>>`
     }
-    return `Promise<T>`
+
+    return `Promise<T${nonNullType ? '' : ' | null'}>`
   }
 
   renderInterfaceOrObject(

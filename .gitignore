@@ -1,9 +1,10 @@
 node_modules
 .idea
+.vscode
 dist
 .DS_Store
 *.log
 
 src/*.test.js.md
 /.prettierrc.json
-/.flowconfig
+package-lock.json

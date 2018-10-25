@@ -6,7 +6,8 @@
   "author": "Johannes Schickling <johannes@graph.cool>",
   "contributors": [
     "Kim Brandwijk <kim.brandwijk@gmail.com>",
-    "Tim Suchanek <suchanek@prisma.io>"
+    "Tim Suchanek <suchanek@prisma.io>",
+    "Marcin Pacholec <marcin11235@gmail.com>"
   ],
   "bin": {
     "graphql-binding": "./dist/bin.js"
@@ -15,15 +16,16 @@
     "dist"
   ],
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "typescript": {
-    "definition": "dist/index.d.ts"
-  },
+  "types": "dist/index.d.ts",
   "scripts": {
-    "prepublish": "npm run build",
-    "build": "rm -rf dist && tsc -d",
-    "test-only": "npm run build && ava --verbose dist/**/*.test.js dist/*.test.js",
-    "test": "tslint src/**/*.ts && npm run test-only"
+    "prepublish": "yarn build",
+    "clean": "rimraf dist",
+    "compile": "tsc --build",
+    "lint": "tslint src/**/*.ts",
+    "ava": "ava --verbose dist/**/*.test.js dist/*.test.js",
+    "build": "npm-run-all clean compile",
+    "test-only": "npm-run-all build ava",
+    "test": "npm-run-all lint test-only"
   },
   "devDependencies": {
     "@types/graphql": "0.13.0",
@@ -32,10 +34,12 @@
     "ava": "^0.25.0",
     "graphql": "0.13.2",
     "graphql-tag": "^2.9.2",
+    "npm-run-all": "^4.1.3",
+    "rimraf": "^2.6.2",
     "semantic-release": "^15.5.2",
     "tslint": "5.9.1",
     "tslint-config-standard": "7.0.0",
-    "typescript": "2.8.3"
+    "typescript": "^3.1.3"
   },
   "dependencies": {
     "graphql-import": "^0.5.2",
