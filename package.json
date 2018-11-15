@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/graphql": "0.13.0",
-    "@types/node": "10.0.2",
+    "@types/node": "10.12.9",
     "apollo-link": "1.2.2",
     "ava": "^0.25.0",
     "graphql": "0.13.2",
