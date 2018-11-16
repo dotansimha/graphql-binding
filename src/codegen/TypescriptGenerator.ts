@@ -24,6 +24,7 @@ import {
   GraphQLFieldMap,
   GraphQLObjectType as GraphQLObjectTypeRef,
 } from 'graphql'
+import Maybe from 'graphql/tsutils/Maybe'
 
 import { Generator } from './Generator'
 
@@ -333,7 +334,7 @@ ${this.renderTypes()}`
 
   renderTypeWrapper(
     typeName: string,
-    typeDescription: string | void,
+    typeDescription: Maybe<string>,
     fieldDefinition: string,
   ): string {
     return `${this.renderDescription(
@@ -345,7 +346,7 @@ ${fieldDefinition}
 
   renderInterfaceWrapper(
     typeName: string,
-    typeDescription: string | void,
+    typeDescription: Maybe<string>,
     interfaces: GraphQLInterfaceType[],
     fieldDefinition: string,
   ): string {
@@ -360,7 +361,7 @@ ${fieldDefinition}
 }`
   }
 
-  renderDescription(description?: string | void) {
+  renderDescription(description: Maybe<string>) {
     return `${
       description
         ? `/*
