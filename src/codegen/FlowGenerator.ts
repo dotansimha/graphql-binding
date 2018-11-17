@@ -1,9 +1,5 @@
 declare const __non_webpack_require__
-const {
-  isNonNullType,
-  isListType,
-  GraphQLObjectType,
-} = (isWebpack => {
+const { isNonNullType, isListType, GraphQLObjectType } = (isWebpack => {
   if (isWebpack) return require('graphql')
 
   const resolveCwd = require('resolve-cwd')
@@ -103,7 +99,8 @@ ${type.description}
 */
 `
           : ''
-      } export type ${type.name} = ${this.scalarMapping[type.name] || 'string'} `
+      } export type ${type.name} = ${this.scalarMapping[type.name] ||
+        'string'} `
     },
 
     GraphQLIDType: (type: GraphQLScalarType): string => {
@@ -120,11 +117,13 @@ export type ${type.name}_Output = string`
     },
 
     GraphQLEnumType: (type: GraphQLEnumType): string => {
-      return `${this.renderDescription(type.description)} export type ${type.name} =
+      return `${this.renderDescription(type.description)} export type ${
+        type.name
+      } =
 ${type
-  .getValues()
-  .map(e => `    | '${e.name}'`)
-  .join('\n')}
+        .getValues()
+        .map(e => `    | '${e.name}'`)
+        .join('\n')}
   `
     },
   }
@@ -215,25 +214,34 @@ ${this.renderTypes()}`
     return Object.keys(ast.getTypeMap())
       .filter(typeName => !typeName.startsWith('__'))
       .filter(typeName => typeName !== (ast.getQueryType() as any).name)
-      .filter(
-        typeName =>
-          ast.getMutationType()
-            ? typeName !== (ast.getMutationType()! as any).name
-            : true,
+      .filter(typeName =>
+        ast.getMutationType()
+          ? typeName !== (ast.getMutationType()! as any).name
+          : true,
       )
-      .filter(
-        typeName =>
-          ast.getSubscriptionType()
-            ? typeName !== (ast.getSubscriptionType()! as any).name
-            : true,
+      .filter(typeName =>
+        ast.getSubscriptionType()
+          ? typeName !== (ast.getSubscriptionType()! as any).name
+          : true,
       )
-      .sort(
-        (a, b) =>
-          (ast.getType(a) as any).constructor.name <
-          (ast.getType(b) as any).constructor.name
-            ? -1
-            : 1,
-      )
+      .sort((a, b) => {
+        const typeA = ast.getType(a)!
+        const typeB = ast.getType(b)!
+        /**
+         * Firstly sorted by constructor type alphabetically,
+         * secondly sorted by their name alphabetically.
+         */
+        const constructorOrder = typeA.constructor.name.localeCompare(
+          typeB.constructor.name,
+        )
+        switch (constructorOrder) {
+          case 0:
+            return typeA.name.localeCompare(typeB.name)
+
+          default:
+            return constructorOrder
+        }
+      })
   }
 
   renderTypes() {
@@ -256,7 +264,9 @@ ${this.renderTypes()}`
       .map(f => {
         const field = fields[f]
         const hasArgs = field.args.length > 0
-        return `    ${field.name}(args${hasArgs ? '' : '?'}: {${hasArgs ? ' ' : ''}${field.args
+        return `    ${field.name}(args${hasArgs ? '' : '?'}: {${
+          hasArgs ? ' ' : ''
+        }${field.args
           .map(
             f => `${this.renderFieldName(f)}: ${this.renderFieldType(f.type)}`,
           )
@@ -265,8 +275,8 @@ ${this.renderTypes()}`
         }}, info?: GraphQLResolveInfo | string, options?: Options): ${this.getPayloadType(
           operation,
           `${this.renderFieldType(field.type)}${
-          !isNonNullType(field.type) ? ' | null' : ''
-        }`
+            !isNonNullType(field.type) ? ' | null' : ''
+          }`,
         )}; `
       })
       .join('\n')
@@ -324,7 +334,9 @@ ${this.renderTypes()}`
 
   renderInputFieldType(type: GraphQLInputType | GraphQLOutputType) {
     if (isNonNullType(type)) {
-      return `${this.renderInputFieldType((type as GraphQLWrappingType).ofType)}`
+      return `${this.renderInputFieldType(
+        (type as GraphQLWrappingType).ofType,
+      )}`
     }
     if (isListType(type)) {
       const inputType = this.renderInputFieldType(

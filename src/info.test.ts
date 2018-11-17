@@ -1,4 +1,4 @@
-import { TestContext, test } from 'ava'
+import test, { ExecutionContext } from 'ava'
 import {
   buildSchema,
   SelectionNode,
@@ -174,7 +174,12 @@ test('buildInfoFromFragment: invalid selection', t => {
     title: String
   }
   `)
-  t.throws(() => buildInfoFromFragment('book', schema, 'query', `{ xxx }`))
+  try {
+    buildInfoFromFragment('book', schema, 'query', `{ xxx }`)
+    t.fail()
+  } catch (err) {
+    t.pass()
+  }
 })
 
 test('makeSubInfo: works when path has been selected', t => {
@@ -321,7 +326,7 @@ test('makeSubInfo: returns null when path has not been selected', t => {
 })
 
 export function assertFields(
-  t: TestContext,
+  t: ExecutionContext,
   selections: ReadonlyArray<SelectionNode>,
   names: string[],
 ) {

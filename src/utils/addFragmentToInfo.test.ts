@@ -1,4 +1,4 @@
-import { test } from 'ava'
+import test from 'ava'
 import { buildSchema, GraphQLResolveInfo } from 'graphql'
 import { buildInfoFromFragment } from '../info'
 import { addFragmentToInfo } from './addFragmentToInfo'
