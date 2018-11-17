@@ -724,7 +724,7 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
   integrity sha1-ri1acpR38onWDdf5amMUoi3Wwio=
 
-ava@^1.0.0-rc.2:
+ava@1.0.0-rc.2:
   version "1.0.0-rc.2"
   resolved "https://registry.yarnpkg.com/ava/-/ava-1.0.0-rc.2.tgz#a2f63211d2ad1924fa4671ff3b29212b1da656af"
   integrity sha512-MxCW+bY+ddID5SrZZHbkuCiwsLup3Dn/bAgnrl6BzHYRI4RF9Yk5zv6S2L1TjqUF1LvRS8RiqZBrD+G6db+fEg==
@@ -4799,14 +4799,14 @@ prepend-http@^1.0.1:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
   integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
 
-prettier-check@^2.0.0:
+prettier-check@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/prettier-check/-/prettier-check-2.0.0.tgz#edd086ee12d270579233ccb136a16e6afcfba1ae"
   integrity sha512-HZG53XQTJ9Cyi5hi1VFVVFxdlhITJybpZAch3ib9KqI05VUxV+F5Hip0GhSWRItrlDzVyqjSoDQ9KqIn7AHYyw==
   dependencies:
     execa "^0.6.0"
 
-prettier@^1.15.2:
+prettier@1.15.2:
   version "1.15.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.15.2.tgz#d31abe22afa4351efa14c7f8b94b58bb7452205e"
   integrity sha512-YgPLFFA0CdKL4Eg2IHtUSjzj/BWgszDHiNQAe0VAIBse34148whfdzLagRL+QiKS+YfK5ftB6X4v/MBw8yCoug==
