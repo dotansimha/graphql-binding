@@ -26,7 +26,8 @@ import {
   GraphQLFieldMap,
   GraphQLObjectType as GraphQLObjectTypeRef,
 } from 'graphql'
-import Maybe from 'graphql/tsutils/Maybe'
+
+import { Maybe } from './types'
 
 export class FlowGenerator extends Generator {
   scalarMapping = {

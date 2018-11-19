@@ -24,9 +24,9 @@ import {
   GraphQLFieldMap,
   GraphQLObjectType as GraphQLObjectTypeRef,
 } from 'graphql'
-import Maybe from 'graphql/tsutils/Maybe'
 
 import { Generator } from './Generator'
+import { Maybe } from './types'
 
 export class TypescriptGenerator extends Generator {
   scalarMapping = {

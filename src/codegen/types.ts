@@ -15,3 +15,5 @@ export type SimpleInterpolation =
 export interface InterpolationFunction<P> {
   (props: P): Interpolation<P>
 }
+
+export type Maybe<T> = null | undefined | T
