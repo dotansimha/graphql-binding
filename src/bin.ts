@@ -2,7 +2,7 @@
 
 import * as fs from 'fs'
 import * as yargs from 'yargs'
-import * as mkdirp from 'mkdirp'
+import mkdirp from 'mkdirp'
 import * as path from 'path'
 import { Generator } from './codegen/Generator'
 import { TypescriptGenerator } from './codegen/TypescriptGenerator'
