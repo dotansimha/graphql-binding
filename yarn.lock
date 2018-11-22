@@ -430,7 +430,7 @@
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-14.0.3.tgz#389e2e5b83ecdb376d9f98fae2094297bc112c1c"
   integrity sha512-TcFkpEjcQK7w8OcrQcd7iIBPjU0rdyi3ldj6d0iJ4PPSzbWqPBvXj9KSwO14hTOX2dm9RoiH7VuxksJLNYdXUQ==
 
-"@types/mkdirp@^0.5.2":
+"@types/mkdirp@0.5.2":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@types/mkdirp/-/mkdirp-0.5.2.tgz#503aacfe5cc2703d5484326b1b27efa67a339c1f"
   integrity sha512-U5icWpv7YnZYGsN4/cmh3WD2onMY0aJIiTE6+51TwJCttdHvtCYmkBNOobHlXwrJRL0nkH9jH4kD+1FAdMN4Tg==
@@ -447,7 +447,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.9.tgz#a07bfa74331471e1dc22a47eb72026843f7b95c8"
   integrity sha512-eajkMXG812/w3w4a1OcBlaTwsFPO5F7fJ/amy+tieQxEMWBlbV1JGSjkFM+zkHNf81Cad+dfIRA+IBkvmvdAeA==
 
-"@types/yargs@^12.0.1":
+"@types/yargs@12.0.1":
   version "12.0.1"
   resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-12.0.1.tgz#c5ce4ad64499010ae4dc2acd9b14d49749a44233"
   integrity sha512-UVjo2oH79aRNcsDlFlnQ/iJ67Jd7j6uSg7jUJP/RZ/nUjAh5ElmnwlD5K/6eGgETJUgCHkiWn91B8JjXQ6ubAw==
