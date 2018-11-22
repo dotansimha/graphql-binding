@@ -57,11 +57,11 @@ async function run(argv) {
       : new Generator(args)
   const code = generatorInstance.render()
 
-  mkdirp(path.dirname(outputBinding))
+  mkdirp.sync(path.dirname(outputBinding))
   fs.writeFileSync(outputBinding, code)
 
   if (outputTypedefs) {
-    mkdirp(path.dirname(outputTypedefs))
+    mkdirp.sync(path.dirname(outputTypedefs))
     fs.writeFileSync(outputTypedefs, printSchema(schema.schema))
   }
 
