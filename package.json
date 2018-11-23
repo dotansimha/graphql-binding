@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/graphql": "14.0.3",
     "@types/mkdirp": "0.5.2",
-    "@types/node": "10.12.9",
+    "@types/node": "10.12.10",
     "@types/yargs": "12.0.1",
     "apollo-link": "1.2.3",
     "ava": "1.0.0-rc.2",
