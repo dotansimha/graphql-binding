@@ -269,7 +269,6 @@ ${this.renderTypes()}`
           field.args.length > 0 ? ' ' : ''
         }}, info?: GraphQLResolveInfo | string, options?: Options) => ${this.getPayloadType(
           operation,
-          isNonNullType(field.type),
         )} `
       })
       .join(',\n')
@@ -277,12 +276,12 @@ ${this.renderTypes()}`
     return `{\n${methods}\n  }`
   }
 
-  getPayloadType(operation: string, nonNullType: boolean) {
+  getPayloadType(operation: string) {
     if (operation === 'subscription') {
-      return `Promise<AsyncIterator<T${nonNullType ? '' : ' | null'}>>`
+      return `Promise<AsyncIterator<T>>`
     }
 
-    return `Promise<T${nonNullType ? '' : ' | null'}>`
+    return `Promise<T>`
   }
 
   renderInterfaceOrObject(
@@ -314,31 +313,44 @@ ${this.renderTypes()}`
     return `${field.name}${isNonNullType(field.type) ? '' : '?'}`
   }
 
-  renderFieldType(type: GraphQLInputType | GraphQLOutputType) {
+  renderFieldType(
+    type: GraphQLInputType | GraphQLOutputType,
+    nonNull?: boolean,
+  ) {
     if (isNonNullType(type)) {
-      return this.renderFieldType((type as GraphQLWrappingType).ofType)
+      return this.renderFieldType((type as GraphQLWrappingType).ofType, true)
     }
     if (isListType(type)) {
-      return `${this.renderFieldType((type as GraphQLWrappingType).ofType)}[]`
+      return `Array<${this.renderFieldType(
+        (type as GraphQLWrappingType).ofType,
+      )}>${nonNull ? '' : ' | null'}`
     }
     return `${(type as GraphQLNamedType).name}${
       (type as GraphQLNamedType).name === 'ID' ? '_Output' : ''
-    }`
+    }${nonNull ? '' : ' | null'}`
   }
 
-  renderInputFieldType(type: GraphQLInputType | GraphQLOutputType) {
+  renderInputFieldType(
+    type: GraphQLInputType | GraphQLOutputType,
+    nonNull?: boolean,
+  ) {
     if (isNonNullType(type)) {
-      return this.renderInputFieldType((type as GraphQLWrappingType).ofType)
+      return this.renderInputFieldType(
+        (type as GraphQLWrappingType).ofType,
+        true,
+      )
     }
     if (isListType(type)) {
-      const inputType = this.renderInputFieldType(
-        (type as GraphQLWrappingType).ofType,
-      )
-      return `${inputType}[] | ${inputType}`
+      const ofType = (type as GraphQLWrappingType).ofType
+      const ofTypeNonNull = isNonNullType(ofType)
+      const inputType = this.renderInputFieldType(ofType)
+      return `Array<${inputType}${
+        ofTypeNonNull ? '' : ' | undefined'
+      }> | ${inputType}${nonNull ? '' : ofTypeNonNull ? ' | null' : ''}`
     }
     return `${(type as GraphQLNamedType).name}${
       (type as GraphQLNamedType).name === 'ID' ? '_Input' : ''
-    }`
+    }${nonNull ? '' : ' | null'}`
   }
 
   renderTypeWrapper(
