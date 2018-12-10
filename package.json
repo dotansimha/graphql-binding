@@ -7,7 +7,8 @@
   "contributors": [
     "Kim Brandwijk <kim.brandwijk@gmail.com>",
     "Tim Suchanek <suchanek@prisma.io>",
-    "Marcin Pacholec <marcin11235@gmail.com>"
+    "Marcin Pacholec <marcin11235@gmail.com>",
+    "Matic Zavadlal <matic.zavadlal@gmail.com>"
   ],
   "bin": {
     "graphql-binding": "./dist/bin.js"
@@ -18,13 +19,14 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepublish": "yarn build",
+    "prepublish": "npm-run-all build",
     "clean": "rimraf dist",
     "compile": "tsc -d",
-    "lint": "tslint --project tsconfig.json {src}/**/*.ts && prettier-check --ignore-path .gitignore src/**/*.ts",
     "build": "npm-run-all clean compile",
-    "pretest": "npm run build",
-    "test": "npm run lint && ava"
+    "pretest": "npm-run-all build",
+    "test-lint": "tslint --project tsconfig.json {src}/**/*.ts && prettier-check --ignore-path .gitignore src/**/*.ts",
+    "test-ava": "ava",
+    "test": "npm-run-all test-*"
   },
   "devDependencies": {
     "@types/graphql": "14.0.3",
