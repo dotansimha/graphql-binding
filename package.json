@@ -28,6 +28,16 @@
     "test-ava": "ava",
     "test": "npm-run-all test-*"
   },
+  "dependencies": {
+    "graphql": "^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0",
+    "graphql-import": "^0.7.1",
+    "graphql-tools": "4.0.3",
+    "iterall": "1.2.2",
+    "object-path-immutable": "^3.0.0",
+    "resolve-cwd": "^2.0.0",
+    "ts-node": "^7.0.1",
+    "yargs": "^12.0.2"
+  },
   "devDependencies": {
     "@types/graphql": "14.0.3",
     "@types/mkdirp": "0.5.2",
@@ -35,7 +45,6 @@
     "@types/yargs": "12.0.1",
     "apollo-link": "1.2.4",
     "ava": "1.0.0-rc.2",
-    "graphql": "14.0.2",
     "graphql-tag": "2.10.0",
     "husky": "1.2.0",
     "npm-run-all": "4.1.5",
@@ -48,17 +57,5 @@
     "tslint-config-prettier": "1.17.0",
     "tslint-config-standard": "8.0.1",
     "typescript": "3.2.2"
-  },
-  "dependencies": {
-    "graphql-import": "^0.7.1",
-    "graphql-tools": "4.0.3",
-    "iterall": "1.2.2",
-    "object-path-immutable": "^3.0.0",
-    "resolve-cwd": "^2.0.0",
-    "ts-node": "^7.0.1",
-    "yargs": "^12.0.2"
-  },
-  "peerDependencies": {
-    "graphql": "^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0"
   }
 }

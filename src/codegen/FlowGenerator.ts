@@ -1,13 +1,3 @@
-declare const __non_webpack_require__
-const { isNonNullType, isListType, GraphQLObjectType } = (isWebpack => {
-  if (isWebpack) return require('graphql')
-
-  const resolveCwd = require('resolve-cwd')
-  const graphqlPackagePath = resolveCwd.silent('graphql')
-
-  return require(graphqlPackagePath || 'graphql')
-})(typeof __non_webpack_require__ !== 'undefined')
-
 import { Generator } from './Generator'
 
 import {
@@ -24,7 +14,9 @@ import {
   GraphQLScalarType,
   GraphQLEnumType,
   GraphQLFieldMap,
-  GraphQLObjectType as GraphQLObjectTypeRef,
+  GraphQLObjectType,
+  isNonNullType,
+  isListType,
 } from 'graphql'
 
 import { Maybe } from './types'
@@ -51,22 +43,13 @@ export class FlowGenerator extends Generator {
         `
     },
     GraphQLObjectType: (
-      type:
-        | GraphQLObjectTypeRef
-        | GraphQLInputObjectType
-        | GraphQLInterfaceType,
+      type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
     ): string => this.renderInterfaceOrObject(type),
     GraphQLInterfaceType: (
-      type:
-        | GraphQLObjectTypeRef
-        | GraphQLInputObjectType
-        | GraphQLInterfaceType,
+      type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
     ): string => this.renderInterfaceOrObject(type),
     GraphQLInputObjectType: (
-      type:
-        | GraphQLObjectTypeRef
-        | GraphQLInputObjectType
-        | GraphQLInterfaceType,
+      type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
     ): string => {
       const fieldDefinition = Object.keys(type.getFields())
         .map(f => {
@@ -293,7 +276,7 @@ ${this.renderTypes()}`
   }
 
   renderInterfaceOrObject(
-    type: GraphQLObjectTypeRef | GraphQLInputObjectType | GraphQLInterfaceType,
+    type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
   ): string {
     const fieldDefinition: string = Object.keys(type.getFields())
       .map(f => {
@@ -363,7 +346,7 @@ ${this.renderTypes()}`
   renderObjectWrapper(
     typeName: string,
     typeDescription: Maybe<string>,
-    objects: GraphQLObjectTypeRef[],
+    objects: GraphQLObjectType[],
     fieldDefinition: string,
   ): string {
     return `${this.renderDescription(

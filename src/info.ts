@@ -1,30 +1,17 @@
-declare const __non_webpack_require__
-const {
-  GraphQLObjectType,
-  GraphQLScalarType,
-  parse,
-  validate,
-  Kind,
-} = (isWebpack => {
-  if (isWebpack) return require('graphql')
-
-  const resolveCwd = require('resolve-cwd')
-  const graphqlPackagePath = resolveCwd.silent('graphql')
-
-  return require(graphqlPackagePath || 'graphql')
-})(typeof __non_webpack_require__ !== 'undefined')
-
 import {
   GraphQLSchema,
   GraphQLResolveInfo,
   FieldNode,
   SelectionSetNode,
   GraphQLOutputType,
-  GraphQLObjectType as GraphQLObjectTypeRef,
-  GraphQLScalarType as GraphQLScalarTypeRef,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  Kind,
   getNamedType,
   DocumentNode,
   print,
+  parse,
+  validate,
 } from 'graphql'
 
 import { Operation } from './types'
@@ -274,7 +261,7 @@ export function makeSubInfo(
 
 export function getDeepType(
   type: GraphQLOutputType,
-): GraphQLObjectTypeRef | GraphQLScalarTypeRef {
+): GraphQLObjectType | GraphQLScalarType {
   if ((type as any).ofType) {
     return getDeepType((type as any).ofType)
   }
