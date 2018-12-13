@@ -43,7 +43,7 @@
     "@types/mkdirp": "0.5.2",
     "@types/node": "10.12.15",
     "@types/yargs": "12.0.1",
-    "apollo-link": "1.2.4",
+    "apollo-link": "1.2.5",
     "ava": "1.0.0-rc.2",
     "graphql-tag": "2.10.0",
     "husky": "1.2.0",
