@@ -18,7 +18,6 @@ import {
 } from 'graphql'
 
 import { Generator } from './Generator'
-
 import { Maybe } from './types'
 
 export class TypescriptGenerator extends Generator {
