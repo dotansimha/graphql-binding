@@ -66,6 +66,31 @@ test('buildInfoForAllScalars: excludes object type fields', t => {
   t.is(info.fieldName, 'book')
 })
 
+test('buildInfoForAllScalars: support interfaces', t => {
+  const schema = buildSchema(`
+  type Query {
+    book: IBook
+  }
+
+  type Book implements IBook {
+    title: String
+    number: Float
+    otherBook: IBook
+  }
+
+  interface IBook {
+    title: String
+    number: Float
+    otherBook: Book
+  }
+  `)
+  const info = buildInfoForAllScalars('book', schema, 'query')
+  const selections = info.fieldNodes[0].selectionSet!.selections
+
+  assertFields(t, selections, ['title', 'number'])
+  t.is(info.fieldName, 'book')
+})
+
 test('buildInfoForAllScalars: enums', t => {
   const schema = buildSchema(`
   type Query {
