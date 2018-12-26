@@ -127,16 +127,16 @@ export type ${type.name}_Output = string`
     return this.compile`\
 ${this.renderImports()}
 
-export interface Query ${this.renderQueries()}
+export interface IQuery ${this.renderQueries()}
 
-export interface Mutation ${this.renderMutations()}
+export interface IMutation ${this.renderMutations()}
 
-export interface Subscription ${this.renderSubscriptions()}
+export interface ISubscription ${this.renderSubscriptions()}
 
-export interface Binding {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
+export interface IBinding {
+  query: IQuery
+  mutation: IMutation
+  subscription: ISubscription
   request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
   delegate(operation: 'query' | 'mutation', fieldName: string, args: {
       [key: string]: any;
@@ -147,7 +147,7 @@ export interface Binding {
   getAbstractResolvers(filterSchema?: GraphQLSchema | string): IResolvers;
 }
 
-export interface BindingConstructor<T> {
+export interface IBindingConstructor<T> {
   new(...args: any[]): T
 }
 
@@ -160,7 +160,7 @@ ${this.renderExports()}
 ${this.renderTypes()}`
   }
   renderExports() {
-    return `export const Binding = makeBindingClass<BindingConstructor<Binding>>({ schema })`
+    return `export const Binding = makeBindingClass<IBindingConstructor<IBinding>>({ schema })`
   }
   renderQueries() {
     const queryType = this.schema.getQueryType()
