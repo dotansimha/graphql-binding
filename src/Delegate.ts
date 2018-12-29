@@ -160,8 +160,8 @@ export class Delegate {
       context: options && options.context ? options.context : {},
       info,
       transforms: [
-        new ReplaceFieldWithFragment(this.schema, this.fragmentReplacements),
         ...transforms,
+        new ReplaceFieldWithFragment(this.schema, this.fragmentReplacements),
       ],
     })
 
