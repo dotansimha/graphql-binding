@@ -39,7 +39,7 @@
     "yargs": "^12.0.2"
   },
   "devDependencies": {
-    "@types/graphql": "14.0.3",
+    "@types/graphql": "14.0.4",
     "@types/mkdirp": "0.5.2",
     "@types/node": "10.12.18",
     "@types/yargs": "12.0.4",
