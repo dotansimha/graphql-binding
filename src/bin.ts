@@ -6,7 +6,7 @@ import mkdirp from 'mkdirp'
 import * as path from 'path'
 import { Generator } from './codegen/Generator'
 import { TypescriptGenerator } from './codegen/TypescriptGenerator'
-import { printSchema } from 'graphql'
+import { buildSchema, printSchema } from 'graphql'
 
 const argv = yargs
   .usage(
@@ -70,9 +70,12 @@ async function run(argv) {
 
 function getSchemaFromInput(input) {
   if (input.endsWith('.graphql') || input.endsWith('.gql')) {
-    throw new Error(
-      'graphql-bindings 2.0 can only be generated based on an executable Schema exposed by a .js or .ts file',
-    )
+    const sdl = fs.readFileSync(path.resolve(input), 'utf-8')
+    const schema = buildSchema(sdl)
+    return {
+      isDefaultExport: false,
+      schema
+    }
   }
 
   if (input.endsWith('.js') || input.endsWith('.ts')) {
