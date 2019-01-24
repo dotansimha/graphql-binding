@@ -32,6 +32,7 @@ export interface BindingOptions {
   fragmentReplacements?: FragmentReplacement[]
   schema: GraphQLSchema
   before?: () => void
+  disableCache?: boolean
 }
 
 export interface BindingWithoutSchemaOptions {
