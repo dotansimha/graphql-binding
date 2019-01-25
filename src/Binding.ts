@@ -41,10 +41,9 @@ export class Binding extends Delegate {
       mutation: this.buildQueryMethods('mutation'),
       subscription: this.buildSubscriptionMethods(),
     }
-    if (this.disableCache) {
-      return methods
+    if (!this.disableCache) {
+      methodCache.set(this.schema, methods)
     }
-    methodCache.set(this.schema, methods)
     return methods
   }
 
