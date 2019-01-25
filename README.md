@@ -23,6 +23,7 @@ You can find practical, production-ready examples here:
 
 * [`graphql-binding-github`](https://github.com/graphcool/graphql-binding-github)
 * [`prisma-binding`](https://github.com/graphcool/prisma-binding)
+* [`basic-binding`](https://github.com/artetecha/basic-binding)
 
 > Note: If you've created your own GraphQL binding based on this package, please add it to this list via a PR 🙌
 
