@@ -652,13 +652,12 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-link@1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.6.tgz#d9b5676d79c01eb4e424b95c7171697f6ad2b8da"
-  integrity sha512-sUNlA20nqIF3gG3F8eyMD+mO80fmf3dPZX+GUOs3MI9oZR8ug09H3F0UsWJMcpEg6h55Yy5wZ+BMmAjrbenF/Q==
+apollo-link@1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.7.tgz#d3aa8a310ff9dd8f995936faa7205cad380d29a0"
+  integrity sha512-GXHBF5KTb9xndOnHPo6Z4uxjjs8Ce7R+kkm5MXFPMeDEa7QzBOGgAe9/zudWDPjSD0OtYJ20wyY+5R0MYq+lCQ==
   dependencies:
-    apollo-utilities "^1.0.0"
-    zen-observable-ts "^0.8.13"
+    zen-observable-ts "^0.8.14"
 
 apollo-link@^1.2.3:
   version "1.2.4"
@@ -6492,10 +6491,10 @@ zen-observable-ts@^0.8.11:
   dependencies:
     zen-observable "^0.8.0"
 
-zen-observable-ts@^0.8.13:
-  version "0.8.13"
-  resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.8.13.tgz#ae1fd77c84ef95510188b1f8bca579d7a5448fc2"
-  integrity sha512-WDb8SM0tHCb6c0l1k60qXWlm1ok3zN9U4VkLdnBKQwIYwUoB9psH7LIFgR+JVCCMmBxUgOjskIid8/N02k/2Bg==
+zen-observable-ts@^0.8.14:
+  version "0.8.14"
+  resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.8.14.tgz#b443aa83f80d268030160c594c55ec34a45b3583"
+  integrity sha512-yAkb3KkXFa0Dx5A7CvQC0Gj8ycixrLmbr2UZjHgS4FlV5bFwP5artbJTJepETO/DKKfLJ2JVAZrrmNJ4APjdmA==
   dependencies:
     zen-observable "^0.8.0"
 
