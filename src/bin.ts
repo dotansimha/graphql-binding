@@ -6,6 +6,7 @@ import mkdirp from 'mkdirp'
 import * as path from 'path'
 import { Generator } from './codegen/Generator'
 import { TypescriptGenerator } from './codegen/TypescriptGenerator'
+import { FlowGenerator } from './codegen/FlowGenerator'
 import { buildSchema, printSchema } from 'graphql'
 
 const argv = yargs
@@ -21,7 +22,7 @@ const argv = yargs
     language: {
       alias: 'l',
       describe:
-        'Type of the generator. Available languages: typescript, javascript',
+        'Type of the generator. Available languages: typescript, javascript, flow',
       type: 'string',
     },
     outputBinding: {
@@ -51,10 +52,18 @@ async function run(argv) {
   if (language === 'typescript') {
     require('ts-node').register()
   }
-  const generatorInstance =
-    language === 'typescript'
-      ? new TypescriptGenerator(args)
-      : new Generator(args)
+  let generatorInstance
+  switch (language) {
+    case 'typescript':
+      generatorInstance = new TypescriptGenerator(args)
+      break
+    case 'flow':
+      generatorInstance = new FlowGenerator(args)
+      break
+    default:
+      generatorInstance = new Generator(args)
+  }
+
   const code = generatorInstance.render()
 
   mkdirp.sync(path.dirname(outputBinding))
@@ -74,7 +83,7 @@ function getSchemaFromInput(input) {
     const schema = buildSchema(sdl)
     return {
       isDefaultExport: false,
-      schema
+      schema,
     }
   }
 
