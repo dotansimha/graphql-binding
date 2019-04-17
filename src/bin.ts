@@ -40,6 +40,17 @@ const argv = yargs
 
 run(argv).catch(e => console.error(e))
 
+function createGeneratorInstance(args, language) {
+  switch (language) {
+    case 'typescript':
+      return new TypescriptGenerator(args)
+    case 'flow':
+      return new FlowGenerator(args)
+    default:
+      return new Generator(args)
+  }
+}
+
 async function run(argv) {
   const { input, language, outputBinding, outputTypedefs } = argv
 
@@ -52,17 +63,7 @@ async function run(argv) {
   if (language === 'typescript') {
     require('ts-node').register()
   }
-  let generatorInstance
-  switch (language) {
-    case 'typescript':
-      generatorInstance = new TypescriptGenerator(args)
-      break
-    case 'flow':
-      generatorInstance = new FlowGenerator(args)
-      break
-    default:
-      generatorInstance = new Generator(args)
-  }
+  const generatorInstance = createGeneratorInstance(args, language)
 
   const code = generatorInstance.render()
 
