@@ -1,13 +1,3 @@
-declare const __non_webpack_require__
-const { isNonNullType, isListType, GraphQLObjectType } = (isWebpack => {
-  if (isWebpack) return require('graphql')
-
-  const resolveCwd = require('resolve-cwd')
-  const graphqlPackagePath = resolveCwd.silent('graphql')
-
-  return require(graphqlPackagePath || 'graphql')
-})(typeof __non_webpack_require__ !== 'undefined')
-
 import {
   GraphQLSchema,
   GraphQLUnionType,
@@ -17,15 +7,18 @@ import {
   GraphQLField,
   GraphQLInputType,
   GraphQLOutputType,
-  GraphQLWrappingType,
-  GraphQLNamedType,
   GraphQLScalarType,
   GraphQLEnumType,
   GraphQLFieldMap,
-  GraphQLObjectType as GraphQLObjectTypeRef,
+  GraphQLObjectType,
+  getNamedType,
+  isNonNullType,
+  isListType,
+  isObjectType,
 } from 'graphql'
 
 import { Generator } from './Generator'
+import { Maybe } from './types'
 
 export class TypescriptGenerator extends Generator {
   scalarMapping = {
@@ -49,24 +42,15 @@ export class TypescriptGenerator extends Generator {
     },
 
     GraphQLObjectType: (
-      type:
-        | GraphQLObjectTypeRef
-        | GraphQLInputObjectType
-        | GraphQLInterfaceType,
+      type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
     ): string => this.renderInterfaceOrObject(type),
 
     GraphQLInterfaceType: (
-      type:
-        | GraphQLObjectTypeRef
-        | GraphQLInputObjectType
-        | GraphQLInterfaceType,
+      type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
     ): string => this.renderInterfaceOrObject(type),
 
     GraphQLInputObjectType: (
-      type:
-        | GraphQLObjectTypeRef
-        | GraphQLInputObjectType
-        | GraphQLInterfaceType,
+      type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
     ): string => {
       const fieldDefinition = Object.keys(type.getFields())
         .map(f => {
@@ -78,8 +62,8 @@ export class TypescriptGenerator extends Generator {
         .join('\n')
 
       let interfaces: GraphQLInterfaceType[] = []
-      if (type instanceof GraphQLObjectType) {
-        interfaces = (type as any).getInterfaces()
+      if (isObjectType(type)) {
+        interfaces = type.getInterfaces()
       }
 
       return this.renderInterfaceWrapper(
@@ -164,7 +148,7 @@ export interface Binding {
 }
 
 export interface BindingConstructor<T> {
-  new(...args): T
+  new(...args: any[]): T
 }
 
 ${this.renderExports()}
@@ -207,26 +191,35 @@ ${this.renderTypes()}`
     // Create types
     return Object.keys(ast.getTypeMap())
       .filter(typeName => !typeName.startsWith('__'))
-      .filter(typeName => typeName !== (ast.getQueryType() as any).name)
-      .filter(
-        typeName =>
-          ast.getMutationType()
-            ? typeName !== (ast.getMutationType()! as any).name
-            : true,
+      .filter(typeName =>
+        ast.getQueryType() ? typeName !== ast.getQueryType()!.name : true,
       )
-      .filter(
-        typeName =>
-          ast.getSubscriptionType()
-            ? typeName !== (ast.getSubscriptionType()! as any).name
-            : true,
+      .filter(typeName =>
+        ast.getMutationType() ? typeName !== ast.getMutationType()!.name : true,
       )
-      .sort(
-        (a, b) =>
-          (ast.getType(a) as any).constructor.name <
-          (ast.getType(b) as any).constructor.name
-            ? -1
-            : 1,
+      .filter(typeName =>
+        ast.getSubscriptionType()
+          ? typeName !== ast.getSubscriptionType()!.name
+          : true,
       )
+      .sort((a, b) => {
+        const typeA = ast.getType(a)!
+        const typeB = ast.getType(b)!
+        /**
+         * Firstly sorted by constructor type alphabetically,
+         * secondly sorted by their name alphabetically.
+         */
+        const constructorOrder = typeA.constructor.name.localeCompare(
+          typeB.constructor.name,
+        )
+        switch (constructorOrder) {
+          case 0:
+            return typeA.name.localeCompare(typeB.name)
+
+          default:
+            return constructorOrder
+        }
+      })
   }
   renderTypes() {
     const typeNames = this.getTypeNames()
@@ -276,7 +269,7 @@ ${this.renderTypes()}`
   }
 
   renderInterfaceOrObject(
-    type: GraphQLObjectTypeRef | GraphQLInputObjectType | GraphQLInterfaceType,
+    type: GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType,
   ): string {
     const fieldDefinition = Object.keys(type.getFields())
       .map(f => {
@@ -288,8 +281,8 @@ ${this.renderTypes()}`
       .join('\n')
 
     let interfaces: GraphQLInterfaceType[] = []
-    if (type instanceof GraphQLObjectType) {
-      interfaces = (type as any).getInterfaces()
+    if (isObjectType(type)) {
+      interfaces = type.getInterfaces()
     }
 
     return this.renderInterfaceWrapper(
@@ -301,39 +294,45 @@ ${this.renderTypes()}`
   }
 
   renderFieldName(field: GraphQLInputField | GraphQLField<any, any>) {
-    return `${field.name}${isNonNullType(field.type) ? '' : '?'}`
+    return isNonNullType(field.type) ? field.name : `${field.name}?`
   }
 
-  renderFieldType(type: GraphQLInputType | GraphQLOutputType) {
-    if (isNonNullType(type)) {
-      return this.renderFieldType((type as GraphQLWrappingType).ofType)
-    }
+  renderFieldType(type: GraphQLInputType | GraphQLOutputType): string {
+    /* Render list type */
     if (isListType(type)) {
-      return `${this.renderFieldType((type as GraphQLWrappingType).ofType)}[]`
+      return `Array<${this.renderFieldType(type.ofType)}> | null`
     }
-    return `${(type as GraphQLNamedType).name}${
-      (type as GraphQLNamedType).name === 'ID' ? '_Output' : ''
-    }`
+
+    /* Render non nullable type */
+    if (isNonNullType(type)) {
+      return `${this.renderFieldType(type.ofType)}`.replace(/ \| null$/, '')
+    }
+
+    /* Render nullable type */
+    const ofType = getNamedType(type)
+    return `${ofType.name === 'ID' ? 'ID_Output' : ofType.name} | null`
   }
 
-  renderInputFieldType(type: GraphQLInputType | GraphQLOutputType) {
-    if (isNonNullType(type)) {
-      return this.renderInputFieldType((type as GraphQLWrappingType).ofType)
-    }
+  renderInputFieldType(type: GraphQLInputType | GraphQLOutputType): string {
+    /* Render list type */
     if (isListType(type)) {
-      const inputType = this.renderInputFieldType(
-        (type as GraphQLWrappingType).ofType,
-      )
-      return `${inputType}[] | ${inputType}`
+      const typeName = this.renderFieldType(type.ofType)
+      return `${typeName}[] | ${typeName} | null`
     }
-    return `${(type as GraphQLNamedType).name}${
-      (type as GraphQLNamedType).name === 'ID' ? '_Input' : ''
-    }`
+
+    /* Render non nullable type */
+    if (isNonNullType(type)) {
+      return `${this.renderFieldType(type.ofType)}`.replace(/ \| null$/, '')
+    }
+
+    /* Render nullable type */
+    const ofType = getNamedType(type)
+    return `${ofType.name === 'ID' ? 'ID_Input' : ofType.name} | null`
   }
 
   renderTypeWrapper(
     typeName: string,
-    typeDescription: string | void,
+    typeDescription: Maybe<string>,
     fieldDefinition: string,
   ): string {
     return `${this.renderDescription(
@@ -345,7 +344,7 @@ ${fieldDefinition}
 
   renderInterfaceWrapper(
     typeName: string,
-    typeDescription: string | void,
+    typeDescription: Maybe<string>,
     interfaces: GraphQLInterfaceType[],
     fieldDefinition: string,
   ): string {
@@ -360,7 +359,7 @@ ${fieldDefinition}
 }`
   }
 
-  renderDescription(description?: string | void) {
+  renderDescription(description: Maybe<string>) {
     return `${
       description
         ? `/*

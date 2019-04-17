@@ -1,30 +1,20 @@
-declare const __non_webpack_require__
-const {
-  GraphQLObjectType,
-  GraphQLScalarType,
-  parse,
-  validate,
-  Kind,
-} = (isWebpack => {
-  if (isWebpack) return require('graphql')
-
-  const resolveCwd = require('resolve-cwd')
-  const graphqlPackagePath = resolveCwd.silent('graphql')
-
-  return require(graphqlPackagePath || 'graphql')
-})(typeof __non_webpack_require__ !== 'undefined')
-
 import {
   GraphQLSchema,
   GraphQLResolveInfo,
   FieldNode,
   SelectionSetNode,
   GraphQLOutputType,
-  GraphQLObjectType as GraphQLObjectTypeRef,
-  GraphQLScalarType as GraphQLScalarTypeRef,
+  GraphQLObjectType,
+  GraphQLScalarType,
+  Kind,
   getNamedType,
   DocumentNode,
   print,
+  parse,
+  validate,
+  isObjectType,
+  isInterfaceType,
+  isScalarType,
 } from 'graphql'
 
 import { Operation } from './types'
@@ -58,7 +48,7 @@ export function buildInfoForAllScalars(
   const namedType = getNamedType(type)
 
   let selections: FieldNode[] | undefined
-  if (namedType instanceof GraphQLObjectType) {
+  if (isInterfaceType(namedType) || isObjectType(namedType)) {
     const fields = (namedType as any).getFields()
     selections = Object.keys(fields)
       .filter(f => isScalar(fields[f].type))
@@ -174,7 +164,7 @@ export function makeSubInfo(
   fragment?: string,
 ): GraphQLResolveInfo | null {
   const returnType = getDeepType(info.returnType)
-  if (returnType instanceof GraphQLScalarType) {
+  if (isScalarType(returnType)) {
     throw new Error(`Can't make subInfo for type ${info.returnType.toString()}`)
   }
 
@@ -191,7 +181,7 @@ export function makeSubInfo(
 
   while (fieldsToTraverse.length > 0) {
     currentFieldName = fieldsToTraverse.shift()!
-    if (!(currentType instanceof GraphQLObjectType)) {
+    if (!isObjectType(currentType)) {
       throw new Error(
         `Can't get subInfo for type ${currentType.toString()} as needs to be a GraphQLObjectType`,
       )
@@ -205,7 +195,7 @@ export function makeSubInfo(
     }
 
     const currentFieldType = fields[currentFieldName].type
-    if (!(currentFieldType instanceof GraphQLObjectType)) {
+    if (!isObjectType(currentFieldType)) {
       throw new Error(
         `Can't get subInfo for type ${currentFieldType} of field ${currentFieldName} on type ${currentType.toString()}`,
       )
@@ -274,7 +264,7 @@ export function makeSubInfo(
 
 export function getDeepType(
   type: GraphQLOutputType,
-): GraphQLObjectTypeRef | GraphQLScalarTypeRef {
+): GraphQLObjectType | GraphQLScalarType {
   if ((type as any).ofType) {
     return getDeepType((type as any).ofType)
   }

@@ -1,5 +1,7 @@
-declare const __non_webpack_require__
-const {
+import {
+  GraphQLSchema,
+  GraphQLResolveInfo,
+  GraphQLOutputType,
   GraphQLObjectType,
   GraphQLScalarType,
   GraphQLInterfaceType,
@@ -7,19 +9,6 @@ const {
   GraphQLList,
   GraphQLEnumType,
   GraphQLNonNull,
-} = (isWebpack => {
-  if (isWebpack) return require('graphql')
-
-  const resolveCwd = require('resolve-cwd')
-  const graphqlPackagePath = resolveCwd.silent('graphql')
-
-  return require(graphqlPackagePath || 'graphql')
-})(typeof __non_webpack_require__ !== 'undefined')
-
-import {
-  GraphQLSchema,
-  GraphQLResolveInfo,
-  GraphQLOutputType,
   print,
 } from 'graphql'
 
@@ -82,7 +71,12 @@ export function getTypeForRootFieldName(
 }
 
 export function forwardTo(bindingName: string) {
-  return <PARENT, ARGS, CONTEXT>(parent: PARENT, args: ARGS, context: CONTEXT, info: GraphQLResolveInfo) => {
+  return <PARENT, ARGS, CONTEXT>(
+    parent: PARENT,
+    args: ARGS,
+    context: CONTEXT,
+    info: GraphQLResolveInfo,
+  ) => {
     let message = `Forward to '${bindingName}.${info.parentType.name.toLowerCase()}.${
       info.fieldName
     }' failed. `

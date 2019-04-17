@@ -15,8 +15,13 @@ export class Binding extends Delegate {
   mutation: MutationMap
   subscription: SubscriptionMap
 
-  constructor({ schema, fragmentReplacements, before }: BindingOptions) {
-    super({ schema, fragmentReplacements, before })
+  constructor({
+    schema,
+    fragmentReplacements,
+    before,
+    disableCache,
+  }: BindingOptions) {
+    super({ schema, fragmentReplacements, before, disableCache })
 
     const { query, mutation, subscription } = this.buildMethods()
     this.query = query
@@ -34,7 +39,9 @@ export class Binding extends Delegate {
       mutation: this.buildQueryMethods('mutation'),
       subscription: this.buildSubscriptionMethods(),
     }
-    methodCache.set(this.schema, methods)
+    if (!this.disableCache) {
+      methodCache.set(this.schema, methods)
+    }
     return methods
   }
 

@@ -1,4 +1,4 @@
-import { TestContext, test } from 'ava'
+import test, { ExecutionContext } from 'ava'
 import {
   buildSchema,
   SelectionNode,
@@ -54,6 +54,31 @@ test('buildInfoForAllScalars: excludes object type fields', t => {
   }
 
   type Book {
+    title: String
+    number: Float
+    otherBook: Book
+  }
+  `)
+  const info = buildInfoForAllScalars('book', schema, 'query')
+  const selections = info.fieldNodes[0].selectionSet!.selections
+
+  assertFields(t, selections, ['title', 'number'])
+  t.is(info.fieldName, 'book')
+})
+
+test('buildInfoForAllScalars: support interfaces', t => {
+  const schema = buildSchema(`
+  type Query {
+    book: IBook
+  }
+
+  type Book implements IBook {
+    title: String
+    number: Float
+    otherBook: IBook
+  }
+
+  interface IBook {
     title: String
     number: Float
     otherBook: Book
@@ -174,7 +199,12 @@ test('buildInfoFromFragment: invalid selection', t => {
     title: String
   }
   `)
-  t.throws(() => buildInfoFromFragment('book', schema, 'query', `{ xxx }`))
+  try {
+    buildInfoFromFragment('book', schema, 'query', `{ xxx }`)
+    t.fail()
+  } catch (err) {
+    t.pass()
+  }
 })
 
 test('makeSubInfo: works when path has been selected', t => {
@@ -321,7 +351,7 @@ test('makeSubInfo: returns null when path has not been selected', t => {
 })
 
 export function assertFields(
-  t: TestContext,
+  t: ExecutionContext,
   selections: ReadonlyArray<SelectionNode>,
   names: string[],
 ) {

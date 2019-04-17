@@ -24,12 +24,19 @@ import * as path from 'path'
 export class Delegate {
   schema: GraphQLSchema
   before: () => void
+  disableCache: boolean
 
   private fragmentReplacements: FragmentReplacement[]
 
-  constructor({ schema, fragmentReplacements, before }: BindingOptions) {
+  constructor({
+    schema,
+    fragmentReplacements,
+    before,
+    disableCache,
+  }: BindingOptions) {
     this.fragmentReplacements = fragmentReplacements || []
     this.schema = schema
+    this.disableCache = disableCache || false
 
     this.before = before || (() => undefined)
   }
@@ -160,8 +167,8 @@ export class Delegate {
       context: options && options.context ? options.context : {},
       info,
       transforms: [
-        new ReplaceFieldWithFragment(this.schema, this.fragmentReplacements),
         ...transforms,
+        new ReplaceFieldWithFragment(this.schema, this.fragmentReplacements),
       ],
     })
 
