@@ -51,7 +51,7 @@
     "prettier": "1.15.3",
     "prettier-check": "2.0.0",
     "pretty-quick": "1.11.1",
-    "rimraf": "2.6.3",
+    "rimraf": "2.7.0",
     "semantic-release": "15.13.21",
     "tslint": "5.18.0",
     "tslint-config-prettier": "1.18.0",
