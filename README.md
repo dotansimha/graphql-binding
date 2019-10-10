@@ -1,6 +1,8 @@
 # graphql-binding
 
-[![CircleCI](https://circleci.com/gh/graphql-binding/graphql-binding.svg?style=shield)](https://circleci.com/gh/graphql-binding/graphql-binding) [![npm version](https://badge.fury.io/js/graphql-binding.svg)](https://badge.fury.io/js/graphql-binding)
+[![CircleCI](https://circleci.com/gh/graphql-binding/graphql-binding.svg?style=shield)](https://circleci.com/gh/graphql-binding/graphql-binding)
+[![npm version](https://badge.fury.io/js/graphql-binding.svg)](https://badge.fury.io/js/graphql-binding)
+[![Discord Chat](https://img.shields.io/discord/625400653321076807)](https://discord.gg/xud7bH9)
 
 ## Overview
 
