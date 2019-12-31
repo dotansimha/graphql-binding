@@ -386,7 +386,7 @@ ${description.split('\n').map(l => ` * ${l}\n`)}
     return `\
 import { makeBindingClass, Options } from 'graphql-binding'
 import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
-import { IResolvers } from 'graphql-tools/dist/Interfaces'
+import { IResolvers } from 'graphql-tools-fork'
 import ${
       this.isDefaultExport ? '' : '* as '
     }schema from  '${this.getRelativeSchemaPath()}'`

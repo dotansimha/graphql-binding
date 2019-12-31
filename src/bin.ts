@@ -74,7 +74,7 @@ function getSchemaFromInput(input) {
     const schema = buildSchema(sdl)
     return {
       isDefaultExport: false,
-      schema
+      schema,
     }
   }
 

@@ -41,7 +41,7 @@ ${this.renderExports()}`
     )
   }
   getRelativeSchemaPath() {
-    const result = path
+    const result = path.posix
       .relative(
         path.dirname(this.outputBindingPath) + '/',
         this.inputSchemaPath,

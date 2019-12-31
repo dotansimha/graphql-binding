@@ -29,9 +29,9 @@
     "test": "npm-run-all test-*"
   },
   "dependencies": {
-    "graphql": "^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0",
+    "graphql": "^14.2.0",
     "graphql-import": "^0.7.1",
-    "graphql-tools": "4.0.5",
+    "graphql-tools-fork": "^8.1.0",
     "iterall": "1.2.2",
     "object-path-immutable": "^3.0.0",
     "resolve-cwd": "^2.0.0",
@@ -39,7 +39,6 @@
     "yargs": "^12.0.2"
   },
   "devDependencies": {
-    "@types/graphql": "14.0.7",
     "@types/mkdirp": "0.5.2",
     "@types/node": "10.14.17",
     "@types/yargs": "12.0.12",
