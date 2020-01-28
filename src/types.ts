@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLSchema } from 'graphql'
-import { Transform } from 'graphql-tools'
+import { Transform } from 'graphql-tools-fork'
 
 export type Operation = 'query' | 'mutation' | 'subscription'
 // needed to exclude 'subscription' in delegate api

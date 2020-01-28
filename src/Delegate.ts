@@ -8,8 +8,11 @@ import {
   GraphQLUnionType,
   GraphQLInterfaceType,
 } from 'graphql'
-import { delegateToSchema, ReplaceFieldWithFragment } from 'graphql-tools'
-import { IResolvers } from 'graphql-tools/dist/Interfaces'
+import {
+  delegateToSchema,
+  ReplaceFieldWithFragment,
+  IResolvers,
+} from 'graphql-tools-fork'
 import {
   BindingOptions,
   Options,

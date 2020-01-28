@@ -30,7 +30,7 @@ export function buildInfo(
   if (!info) {
     info = buildInfoForAllScalars(rootFieldName, schema, operation)
   } else if ((info as any).kind && (info as any).kind === 'Document') {
-    info = print(info)
+    info = print(info as DocumentNode)
   }
   if (typeof info === 'string') {
     info = buildInfoFromFragment(rootFieldName, schema, operation, info)
