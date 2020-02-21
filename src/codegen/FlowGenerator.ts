@@ -83,8 +83,7 @@ ${type.description}
 */
 `
           : ''
-      } export type ${type.name} = ${this.scalarMapping[type.name] ||
-        'string'} `
+      } export type ${type.name} = ${this.scalarMapping[type.name] || 'any'} `
     },
 
     GraphQLIDType: (type: GraphQLScalarType): string => {
