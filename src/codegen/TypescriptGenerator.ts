@@ -316,8 +316,7 @@ ${this.renderTypes()}`
   renderInputFieldType(type: GraphQLInputType | GraphQLOutputType): string {
     /* Render list type */
     if (isListType(type)) {
-      const typeName = this.renderFieldType(type.ofType)
-      return `${typeName}[] | ${typeName} | null`
+      return `Array<${this.renderInputFieldType(type.ofType)}> | null`
     }
 
     /* Render non nullable type */
