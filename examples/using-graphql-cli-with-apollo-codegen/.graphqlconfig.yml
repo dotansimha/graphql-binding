@@ -6,11 +6,11 @@ projects:
       codegen:
         - generator: typegen
           language: typescript
-          input: "{binding,prisma}/*.ts"
+          input: '{binding,prisma}/*.ts'
           output:
             typings: typings.ts
         - generator: prisma-binding
-          language: typescript 
+          language: typescript
           input: schema.js
           output:
             binding: prisma/ts-prisma.ts
@@ -20,7 +20,7 @@ projects:
 #           output:
 #             binding: prisma/prisma.js
 #         - generator: graphql-binding
-#           language: typescript 
+#           language: typescript
 #           input: schema.js
 #           output:
 #             binding: binding/ts-binding.ts

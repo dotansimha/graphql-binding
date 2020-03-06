@@ -1,4 +1,4 @@
-import {makeExecutableSchema} from 'graphql-tools'
+const { makeExecutableSchema } = require('graphql-tools-fork')
 
 const schema = makeExecutableSchema({
   typeDefs: `
@@ -8,9 +8,9 @@ const schema = makeExecutableSchema({
   `,
   resolvers: {
     Query: {
-      hello: () => 'world'
-    }
-  }
+      hello: () => 'world',
+    },
+  },
 })
 
-export default schema
+module.exports = schema

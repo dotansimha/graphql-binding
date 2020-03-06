@@ -1,0 +1,12 @@
+{
+  "name": "graphql-binding-example-using-prisma-binding-with-typescript",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "generate": "prisma-binding --input prisma.graphql --outputBinding prisma.js --language javascript",
+    "start": "node ./index.js"
+  },
+  "devDependencies": {
+    "prisma-binding": "^2.3.16"
+  }
+}

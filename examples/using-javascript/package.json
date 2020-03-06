@@ -1,0 +1,16 @@
+{
+  "name": "graphql-binding-example-using-javascript",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "generate": "graphql-binding --input schema.js --outputBinding binding.js --language javascript",
+    "start": "node ./index.js"
+  },
+  "dependencies": {
+    "graphql": "^14.6.0",
+    "graphql-tools-fork": "^8.6.4"
+  },
+  "devDependencies": {
+    "graphql-binding": "^2.5.2"
+  }
+}

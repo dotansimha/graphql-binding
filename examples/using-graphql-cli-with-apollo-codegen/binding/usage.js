@@ -3,11 +3,14 @@ const Binding = require('./binding')
 const binding = new Binding()
 
 binding.mutation
-  .createUser({
-    data: {
-      name: 'some user',
+  .createUser(
+    {
+      data: {
+        name: 'some user',
+      },
     },
-  }, '{id}')
+    '{id}',
+  )
   .catch(e => console.error(e))
 
 binding.query

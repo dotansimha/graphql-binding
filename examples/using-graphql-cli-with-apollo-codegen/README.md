@@ -1,6 +1,7 @@
 # graphql-config-example
 
 ## Usage
+
 ```bash
 $ yarn install
 $ npm install -g graphql-cli typescript

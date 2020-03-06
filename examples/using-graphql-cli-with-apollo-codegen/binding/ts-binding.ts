@@ -1,50 +1,118 @@
 import { makeBindingClass } from 'graphql-binding'
 import { GraphQLResolveInfo } from 'graphql'
-import * as schema from  '../schema'
+import * as schema from '../schema'
 
 interface BindingInstance {
   query: {
-    users: <T = User[]>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    user: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    usersConnection: <T = UserConnection>(args: { where?: UserWhereInput, orderBy?: UserOrderByInput, skip?: Int, after?: String, before?: String, first?: Int, last?: Int }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    node: <T = Node | null>(args: { id: ID_Output }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> 
+    users: <T = User[]>(
+      args: {
+        where?: UserWhereInput
+        orderBy?: UserOrderByInput
+        skip?: Int
+        after?: String
+        before?: String
+        first?: Int
+        last?: Int
+      },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
+    user: <T = User | null>(
+      args: { where: UserWhereUniqueInput },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
+    usersConnection: <T = UserConnection>(
+      args: {
+        where?: UserWhereInput
+        orderBy?: UserOrderByInput
+        skip?: Int
+        after?: String
+        before?: String
+        first?: Int
+        last?: Int
+      },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
+    node: <T = Node | null>(
+      args: { id: ID_Output },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
   }
   mutation: {
-    createUser: <T = User>(args: { data: UserCreateInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    updateUser: <T = User | null>(args: { data: UserUpdateInput, where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    deleteUser: <T = User | null>(args: { where: UserWhereUniqueInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    upsertUser: <T = User>(args: { where: UserWhereUniqueInput, create: UserCreateInput, update: UserUpdateInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    updateManyUsers: <T = BatchPayload>(args: { data: UserUpdateInput, where?: UserWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> ,
-    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> 
+    createUser: <T = User>(
+      args: { data: UserCreateInput },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
+    updateUser: <T = User | null>(
+      args: { data: UserUpdateInput; where: UserWhereUniqueInput },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
+    deleteUser: <T = User | null>(
+      args: { where: UserWhereUniqueInput },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
+    upsertUser: <T = User>(
+      args: {
+        where: UserWhereUniqueInput
+        create: UserCreateInput
+        update: UserUpdateInput
+      },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
+    updateManyUsers: <T = BatchPayload>(
+      args: { data: UserUpdateInput; where?: UserWhereInput },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
+    deleteManyUsers: <T = BatchPayload>(
+      args: { where?: UserWhereInput },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
   }
   subscription: {
-    user: <T = UserSubscriptionPayload | null>(args: { where?: UserSubscriptionWhereInput }, info?: GraphQLResolveInfo | string, context?: { [key: string]: any }) => Promise<T> 
+    user: <T = UserSubscriptionPayload | null>(
+      args: { where?: UserSubscriptionWhereInput },
+      info?: GraphQLResolveInfo | string,
+      context?: { [key: string]: any },
+    ) => Promise<T>
   }
-  request: <T = any>(query: string, variables?: {[key: string]: any}) => Promise<T>
+  request: <T = any>(
+    query: string,
+    variables?: { [key: string]: any },
+  ) => Promise<T>
 }
 
 interface BindingConstructor<T> {
-  new(...args): T
+  new (...args): T
 }
 
-export const Binding = makeBindingClass<BindingConstructor<BindingInstance>>({ schema })
+export const Binding = makeBindingClass<BindingConstructor<BindingInstance>>({
+  schema,
+})
 
 /**
  * Types
-*/
+ */
 
-export type UserOrderByInput =   'id_ASC' |
-  'id_DESC' |
-  'name_ASC' |
-  'name_DESC' |
-  'updatedAt_ASC' |
-  'updatedAt_DESC' |
-  'createdAt_ASC' |
-  'createdAt_DESC'
+export type UserOrderByInput =
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'name_ASC'
+  | 'name_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
 
-export type MutationType =   'CREATED' |
-  'UPDATED' |
-  'DELETED'
+export type MutationType = 'CREATED' | 'UPDATED' | 'DELETED'
 
 export interface UserCreateInput {
   name: String
