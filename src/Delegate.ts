@@ -12,7 +12,7 @@ import {
   delegateToSchema,
   ReplaceFieldWithFragment,
   IResolvers,
-} from 'graphql-tools-fork'
+} from 'graphql-tools'
 import {
   BindingOptions,
   Options,
