@@ -52,7 +52,7 @@
     "pretty-quick": "1.11.1",
     "rimraf": "2.7.1",
     "semantic-release": "15.13.24",
-    "tslint": "5.20.0",
+    "tslint": "5.20.1",
     "tslint-config-prettier": "1.18.0",
     "tslint-config-standard": "8.0.1",
     "typescript": "3.6.2"
