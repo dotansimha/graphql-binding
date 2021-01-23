@@ -29,7 +29,7 @@
     "test": "npm-run-all test-*"
   },
   "dependencies": {
-    "graphql": "^14.2.0",
+    "graphql": "^15.0.0",
     "graphql-import": "^0.7.1",
     "graphql-tools-fork": "^8.1.0",
     "iterall": "1.2.2",
