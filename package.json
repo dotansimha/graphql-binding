@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "graphql": "^14.2.0",
-    "graphql-import": "^0.7.1",
+    "graphql-import": "^1.0.0",
     "graphql-tools-fork": "^8.1.0",
     "iterall": "1.2.2",
     "object-path-immutable": "^3.0.0",
