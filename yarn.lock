@@ -3164,6 +3164,11 @@ is-plain-object@^2.0.1, is-plain-object@^2.0.3, is-plain-object@^2.0.4:
   dependencies:
     isobject "^3.0.1"
 
+is-plain-object@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-3.0.1.tgz#662d92d24c0aa4302407b0d45d21f2251c85f85b"
+  integrity sha512-Xnpx182SBMrr/aBik8y+GuR4U1L9FqMSojwDQwPMmxyC6bvEqly9UBCxhauBF5vNh2gwWJNX6oDV7O+OM4z34g==
+
 is-promise@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/is-promise/-/is-promise-2.1.0.tgz#79a2a9ece7f096e80f36d2b2f3bc16c1ff4bf3fa"
@@ -4517,12 +4522,18 @@ object-keys@^1.0.12:
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.12.tgz#09c53855377575310cca62f55bb334abff7b3ed2"
   integrity sha512-FTMyFUm2wBcGHnH2eXmz7tC6IwlqQZ6mVZ+6dm6vZ4IQIHjs6FdNsQBuKGPuUUUY6NfJw2PshC08Tn6LzLDOag==
 
-object-path-immutable@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/object-path-immutable/-/object-path-immutable-3.0.0.tgz#c242a7e6648c64e37bd9f363bbf2fb91ced69ff5"
-  integrity sha512-T/KtAbX2oNH6gjJdkI7kXxEh9W+Zyt/Cie+XXW8HkzpKFO8bKtI+jOldyGHkxJu0FzGWWYlcbPh3zVh2GY0+qg==
+object-path-immutable@^4.0.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/object-path-immutable/-/object-path-immutable-4.1.1.tgz#f657e9120075a9866227cb6324b90edda042118d"
+  integrity sha512-kaH7a+jzt8WhPUeA26qrBwiJFBGFCkXaa4CbCuv4+8oZgb2Qo4/NV9KN1fyd8xPzAutJvVw0mjywn+FqU1MbTA==
   dependencies:
-    is-plain-object "^2.0.4"
+    is-plain-object "^3.0.0"
+    object-path "^0.11.5"
+
+object-path@^0.11.5:
+  version "0.11.5"
+  resolved "https://registry.yarnpkg.com/object-path/-/object-path-0.11.5.tgz#d4e3cf19601a5140a55a16ad712019a9c50b577a"
+  integrity sha512-jgSbThcoR/s+XumvGMTMf81QVBmah+/Q7K7YduKeKVWL7N111unR2d6pZZarSk6kY/caeNxUDyxOvMWyzoU2eg==
 
 object-visit@^1.0.0:
   version "1.0.1"
