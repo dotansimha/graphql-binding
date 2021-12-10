@@ -4,15 +4,17 @@ import {
   GraphQLResolveInfo,
   graphql,
   GraphQLSchema,
-  buildSchema,
   GraphQLUnionType,
   GraphQLInterfaceType,
 } from 'graphql'
-import {
-  delegateToSchema,
-  ReplaceFieldWithFragment,
-  IResolvers,
-} from 'graphql-tools-fork'
+// import {
+//   delegateToSchema,
+//   ReplaceFieldWithFragment,
+//   IResolvers,
+// } from 'graphql-tools-fork'
+// import { importSchema } from 'graphql-import'
+import { IResolvers } from '@graphql-tools/utils'
+import { delegateToSchema } from '@graphql-tools/delegate'
 import {
   BindingOptions,
   Options,
@@ -20,16 +22,17 @@ import {
   Operation,
   FragmentReplacement,
 } from './types'
-import { importSchema } from 'graphql-import'
 import * as fs from 'fs'
 import * as path from 'path'
+import { loadSchemaSync } from '@graphql-tools/load'
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 
 export class Delegate {
   schema: GraphQLSchema
   before: () => void
   disableCache: boolean
 
-  private fragmentReplacements: FragmentReplacement[]
+  // private fragmentReplacements: FragmentReplacement[]
 
   constructor({
     schema,
@@ -37,7 +40,7 @@ export class Delegate {
     before,
     disableCache,
   }: BindingOptions) {
-    this.fragmentReplacements = fragmentReplacements || []
+    // this.fragmentReplacements = fragmentReplacements || []
     this.schema = schema
     this.disableCache = disableCache || false
 
@@ -124,9 +127,10 @@ export class Delegate {
           throw new Error(`No schema found for path: ${schemaPath}`)
         }
 
-        filterSchema = importSchema(schemaPath)
+        filterSchema = loadSchemaSync(schemaPath, {
+          loaders: [new GraphQLFileLoader()],
+        })
       }
-      filterSchema = buildSchema(filterSchema)
     }
     const filterTypeMap =
       filterSchema instanceof GraphQLSchema
@@ -171,7 +175,7 @@ export class Delegate {
       info,
       transforms: [
         ...transforms,
-        new ReplaceFieldWithFragment(this.schema, this.fragmentReplacements),
+        // new ReplaceFieldWithFragment(this.schema, this.fragmentReplacements), // TODO
       ],
     })
 

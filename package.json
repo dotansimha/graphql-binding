@@ -29,9 +29,12 @@
     "test": "npm-run-all test-*"
   },
   "dependencies": {
-    "graphql": "^14.2.0",
-    "graphql-import": "^0.7.1",
-    "graphql-tools-fork": "^8.1.0",
+    "@graphql-tools/delegate": "^8.4.3",
+    "@graphql-tools/graphql-file-loader": "^7.3.3",
+    "@graphql-tools/load": "^7.4.1",
+    "@graphql-tools/schema": "^8.3.1",
+    "@graphql-tools/utils": "^8.5.4",
+    "graphql": "^15.8.0",
     "iterall": "1.2.2",
     "object-path-immutable": "^3.0.0",
     "resolve-cwd": "^2.0.0",
@@ -55,6 +58,6 @@
     "tslint": "5.20.0",
     "tslint-config-prettier": "1.18.0",
     "tslint-config-standard": "8.0.1",
-    "typescript": "3.6.2"
+    "typescript": "^3.7.2"
   }
 }
