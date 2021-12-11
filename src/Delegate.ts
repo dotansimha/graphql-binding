@@ -20,7 +20,7 @@ import {
   Options,
   QueryOrMutation,
   Operation,
-  FragmentReplacement,
+  // FragmentReplacement,
 } from './types'
 import * as fs from 'fs'
 import * as path from 'path'

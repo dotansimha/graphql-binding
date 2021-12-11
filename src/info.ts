@@ -228,7 +228,7 @@ export function makeSubInfo(
       return null
     }
 
-    currentPath = addPath(currentPath, currentFieldName)
+    currentPath = addPath(currentPath, currentFieldName, 'thing')
   }
 
   const fieldNode: FieldNode = {
@@ -272,6 +272,6 @@ export function getDeepType(
   return type as any
 }
 
-export function addPath(prev, key) {
-  return { prev, key }
+export function addPath(prev, key, typename) {
+  return { prev, key, typename }
 }
